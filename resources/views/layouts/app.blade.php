@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
-  
+   <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
   <!-- Vite: Tailwind CSS y JS -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
   
