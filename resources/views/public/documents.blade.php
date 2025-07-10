@@ -293,7 +293,7 @@
                                 </ul>
                             </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Participa</a>
+                                    <a class="nav-link" href="https://www.bucaramanga.gov.co/participa/">Participa</a>
                                 </li>
                         </ul>
                         
@@ -320,7 +320,7 @@
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-5">
             <!-- Botón 1: Conoce el sistema de búsqueda -->
             <div class="col">
-                <div class="card h-100 border-0 cursor-pointer" onclick="window.location.href='{{ route('home') }}'" style="background-color: #43883d; color: white; border-radius: 10px; overflow: hidden; transition: all 0.3s ease;">
+                <div class="card h-100 border-0 cursor-pointer" onclick="window.location.href='{{ route('home') }}'"  style="background-color: #43883d; color: white; border-radius: 10px; overflow: hidden; transition: all 0.3s ease; cursor: pointer;">
                     <div class="card-body text-center p-4">
                         <div class="mb-3">
                             <i class="fas fa-info-circle" style="font-size: 2rem;"></i>
@@ -333,7 +333,7 @@
 
             <!-- Botón 2: Relatoría de conceptos -->
             <div class="col">
-                <div class="card h-100 border-0 cursor-pointer" onclick="window.location.href='{{ route('concepts.public') }}'" style="background-color: #43883d; color: white; border-radius: 10px; overflow: hidden; transition: all 0.3s ease;">
+                <div class="card h-100 border-0 cursor-pointer" onclick="window.location.href='{{ route('concepts.public') }}'"  style="background-color: #43883d; color: white; border-radius: 10px; overflow: hidden; transition: all 0.3s ease; cursor: pointer;">
                     <div class="card-body text-center p-4">
                         <div class="mb-3">
                             <i class="fas fa-book-open" style="font-size: 2rem;"></i>
@@ -346,7 +346,7 @@
 
             <!-- Botón 3: Relatoría de Actos Administrativos -->
             <div class="col">
-                <div class="card h-100 border-0 cursor-pointer" style="background-color: #3F8827; color: white; border-radius: 10px; overflow: hidden; transition: all 0.3s ease; border: 2px solid #93C01F;">
+                <div class="card h-100 border-0 cursor-pointer"  style="background-color: #43883d; color: white; border-radius: 10px; overflow: hidden; transition: all 0.3s ease; cursor: pointer;">
                     <div class="card-body text-center p-4">
                         <div class="mb-3">
                             <i class="fas fa-gavel" style="font-size: 2rem;"></i>
@@ -359,7 +359,7 @@
 
             <!-- Botón 4: Relatoría de Circulares -->
             <div class="col">
-                <div class="card h-100 border-0 cursor-pointer" onclick="window.location.href='{{ route('home') }}'" style="background-color: #43883d; color: white; border-radius: 10px; overflow: hidden; transition: all 0.3s ease;">
+                <div class="card h-100 border-0 cursor-pointer" onclick="window.location.href='{{ route('home') }}'"  style="background-color: #43883d; color: white; border-radius: 10px; overflow: hidden; transition: all 0.3s ease; cursor: pointer;">
                     <div class="card-body text-center p-4">
                         <div class="mb-3">
                             <i class="fas fa-file-alt" style="font-size: 2rem;"></i>

@@ -104,7 +104,7 @@
                                 </ul>
                             </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Participa</a>
+                                    <a class="nav-link" href="https://www.bucaramanga.gov.co/participa/">Participa</a>
                                 </li>
                         </ul>
                         
