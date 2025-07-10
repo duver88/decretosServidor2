@@ -169,9 +169,7 @@
                     'fecha_desc' => 'Más recientes',
                     'fecha_asc' => 'Más antiguos',
                     'nombre_asc' => 'Nombre A-Z',
-                    'numero_asc' => 'Por número',
-                    'tipo_asc' => 'Por tipo',
-                    'categoria_asc' => 'Por categoría'
+                    
                 ] as $key => $label)
                     <label class="flex items-center cursor-pointer">
                         <input type="radio" name="orden" value="{{ $key }}" onchange="this.form.submit()" 
@@ -198,9 +196,9 @@
         <div id="filtrosAvanzados" class="hidden border-t pt-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Categoría</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dependencias</label>
                     <select name="category_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]">
-                        <option value="">Todas las categorías</option>
+                        <option value="">Todas las Dependencias</option>
                         @if(isset($categories))
                             @foreach($categories as $categoria)
                                 <option value="{{ $categoria->id }}" {{ request('category_id') == $categoria->id ? 'selected' : '' }}>

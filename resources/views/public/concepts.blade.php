@@ -9,10 +9,19 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Agregamos Font Awesome 5 para los íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
+        /* Solo las fuentes y colores básicos necesarios */
+        .ubuntu-font { font-family: 'Ubuntu', sans-serif !important; }
+        .oswald-font { font-family: 'Oswald', sans-serif !important; }
+        .bg-bucaramanga { background-color: #43883D !important; }
+        .text-bucaramanga { color: #43883D !important; }
+
         body { 
             font-family: 'Ubuntu', sans-serif; 
             margin: 0;
@@ -708,72 +717,251 @@
     {{-- FIN SECCIÓN PRINCIPAL --}}
 
     {{-- FOOTER --}}
-    <span id="final"></span>
-    <div class="govco-footer mt-5">
-        <div class="row govco-portales-contenedor m-0">
-            <div class="col-4 govco-footer-logo-portal">
-                <div class="govco-logo-container-portal">
-                    <span class="govco-logo"></span>
-                    <span class="govco-separator"></span>
-                    <span class="govco-co"></span>
+
+
+
+
+<!-- FOOTER -->
+<span id="final"></span>
+<footer class="bg-bucaramanga text-white ubuntu-font">
+    <div class="container py-5">
+        <div class="row g-4">
+            
+            <!-- Logo Institucional -->
+            <div class="col-lg-3 col-md-6">
+                <div class="bg-white text-center p-4 rounded-3 shadow-sm mb-3">
+                    <!-- Escudo oficial de Bucaramanga -->
+                    <img src="https://www.bucaramanga.gov.co/wp-content/uploads/2025/05/Screenshot_7.png" 
+                         alt="Escudo Alcaldía de Bucaramanga" 
+                         class="mb-3" 
+                         style="height: 80px; width: auto;">
+                    <h6 class="text-bucaramanga fw-bold mb-0 ubuntu-font">
+                        ALCALDÍA DE<br>BUCARAMANGA
+                    </h6>
                 </div>
             </div>
-            <div class="col-4 govco-info-datos-portal">
-                <div class="govco-separator-rows"></div>
-                <div class="govco-texto-datos-portal">
-                    <p class="govco-text-header-portal-1">
-                        Nombre completo del portal
-                    </p>
-                    <p>Dirección: xxxxxx xxx xxx Departamento y municipio. <br>
-                        Código Postal: xxxx <br>
-                        Horario de atención: Lunes a viernes xx:xx a.m. - xx:xx p.m.</p>
-                </div>
-                <div class="govco-network extramt-network">
-                    <div class="govco-iconContainer">
-                        <span class="icon-portal govco-twitter-square"></span>
-                        <span class="govco-link-portal">@Entidad</span>
+
+            <!-- Información de Ubicación -->
+            <div class="col-lg-3 col-md-6">
+                <div class="mb-4">
+                    <h5 class="oswald-font fw-semibold mb-3 d-flex align-items-center">
+                        <span class="bg-white bg-opacity-25 rounded-circle p-2 me-2 d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </span>
+                        Ubicación
+                    </h5>
+                    <div class="mb-3 small">
+                        <strong class="d-block">Dirección Fase I:</strong>
+                        Calle 35 # 10-43, Bucaramanga, Santander, Colombia
                     </div>
-                    <div class="govco-iconContainer">
-                        <span class="icon-portal govco-instagram-square"></span>
-                        <span class="govco-link-portal">@Entidad</span>
+                    <div class="mb-3 small">
+                        <strong class="d-block">Dirección Fase II:</strong>
+                        Carrera 11 # 34-52, Bucaramanga, Santander, Colombia
                     </div>
-                    <div class="govco-iconContainer">
-                        <span class="icon-portal govco-facebook-square"></span>
-                        <span class="govco-link-portal">@Entidad</span>
+                    <div class="small">
+                        <strong>Código Postal:</strong> 680006<br>
+                        <strong>Código Dane:</strong> 68001
                     </div>
                 </div>
             </div>
 
-            <div class="col-4 govco-info-telefonos">
-                <div class="govco-separator-rows"></div>
-                <div class="govco-texto-telefonos">
-                    <p class="govco-text-header-portal-1">
-                        <span class="govco-phone-alt"></span>
-                        Contacto
-                    </p>
-                    <p>Teléfono conmutador: <br>
-                        +57(xx) xxx xx xx <br>
-                        Línea gratuita: 01-800-xxxxxxxx <br>
-                        Línea anticorrupción: 01-800-xxxxxxxx <br>
-                        Correo institucional: <br>
-                        entidad@entidad.gov.co</p>
+            <!-- Horarios y Contacto -->
+            <div class="col-lg-3 col-md-6">
+                <div class="mb-4">
+                    <h5 class="oswald-font fw-semibold mb-3 d-flex align-items-center">
+                        <span class="bg-white bg-opacity-25 rounded-circle p-2 me-2 d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fas fa-clock"></i>
+                        </span>
+                        Horarios
+                    </h5>
+                    <div class="mb-3 small">
+                        <strong class="d-block">Horario de Atención:</strong>
+                        Lunes a jueves: 7:30 a.m. a 12:00 m. y de 1:00 p.m. a 5:00 p.m.<br>
+                        Viernes: Jornada continua de 7:00 a.m. a 4:00 p.m.<br>
+                        <small class="text-white-50">(30 minutos de descanso al medio día)</small>
+                    </div>
+                    <div class="mb-2 small">
+                        <strong>Teléfono:</strong> +57 (607) 633 70 00
+                    </div>
+                    <div class="small">
+                        <strong>Línea gratuita:</strong> +57 (607) 652 55 55
+                    </div>
                 </div>
+            </div>
 
-                <div class="govco-links-portal-container">
-                    <div class="col-12 m-0 mt-2">
-                        <a class="govco-link-portal" href="#">Políticas</a>
-                        <a class="govco-link-portal" href="#">Mapa del sitio</a>
+            <!-- Comunicación -->
+            <div class="col-lg-3 col-md-6">
+                <div class="mb-4">
+                    <h5 class="oswald-font fw-semibold mb-3 d-flex align-items-center">
+                        <span class="bg-white bg-opacity-25 rounded-circle p-2 me-2 d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        Comunicación
+                    </h5>
+                    <div class="mb-3 small">
+                        <strong class="d-block">Correo institucional:</strong>
+                        <a href="mailto:contactenos@bucaramanga.gov.co" class="text-white text-decoration-none">
+                            contactenos@bucaramanga.gov.co
+                        </a>
                     </div>
-                    <div class="col-12 m-0 mt-2">
-                        <a class="govco-link-portal" href="#">Términos y condiciones</a> <br>
+                    <div class="mb-3 small">
+                        <strong class="d-block">Notificaciones judiciales:</strong>
+                        <a href="mailto:notificaciones@bucaramanga.gov.co" class="text-white text-decoration-none">
+                            notificaciones@bucaramanga.gov.co
+                        </a>
                     </div>
-                    <div class="col-12 m-0 mt-2">
-                        <a class="govco-link-portal" href="#">Accesibilidad</a>
+                    <div class="mb-2 small">
+                        <strong class="d-block">Canal de denuncia:</strong>
+                        <a href="https://canaldenuncia.bucaramanga.gov.co/" class="text-white text-decoration-none" target="_blank">
+                            canaldenuncia.bucaramanga.gov.co
+                        </a>
+                    </div>
+                    <div class="small">
+                        <strong class="d-block">Emergencias:</strong>
+                        <a href="https://emergencia.bucaramanga.gov.co/" class="text-white text-decoration-none" target="_blank">
+                            emergencia.bucaramanga.gov.co
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Separador -->
+        <hr class="border-white border-opacity-25 my-4">
+
+        <!-- Redes Sociales -->
+        <div class="row justify-content-center">
+            <div class="col-12 mb-4">
+                <h5 class="oswald-font fw-semibold mb-3 d-flex align-items-center">
+                    <span class="bg-white bg-opacity-25 rounded-circle p-2 me-2 d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="fas fa-share-alt"></i>
+                    </span>
+                    Síguenos en Redes Sociales
+                </h5>
+                <div class="row g-2">
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.facebook.com/alcaldiadebucaramanga/" class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-start text-start" target="_blank">
+                            <i class="fab fa-facebook-f me-2"></i>
+                            <span class="small">Alcaldia de Bucaramanga</span>
+                        </a>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://x.com/AlcaldiaBGA" class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-start text-start" target="_blank">
+                            <i class="fab fa-twitter me-2"></i>
+                            <span class="small">@AlcaldiaBGA</span>
+                        </a>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.instagram.com/alcaldiadebucaramanga/?hl=es" class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-start text-start" target="_blank">
+                            <i class="fab fa-instagram me-2"></i>
+                            <span class="small">@alcaldiadebucaramanga</span>
+                        </a>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.youtube.com/user/PrensaBucaramanga" class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-start text-start" target="_blank">
+                            <i class="fab fa-youtube me-2"></i>
+                            <span class="small">Alcaldia de Bucaramanga</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Separador -->
+        <hr class="border-white border-opacity-25 my-4">
+
+        <!-- Enlaces Institucionales -->
+        <div class="row">
+            <div class="col-12">
+                <h5 class="oswald-font fw-semibold mb-3 d-flex align-items-center">
+                    <span class="bg-white bg-opacity-25 rounded-circle p-2 me-2 d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="fas fa-link"></i>
+                    </span>
+                    Enlaces de Interés
+                </h5>
+                <div class="row g-2">
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.bucaramanga.gov.co/autorizacion-de-tratamiento-de-datos-personales/" class="btn btn-link text-white text-decoration-none p-2 text-start w-100 small border-start border-2 border-transparent">
+                            <i class="fas fa-chevron-right me-2 small"></i>
+                            Autorización de Tratamiento de Datos Personales
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.bucaramanga.gov.co/wp-content/uploads/2023/12/Resolucion-350-2023-politica-de-datos-personales-1.pdf" class="btn btn-link text-white text-decoration-none p-2 text-start w-100 small border-start border-2 border-transparent">
+                            <i class="fas fa-chevron-right me-2 small"></i>
+                            Política de Tratamiento de Datos Personales
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.bucaramanga.gov.co/condiciones-de-uso/" class="btn btn-link text-white text-decoration-none p-2 text-start w-100 small border-start border-2 border-transparent">
+                            <i class="fas fa-chevron-right me-2 small"></i>
+                            Política web y condiciones de uso
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.bucaramanga.gov.co/wp-content/uploads/2021/08/Politica_Editorial_Actualizada_2014.pdf" class="btn btn-link text-white text-decoration-none p-2 text-start w-100 small border-start border-2 border-transparent">
+                            <i class="fas fa-chevron-right me-2 small"></i>
+                            Política editorial
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.bucaramanga.gov.co/wp-content/uploads/2021/08/Plan_de_Uso_Redes_Sociales.pdf" class="btn btn-link text-white text-decoration-none p-2 text-start w-100 small border-start border-2 border-transparent">
+                            <i class="fas fa-chevron-right me-2 small"></i>
+                            Plan uso de redes sociales
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.bucaramanga.gov.co/wp-content/uploads/2024/04/PLAN-DE-COMUNICACIONES-2024-2027.pdf" class="btn btn-link text-white text-decoration-none p-2 text-start w-100 small border-start border-2 border-transparent">
+                            <i class="fas fa-chevron-right me-2 small"></i>
+                            Plan de comunicaciones
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.bucaramanga.gov.co/wp-content/uploads/2023/07/RESOLUCION-0139-ADOPTA-Y-ACTUALIZA-POLITICA-INSTITUCIONAL.pdf" class="btn btn-link text-white text-decoration-none p-2 text-start w-100 small border-start border-2 border-transparent">
+                            <i class="fas fa-chevron-right me-2 small"></i>
+                            Política de Seguridad de la Información
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.bucaramanga.gov.co/politicas-de-privacidad/" class="btn btn-link text-white text-decoration-none p-2 text-start w-100 small border-start border-2 border-transparent">
+                            <i class="fas fa-chevron-right me-2 small"></i>
+                            Uso y monitoreo página web
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a href="https://www.bucaramanga.gov.co/mapa-del-sitio/" class="btn btn-link text-white text-decoration-none p-2 text-start w-100 small border-start border-2 border-transparent">
+                            <i class="fas fa-chevron-right me-2 small"></i>
+                            Mapa del sitio
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Footer Gobierno Nacional -->
+    <div class="navbar navbar-expand-lg barra-superior-govco py-3 mt-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <!-- Logo gov.co oficial -->
+                        <img src="https://www.bucaramanga.gov.co/wp-content/uploads/2021/03/logo_gov_co-e1611810279980.png" 
+                             alt="Logo Gov.co" 
+                             class="me-3" 
+                             style="height: 40px; width: auto;">
+                        <div>
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end text-center mt-3 mt-md-0">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
