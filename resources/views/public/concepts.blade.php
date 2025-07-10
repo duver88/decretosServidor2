@@ -240,29 +240,29 @@
                     <div class="collapse navbar-collapse" id="navbarMenu">
                         <ul class="navbar-nav mx-auto">
                             <li class="nav-item">
-                                <a class="nav-link " href="#">Inicio</a>
+                                <a class="nav-link " href="https://www.bucaramanga.gov.co/">Inicio</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Paga tus impuestos</a>
+                                <a class="nav-link" href="https://www.bucaramanga.gov.co/tramites/">Paga tus impuestos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Noticias</a>
+                                <a class="nav-link" href="https://www.bucaramanga.gov.co/noticias/">Noticias</a>
                             </li>
                             <li class="nav-item dropdown ">
-                                <a class="nav-link dropdown-toggle active " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle active " href="https://www.bucaramanga.gov.co/transparencia/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Transparencia y acceso<br>a la información pública
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Información de la entidad</a></li>
-                                    <li><a class="dropdown-item" href="#">Correo institucional</a></li>
-                                    <li><a class="dropdown-item" href="#">Normativa</a></li>
-                                    <li><a class="dropdown-item" href="#">Contratación</a></li>
-                                    <li><a class="dropdown-item" href="#">Planeación, presupuesto e informes</a></li>
-                                    <li><a class="dropdown-item" href="#">Participa</a></li>
-                                    <li><a class="dropdown-item" href="#">Datos abiertos</a></li>
-                                    <li><a class="dropdown-item" href="#">Información específica para Grupos de Interés</a></li>
-                                    <li><a class="dropdown-item" href="#">Obligación de reporte de información específica por parte de la entidad</a></li>
-                                    <li><a class="dropdown-item" href="#">Información tributaria en entidades territoriales locales</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/gobierno-ciudadanos/#entidad">Información de la entidad</a></li>
+                                    <li><a class="dropdown-item" href="https://outlook.office.com/owa/">Correo institucional</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#normativa">Normativa</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#contratacion">Contratación</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#planeacion">Planeación, presupuesto e informes</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/participa/">Participa</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#datos_abiertos">Datos abiertos</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#grupos_interes">Información específica para Grupos de Interés</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#reporte_info">Obligación de reporte de información específica por parte de la entidad</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#tributaria">Información tributaria en entidades territoriales locales</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -270,19 +270,19 @@
                                     Atención y servicios<br>a la ciudadanía
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Trámites</a></li>
-                                    <li><a class="dropdown-item" href="#">Centro de analítica de datos</a></li>
-                                    <li><a class="dropdown-item" href="#">Canal de denuncia para presuntos actos de corrupción</a></li>
-                                    <li><a class="dropdown-item" href="#">Inspecciones de Policía</a></li>
-                                    <li><a class="dropdown-item" href="#">Bienestar Animal</a></li>
-                                    <li><a class="dropdown-item" href="#">Puntos Digitales</a></li>
-                                    <li><a class="dropdown-item" href="#">Portal de Niños</a></li>
-                                    <li><a class="dropdown-item" href="#">Inventario de Sentencias</a></li>
-                                    <li><a class="dropdown-item" href="#">Servicio de empleo</a></li>
-                                    <li><a class="dropdown-item" href="#">Preguntas frecuentes</a></li>
-                                    <li><a class="dropdown-item" href="#">Canales de atención</a></li>
-                                    <li><a class="dropdown-item" href="#">Crea una PQRSD</a></li>
-                                    <li><a class="dropdown-item" href="#">Juntas administradoras locales 2024-2027</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/tramites/">Trámites</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/datos/">Centro de analítica de datos</a></li>
+                                    <li><a class="dropdown-item" href="https://canaldenuncia.bucaramanga.gov.co/">Canal de denuncia para presuntos actos de corrupción</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/inspecciones-de-policia/">Inspecciones de Policía</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/proteccion-animal/">Bienestar Animal</a></li>
+                                    <li><a class="dropdown-item" href="https://puntosdigitales.bucaramanga.gov.co/">Puntos Digitales</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/ninos/">Portal de Niños</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/inventario-de-sentencias-22/">Inventario de Sentencias</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/servicio-de-empleo/">Servicio de empleo</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/preguntas-frecuentes/">Preguntas frecuentes</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/canales-de-atencion/">Canales de atención</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/portal-de-peticiones/">Crea una PQRSD</a></li>
+                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/juntas-administradoras-locales-2024-2027/">Juntas administradoras locales 2024-2027</a></li>
                                 </ul>
                             </li>
                                 <li class="nav-item">
@@ -299,6 +299,7 @@
 
     {{-- SECCIÓN PRINCIPAL: Relatoría de Conceptos --}}
     <div class="container my-5" style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+       <h5><span style="color: #808080;"><a href="https://www.bucaramanga.gov.co/" title="Inicio" style="color: #808080;">Inicio</a> » <a href="https://www.bucaramanga.gov.co/transparencia/" title="Transparencia" style="color: #808080;">Transparencia</a> » <a href="https://www.bucaramanga.gov.co/transparencia-bucaramanga/sistema-de-busquedas-de-normas-propio-de-la-entidad/" title="Sistema de Normas Propios de la Entidad" style="color: #808080;">Sistema de Normas Propios de la Entidad</a></span></h5>
         <div class="text-center mb-5">
             <h1 class="fw-bold" style="color: #43883d; font-family: 'Ubuntu', sans-serif;">
                 Relatoría de Conceptos
