@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conceptos Jurídicos</title>
     <link rel="stylesheet" href="{{ asset('css/cabecera.css') }}">   
+    <link rel="stylesheet" href="{{ asset('css/accesbilidad.css') }}"> 
+    <link rel="stylesheet" href="{{ asset('js/accesibilidad.js') }}"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&display=swap" rel="stylesheet" />
@@ -299,6 +301,11 @@
     </header>
     {{-- Fin Header --}}
 
+
+
+    {{-- Fin Barrra de accesibiliad-- }}
+
+
     {{-- SECCIÓN PRINCIPAL: Relatoría de Conceptos --}}
     <div class="container my-5" style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
        <h6><span style="color: #808080;"><a href="https://www.bucaramanga.gov.co/" title="Inicio" style="color: #808080;">Inicio</a> » <a href="https://www.bucaramanga.gov.co/transparencia/" title="Transparencia" style="color: #808080;">Transparencia</a> » <a href="https://www.bucaramanga.gov.co/transparencia-bucaramanga/sistema-de-busquedas-de-normas-propio-de-la-entidad/" title="Sistema de Normas Propios de la Entidad" style="color: #808080;">Sistema de Normas Propios de la Entidad</a></span></h6>
@@ -511,19 +518,21 @@
                         </a>
                     @endif
 
-                    @if(request()->filled('concept_type_id'))
-                        <a href="{{ route('concepts.public', array_merge($baseParams, ['concept_type_id' => null, 'concept_theme_id' => null])) }}"
-                           class="badge text-white"
-                           style="background-color: #4E7525;">
-                            Tipo: {{ $conceptTypes->firstWhere('id', request('concept_type_id'))?->nombre }} &times;
-                        </a>
-                    @endif
+
 
                     @if(request()->filled('concept_theme_id'))
                         <a href="{{ route('concepts.public', array_merge($baseParams, ['concept_theme_id' => null])) }}"
                            class="badge text-white"
                            style="background-color: #6A9739;">
                             Tema: {{ $conceptThemes->firstWhere('id', request('concept_theme_id'))?->nombre }} &times;
+                        </a>
+                    @endif
+
+                    @if(request()->filled('concept_type_id'))
+                        <a href="{{ route('concepts.public', array_merge($baseParams, ['concept_type_id' => null, 'concept_theme_id' => null])) }}"
+                           class="badge text-white"
+                           style="background-color: #4E7525;">
+                            Tipo: {{ $conceptTypes->firstWhere('id', request('concept_type_id'))?->nombre }} &times;
                         </a>
                     @endif
 
@@ -1009,5 +1018,7 @@
         }
     }
     </script>
+
+
 </body>
 </html>

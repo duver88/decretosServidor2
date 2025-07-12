@@ -244,7 +244,7 @@
                     <div class="metadata-item">
                         <div class="metadata-label">
                             <i class="fas fa-folder me-2"></i>
-                            Categoría
+                            Dependencia
                         </div>
                         <div class="metadata-value">{{ $document->category->nombre }}</div>
                     </div>

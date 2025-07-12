@@ -263,7 +263,7 @@
                     <div class="metadata-item">
                         <div class="metadata-label">
                             <i class="fas fa-building me-2"></i>
-                            Dependencia
+                            Dependencia la Cual Solicita 
                         </div>
                         <div class="metadata-value">{{ $concept->dependencia }}</div>
                     </div>

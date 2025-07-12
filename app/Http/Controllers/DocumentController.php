@@ -13,178 +13,204 @@ class DocumentController extends Controller
 {
     // Método para la vista pública
  // Método para la vista pública con filtros mejorados
- public function listPublic(Request $request)
-    {
-        $query = Document::with('category');
+public function listPublic(Request $request)
+{
+    // IMPORTANTE: Incluir las relaciones en el with()
+    $query = Document::with(['category', 'documentType', 'documentTheme']);
 
-        // Filtro por tipo de documento
-        if ($request->filled('tipo')) {
-            $query->where('tipo', $request->tipo);
-        }
+    // Filtro por tipo de documento (decreto/resolución)
+    if ($request->filled('tipo')) {
+        $query->where('tipo', $request->tipo);
+    }
 
-        // Filtro por número (búsqueda parcial mejorada)
-        if ($request->filled('numero')) {
-            $numero = trim($request->numero);
-            $query->where('numero', 'LIKE', '%' . $numero . '%');
-        }
+    // Filtro por número (búsqueda parcial mejorada)
+    if ($request->filled('numero')) {
+        $numero = trim($request->numero);
+        $query->where('numero', 'LIKE', '%' . $numero . '%');
+    }
 
-        // CORREGIDO: Filtro por nombre (incluye búsqueda en tipo también)
-        if ($request->filled('nombre')) {
-            $nombre = trim($request->nombre);
-            $query->where(function($q) use ($nombre) {
-                $q->where('nombre', 'LIKE', '%' . $nombre . '%')
-                  ->orWhere('tipo', 'LIKE', '%' . $nombre . '%');
-            });
-        }
+    // Filtro por nombre (incluye búsqueda en tipo también)
+    if ($request->filled('nombre')) {
+        $nombre = trim($request->nombre);
+        $query->where(function($q) use ($nombre) {
+            $q->where('nombre', 'LIKE', '%' . $nombre . '%')
+              ->orWhere('tipo', 'LIKE', '%' . $nombre . '%');
+        });
+    }
 
-        // Filtro por categoría
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
-        }
+    // Filtro por categoría
+    if ($request->filled('category_id')) {
+        $query->where('category_id', $request->category_id);
+    }
 
-        // Filtros de fecha mejorados
-        if ($request->filled('fecha_desde')) {
-            $query->whereDate('fecha', '>=', $request->fecha_desde);
-        }
+    // 🔥 FILTROS PRINCIPALES QUE ESTABAN FALTANDO O MAL CONFIGURADOS:
 
-        if ($request->filled('fecha_hasta')) {
-            $query->whereDate('fecha', '<=', $request->fecha_hasta);
-        }
+    // Filtro por DocumentType (CORREGIDO)
+    if ($request->filled('document_type_id')) {
+        $query->where('document_type_id', $request->document_type_id);
+    }
 
-        // Filtro por fecha exacta (mantener compatibilidad)
-        if ($request->filled('fecha') && !$request->filled('fecha_desde') && !$request->filled('fecha_hasta')) {
-            $query->whereDate('fecha', $request->fecha);
-        }
+    // Filtro por DocumentTheme (CORREGIDO)
+    if ($request->filled('document_theme_id')) {
+        $query->where('document_theme_id', $request->document_theme_id);
+    }
 
-        // CAMBIADO: Filtro por año ahora filtra por nombre del documento
-        if ($request->filled('año')) {
-            $año = trim($request->año);
-            $query->where('nombre', 'LIKE', '%' . $año . '%');
-        }
+    // Filtros de fecha mejorados
+    if ($request->filled('fecha_desde')) {
+        $query->whereDate('fecha', '>=', $request->fecha_desde);
+    }
 
-        // CORREGIDO: Filtro por mes (usar fecha de publicación)
-        if ($request->filled('mes') && $request->filled('año')) {
-            $mes = (int) $request->mes;
-            $año = trim($request->año);
-            
-            // Validar que mes esté entre 1 y 12
-            if ($mes >= 1 && $mes <= 12 && !empty($año)) {
-                $query->whereMonth('fecha', $mes)
-                      ->where('nombre', 'LIKE', '%' . $año . '%');
-            }
-        }
+    if ($request->filled('fecha_hasta')) {
+        $query->whereDate('fecha', '<=', $request->fecha_hasta);
+    }
 
-        // AGREGADO: Búsqueda general (busca en nombre, número, descripción y tipo)
-        if ($request->filled('busqueda_general')) {
-            $busqueda = trim($request->busqueda_general);
-            $query->where(function($q) use ($busqueda) {
-                $q->where('nombre', 'LIKE', '%' . $busqueda . '%')
-                  ->orWhere('numero', 'LIKE', '%' . $busqueda . '%')
-                  ->orWhere('descripcion', 'LIKE', '%' . $busqueda . '%')
-                  ->orWhere('tipo', 'LIKE', "%{$busqueda}%");
-            });
-        }
+    // Filtro por fecha exacta (mantener compatibilidad)
+    if ($request->filled('fecha') && !$request->filled('fecha_desde') && !$request->filled('fecha_hasta')) {
+        $query->whereDate('fecha', $request->fecha);
+    }
 
-        if ($request->filled('document_type_id')) {  
-            $query->where('document_type_id', $request->document_type_id);  
-        }  
+    // Filtro por año ahora filtra por nombre del documento
+    if ($request->filled('año')) {
+        $año = trim($request->año);
+        $query->where('nombre', 'LIKE', '%' . $año . '%');
+    }
+
+    // Filtro por mes (usar fecha de publicación)
+    if ($request->filled('mes') && $request->filled('año')) {
+        $mes = (int) $request->mes;
+        $año = trim($request->año);
         
-        // Filtro por tema específico  
-        if ($request->filled('document_theme_id')) {  
-            $query->where('document_theme_id', $request->document_theme_id);  
-        }  
-
-        // Ordenamiento mejorado
-        $orden = $request->get('orden', 'fecha_desc');
-        switch ($orden) {
-            case 'numero_asc':
-                $query->orderBy('numero', 'asc');
-                break;
-            case 'numero_desc':
-                $query->orderBy('numero', 'desc');
-                break;
-            case 'nombre_asc':
-                $query->orderBy('nombre', 'asc');
-                break;
-            case 'nombre_desc':
-                $query->orderBy('nombre', 'desc');
-                break;
-            case 'fecha_asc':
-                $query->orderBy('fecha', 'asc');
-                break;
-            case 'tipo_asc':
-                $query->orderBy('tipo', 'asc')->orderBy('fecha', 'desc');
-                break;
-            case 'categoria_asc':
-                $query->join('categories', 'documents.category_id', '=', 'categories.id')
-                      ->orderBy('categories.nombre', 'asc')
-                      ->orderBy('documents.fecha', 'desc')
-                      ->select('documents.*');
-                break;
-            default: // fecha_desc
-                $query->orderBy('fecha', 'desc');
+        if ($mes >= 1 && $mes <= 12 && !empty($año)) {
+            $query->whereMonth('fecha', $mes)
+                  ->where('nombre', 'LIKE', '%' . $año . '%');
         }
-
-        // CAMBIADO: Siempre usar paginación de 10 elementos
-        $documents = $query->paginate(10)->withQueryString();
-
-        // Datos adicionales para los filtros
-        $categories = Category::orderBy('nombre')->get();
-        $tipos = Document::distinct()->pluck('tipo')->filter()->sort()->values();
-        
-        // CAMBIADO: Obtener años únicos del nombre del documento
-        $años = Document::selectRaw('SUBSTRING(nombre, LOCATE("2", nombre), 4) as año')
-                       ->distinct()
-                       ->whereRaw('nombre REGEXP "[0-9]{4}"')
-                       ->orderBy('año', 'desc')
-                       ->pluck('año')
-                       ->filter()
-                       ->unique()
-                       ->values();
-
-        // CORREGIDO: Estadísticas para que coincidan con la vista
-        $stats = [
-            'total' => Document::count(),
-            'por_tipo' => Document::selectRaw('tipo, COUNT(*) as count')
-                                 ->groupBy('tipo')
-                                 ->pluck('count', 'tipo'),
-            // CAMBIADO: Usar withCount para coincidir con el formato esperado en la vista
-            'por_categoria' => Category::withCount('documents')->get(),
-            'por_año' => Document::selectRaw('SUBSTRING(nombre, LOCATE("2", nombre), 4) as año, COUNT(*) as count')
-                               ->whereRaw('nombre REGEXP "[0-9]{4}"')
-                               ->groupBy('año')
-                               ->orderBy('año', 'desc')
-                               ->pluck('count', 'año'),
-            'ultimos_30_dias' => Document::where('fecha', '>=', now()->subDays(30))->count(),
-        ];
-
-        return view('public.documents', compact(
-            'documents', 
-            'categories', 
-            'tipos', 
-            'años', 
-            'stats'
-        ));
     }
 
-    public function getStats()
-    {
-        return [
-            'total_documentos' => Document::count(),
-            'por_mes_actual' => Document::whereMonth('fecha', now()->month)
-                                      ->whereYear('fecha', now()->year)
-                                      ->count(),
-            'ultimos_30_dias' => Document::where('fecha', '>=', now()->subDays(30))->count(),
-            'por_categoria' => Category::withCount('documents')->get(),
-        ];
+    // Búsqueda general (busca en nombre, número, descripción y tipo)
+    if ($request->filled('busqueda_general')) {
+        $busqueda = trim($request->busqueda_general);
+        $query->where(function($q) use ($busqueda) {
+            $q->where('nombre', 'LIKE', '%' . $busqueda . '%')
+              ->orWhere('numero', 'LIKE', '%' . $busqueda . '%')
+              ->orWhere('descripcion', 'LIKE', '%' . $busqueda . '%')
+              ->orWhere('tipo', 'LIKE', "%{$busqueda}%");
+        });
     }
 
-    // Vista para ver más o descargar documento
-    public function show($id)
-    {
-        $document = Document::findOrFail($id);
-        return view('public.document_detail', compact('document'));
+    // Ordenamiento mejorado
+    $orden = $request->get('orden', 'fecha_desc');
+    switch ($orden) {
+        case 'numero_asc':
+            $query->orderBy('numero', 'asc');
+            break;
+        case 'numero_desc':
+            $query->orderBy('numero', 'desc');
+            break;
+        case 'nombre_asc':
+            $query->orderBy('nombre', 'asc');
+            break;
+        case 'nombre_desc':
+            $query->orderBy('nombre', 'desc');
+            break;
+        case 'fecha_asc':
+            $query->orderBy('fecha', 'asc');
+            break;
+        case 'tipo_asc':
+            $query->orderBy('tipo', 'asc')->orderBy('fecha', 'desc');
+            break;
+        case 'categoria_asc':
+            $query->join('categories', 'documents.category_id', '=', 'categories.id')
+                  ->orderBy('categories.nombre', 'asc')
+                  ->orderBy('documents.fecha', 'desc')
+                  ->select('documents.*');
+            break;
+        case 'document_type_asc':
+            $query->join('document_types', 'documents.document_type_id', '=', 'document_types.id')
+                  ->orderBy('document_types.nombre', 'asc')
+                  ->orderBy('documents.fecha', 'desc')
+                  ->select('documents.*');
+            break;
+        case 'document_theme_asc':
+            $query->join('document_themes', 'documents.document_theme_id', '=', 'document_themes.id')
+                  ->orderBy('document_themes.nombre', 'asc')
+                  ->orderBy('documents.fecha', 'desc')
+                  ->select('documents.*');
+            break;
+        default: // fecha_desc
+            $query->orderBy('fecha', 'desc');
     }
+
+    // Paginación
+    $documents = $query->paginate(10)->withQueryString();
+
+    // Datos adicionales para los filtros
+    $categories = Category::orderBy('nombre')->get();
+    
+    // Tipos de documento (decreto/resolución)
+    $tipos = Document::distinct()
+                    ->whereNotNull('tipo')
+                    ->where('tipo', '!=', '')
+                    ->pluck('tipo')
+                    ->sort()
+                    ->values();
+    
+    // Obtener años únicos del nombre del documento
+    $años = Document::selectRaw('SUBSTRING(nombre, LOCATE("2", nombre), 4) as año')
+                   ->distinct()
+                   ->whereRaw('nombre REGEXP "[0-9]{4}"')
+                   ->orderBy('año', 'desc')
+                   ->pluck('año')
+                   ->filter()
+                   ->unique()
+                   ->values();
+
+    // DocumentTypes y DocumentThemes
+    $documentTypes = \App\Models\DocumentType::orderBy('nombre')->get();
+    $documentThemes = \App\Models\DocumentTheme::with('documentType')->orderBy('nombre')->get();
+    
+    // Si hay un tipo seleccionado, filtrar temas por ese tipo
+    $temasFiltered = collect();
+    if ($request->filled('document_type_id')) {
+        $temasFiltered = \App\Models\DocumentTheme::where('document_type_id', $request->document_type_id)
+                                    ->orderBy('nombre')
+                                    ->get();
+    }
+
+    // Estadísticas
+    $stats = [
+        'total' => Document::count(),
+        'por_tipo' => Document::selectRaw('tipo, COUNT(*) as count')
+                             ->groupBy('tipo')
+                             ->pluck('count', 'tipo'),
+        'por_categoria' => Category::withCount('documents')->get(),
+        'por_document_type' => \App\Models\DocumentType::withCount('documents')->get(),
+        'por_año' => Document::selectRaw('SUBSTRING(nombre, LOCATE("2", nombre), 4) as año, COUNT(*) as count')
+                           ->whereRaw('nombre REGEXP "[0-9]{4}"')
+                           ->groupBy('año')
+                           ->orderBy('año', 'desc')
+                           ->pluck('count', 'año'),
+        'ultimos_30_dias' => Document::where('fecha', '>=', now()->subDays(30))->count(),
+    ];
+
+    return view('public.documents', compact(
+        'documents', 
+        'categories', 
+        'tipos', 
+        'años', 
+        'stats',
+        'documentTypes',
+        'documentThemes',
+        'temasFiltered'
+    ));
+}
+
+public function getThemesByType($typeId)
+{
+    $themes = DocumentTheme::where('document_type_id', $typeId)
+                          ->orderBy('nombre')
+                          ->get(['id', 'nombre']);
+    return response()->json($themes);
+}
 
     // Dashboard - listado de documentos para admin
 public function index(Request $request)
@@ -346,98 +372,101 @@ public function index(Request $request)
 
 
     // Formulario para crear documento
-    public function create()
-    {
-       if (auth()->user()->is_admin) {  
-        // Admin sees all categories  
+public function create()
+{
+    if (auth()->user()->is_admin) {  
         $categories = Category::all();  
-        return view('admin.create_document', compact('categories'));  
+        $documentTypes = \App\Models\DocumentType::orderBy('nombre')->get();  // AGREGAR ESTA LÍNEA
+        return view('admin.create_document', compact('categories', 'documentTypes'));  
     } else {  
-        // Regular users only see categories they have create permission for  
         $categoryIds = auth()->user()->categoryPermissions()  
                               ->where('can_create', true)  
                               ->pluck('category_id')  
                               ->toArray();  
         $categories = Category::whereIn('id', $categoryIds)->get();  
+        $documentTypes = \App\Models\DocumentType::orderBy('nombre')->get();  // AGREGAR ESTA LÍNEA
           
         if ($categories->isEmpty()) {  
             return redirect()->route('user.dashboard')  
                            ->with('error', 'No tienes permiso para crear documentos');  
         }  
           
-        return view('users.create_document', compact('categories'));  
+        return view('users.create_document', compact('categories', 'documentTypes'));  
     }  
-    }
+}
 
     // Guardar documento
-    public function store(Request $request)
-    {
-        $request->validate([
-            'archivo' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:2048',
-            'nombre' => 'required|string|max:255',
-            'numero' => 'required|string|max:50',
-            'tipo' => 'required|string',
-            'descripcion' => 'nullable|string',
-            'fecha' => 'required|date',
-            'category_id' => 'required|exists:categories,id'
-        ]);
-    
-        if ($request->hasFile('archivo')) {
-            $archivo = $request->file('archivo');
-            $nombreOriginal = $archivo->getClientOriginalName(); // Obtener nombre original
-            $nombreLimpio = time() . '_' . str_replace(' ', '_', $nombreOriginal); // Evitar espacios y hacer único
-    
-            $ruta = $archivo->storeAs('documents', $nombreLimpio, 'public'); // Guardar con el mismo nombre
-    
-            $documento = new Document();
-            $documento->nombre = $request->nombre;
-            $documento->numero = $request->numero;
-            $documento->tipo = $request->tipo;
-            $documento->fecha = $request->fecha;
-            $documento->category_id = $request->category_id;
-            $documento->descripcion = $request->descripcion;
-            $documento->archivo = $ruta; // Guardar la ruta en la base de datos
-            $documento->save();
-            
-            return redirect()->back()->with('success', 'Documento subido correctamente.');
-        }
-    
-        return redirect()->back()->with('error', 'Error al subir el documento.');
+public function store(Request $request)
+{
+    $request->validate([
+        'archivo' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:2048',
+        'nombre' => 'required|string|max:255',
+        'numero' => 'required|string|max:50',
+        'tipo' => 'required|string',
+        'descripcion' => 'nullable|string',
+        'fecha' => 'required|date',
+        'category_id' => 'required|exists:categories,id',
+        'document_type_id' => 'required|exists:document_types,id',     // AGREGAR
+        'document_theme_id' => 'required|exists:document_themes,id',   // AGREGAR
+    ]);
+
+    if ($request->hasFile('archivo')) {
+        $archivo = $request->file('archivo');
+        $nombreOriginal = $archivo->getClientOriginalName();
+        $nombreLimpio = time() . '_' . str_replace(' ', '_', $nombreOriginal);
+
+        $ruta = $archivo->storeAs('documents', $nombreLimpio, 'public');
+
+        $documento = new Document();
+        $documento->nombre = $request->nombre;
+        $documento->numero = $request->numero;
+        $documento->tipo = $request->tipo;
+        $documento->fecha = $request->fecha;
+        $documento->category_id = $request->category_id;
+        $documento->document_type_id = $request->document_type_id;      // AGREGAR
+        $documento->document_theme_id = $request->document_theme_id;    // AGREGAR
+        $documento->descripcion = $request->descripcion;
+        $documento->archivo = $ruta;
+        $documento->save();
+        
+        return redirect()->back()->with('success', 'Documento subido correctamente.');
     }
 
+    return redirect()->back()->with('error', 'Error al subir el documento.');
+}
+
     // Formulario para editar documento
-    public function edit($id)
-    {
-        $document = Document::findOrFail($id);  
-      
+public function edit($id)
+{
+    $document = Document::findOrFail($id);  
+    
     if (auth()->user()->is_admin) {  
-        // Admin can edit any document  
         $categories = Category::all();  
-        return view('admin.edit_document', compact('document', 'categories'));  
+        $documentTypes = \App\Models\DocumentType::orderBy('nombre')->get();  // AGREGAR
+        return view('admin.edit_document', compact('document', 'categories', 'documentTypes'));  
     } else {  
-        // Check if user has edit permission for this document's category  
         if (!auth()->user()->hasPermissionFor($document->category_id, 'edit')) {  
             return redirect()->route('user.dashboard')  
                            ->with('error', 'No tienes permiso para editar documentos en esta categoría');  
         }  
           
-        // Only show categories the user has create permission for in the dropdown  
         $categoryIds = auth()->user()->categoryPermissions()  
                               ->where('can_edit', true)  
                               ->pluck('category_id')  
                               ->toArray();  
         $categories = Category::whereIn('id', $categoryIds)->get();  
+        $documentTypes = \App\Models\DocumentType::orderBy('nombre')->get();  // AGREGAR
           
-        return view('users.edit_document', compact('document', 'categories'));  
+        return view('users.edit_document', compact('document', 'categories', 'documentTypes'));  
     }  
-    }
+}
 
     // Actualizar documento
     public function update(Request $request, $id)
-    {
-        $document = Document::findOrFail($id);  
-      
-    // Validate request data  
+{
+    $document = Document::findOrFail($id);  
+  
+    // Validate request data - AGREGAMOS los nuevos campos pero mantenemos todo lo demás
     $request->validate([  
         'nombre' => 'required|string|max:255',  
         'numero' => 'required|string|max:50',  
@@ -445,7 +474,10 @@ public function index(Request $request)
         'fecha' => 'required|date',  
         'archivo' => 'nullable|file|mimes:pdf,doc,docx',  
         'descripcion' => 'nullable|string',  
-        'category_id' => 'required|exists:categories,id'  
+        'category_id' => 'required|exists:categories,id',
+        // 🆕 NUEVOS CAMPOS - pero opcionales para no romper documentos existentes
+        'document_type_id' => 'nullable|exists:document_types,id',
+        'document_theme_id' => 'nullable|exists:document_themes,id',
     ]);  
       
     if (!auth()->user()->is_admin) {  
@@ -463,10 +495,19 @@ public function index(Request $request)
         }  
     }  
       
-    // Continue with document update logic  
-    $data = $request->only(['nombre', 'numero', 'tipo', 'fecha', 'descripcion', 'category_id']);  
+    // Continue with document update logic - AGREGAMOS los nuevos campos
+    $data = $request->only([
+        'nombre', 
+        'numero', 
+        'tipo', 
+        'fecha', 
+        'descripcion', 
+        'category_id',
+        'document_type_id',    // 🆕 NUEVO
+        'document_theme_id'    // 🆕 NUEVO
+    ]);  
       
-    // Handle file upload if present  
+    // Handle file upload if present - SIN CAMBIOS
     if ($request->hasFile('archivo')) {  
         // Delete old file  
         if (Storage::disk('public')->exists($document->archivo)) {  
@@ -475,14 +516,16 @@ public function index(Request $request)
         $data['archivo'] = $request->file('archivo')->store('documents', 'public');  
     }  
       
+    // Update document - SIN CAMBIOS
     $document->update($data);  
       
+    // Redirect logic - SIN CAMBIOS
     if (auth()->user()->is_admin) {  
         return redirect()->route('dashboard')->with('success', 'Documento actualizado correctamente');  
     } else {  
         return redirect()->route('user.dashboard')->with('success', 'Documento actualizado correctamente');  
     }  
-    }
+}
 
     // Eliminar documento
     public function destroy($id)

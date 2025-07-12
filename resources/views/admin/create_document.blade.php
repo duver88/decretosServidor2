@@ -32,7 +32,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Categoría -->
             <div>
-                <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Categoría</label>
+                <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Categoría/Dependencia</label>
                 <select name="category_id" id="category_id" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu">
                     <option value="">-- Selecciona una categoría --</option>
                     @foreach($categories as $category)
@@ -56,6 +56,43 @@
                     @endforeach
                 </select>
                 @error('nombre')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+
+        <!-- 🆕 NUEVOS CAMPOS: DocumentType y DocumentTheme -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Tipo de Documento (DocumentType) -->
+            <div>
+                <label for="document_type_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Tipo de Documento <span class="text-red-500">*</span>
+                </label>
+                <select name="document_type_id" id="document_type_id" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu" required>
+                    <option value="">-- Selecciona un tipo --</option>
+                    @if(isset($documentTypes))
+                        @foreach($documentTypes as $documentType)
+                            <option value="{{ $documentType->id }}" {{ old('document_type_id') == $documentType->id ? 'selected' : '' }}>
+                                {{ $documentType->nombre }}
+                            </option>
+                        @endforeach
+                    @endif
+                </select>
+                @error('document_type_id')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Tema Específico (DocumentTheme) -->
+            <div>
+                <label for="document_theme_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Tema Específico <span class="text-red-500">*</span>
+                </label>
+                <select name="document_theme_id" id="document_theme_id" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu" disabled required>
+                    <option value="">Primero selecciona un tipo</option>
+                </select>
+                <small class="text-gray-500 dark:text-gray-400">Selecciona primero un tipo de documento</small>
+                @error('document_theme_id')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
@@ -101,18 +138,18 @@
                 @enderror
             </div>
 
-            <!-- Tipo de Documento -->
+            <!-- Tipo de Documento (Decreto/Resolución) -->
             <div>
-                <label for="tipo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Documento</label>
+                <label for="tipo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Clasificación</label>
                 <div class="mt-2 space-y-2">
                     <div class="flex items-center">
-                        <input type="radio" id="tipo_decreto" name="tipo" value="Decreto" class="h-4 w-4 text-[#43883d] focus:ring-[#43883d] border-gray-300 dark:border-gray-600" {{ old('tipo', 'Decreto') == 'Decreto' ? 'checked' : '' }}>
+                        <input type="radio" id="tipo_decreto" name="tipo" value="decreto" class="h-4 w-4 text-[#43883d] focus:ring-[#43883d] border-gray-300 dark:border-gray-600" {{ old('tipo', 'decreto') == 'decreto' ? 'checked' : '' }}>
                         <label for="tipo_decreto" class="ml-2 block text-sm text-gray-700 dark:text-gray-300 font-ubuntu">
                             Decreto
                         </label>
                     </div>
                     <div class="flex items-center">
-                        <input type="radio" id="tipo_resolucion" name="tipo" value="Resolución" class="h-4 w-4 text-[#43883d] focus:ring-[#43883d] border-gray-300 dark:border-gray-600" {{ old('tipo') == 'Resolución' ? 'checked' : '' }}>
+                        <input type="radio" id="tipo_resolucion" name="tipo" value="resolución" class="h-4 w-4 text-[#43883d] focus:ring-[#43883d] border-gray-300 dark:border-gray-600" {{ old('tipo') == 'resolución' ? 'checked' : '' }}>
                         <label for="tipo_resolucion" class="ml-2 block text-sm text-gray-700 dark:text-gray-300 font-ubuntu">
                             Resolución
                         </label>
@@ -127,7 +164,7 @@
         <!-- Descripción -->
         <div>
             <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Descripción</label>
-            <textarea name="descripcion" id="descripcion" rows="4" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu">{{ old('descripcion') }}</textarea>
+            <textarea name="descripcion" id="descripcion" rows="4" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu" placeholder="Describe brevemente el contenido del documento...">{{ old('descripcion') }}</textarea>
             @error('descripcion')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
@@ -148,9 +185,10 @@
     </form>
 </div>
 
-<!-- Script para mostrar el nombre del archivo seleccionado -->
+<!-- Scripts -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Script para mostrar el nombre del archivo seleccionado
         const fileInput = document.getElementById('archivo');
         const fileNameDisplay = document.getElementById('file-name');
         
@@ -161,6 +199,86 @@
                 fileNameDisplay.textContent = '';
             }
         });
+
+        // Script para cargar temas dinámicamente
+        const documentTypeSelect = document.getElementById('document_type_id');
+        const documentThemeSelect = document.getElementById('document_theme_id');
+        
+        function resetThemeSelect() {
+            documentThemeSelect.innerHTML = '<option value="">Primero selecciona un tipo</option>';
+            documentThemeSelect.disabled = true;
+            documentThemeSelect.classList.add('opacity-50');
+        }
+        
+        function loadThemes(typeId) {
+            documentThemeSelect.innerHTML = '<option value="">Cargando temas...</option>';
+            documentThemeSelect.disabled = true;
+            
+            fetch(`/documents/themes/${typeId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(themes => {
+                    documentThemeSelect.innerHTML = '<option value="">-- Selecciona un tema --</option>';
+                    
+                    if (themes && themes.length > 0) {
+                        themes.forEach(theme => {
+                            const option = document.createElement('option');
+                            option.value = theme.id;
+                            option.textContent = theme.nombre;
+                            
+                            // Mantener selección si existe
+                            if ('{{ old("document_theme_id") }}' == theme.id) {
+                                option.selected = true;
+                            }
+                            
+                            documentThemeSelect.appendChild(option);
+                        });
+                        
+                        documentThemeSelect.disabled = false;
+                        documentThemeSelect.classList.remove('opacity-50');
+                    } else {
+                        documentThemeSelect.innerHTML = '<option value="">No hay temas disponibles</option>';
+                        documentThemeSelect.disabled = true;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar temas:', error);
+                    documentThemeSelect.innerHTML = '<option value="">Error al cargar temas</option>';
+                    documentThemeSelect.disabled = true;
+                });
+        }
+        
+        documentTypeSelect.addEventListener('change', function() {
+            const typeId = this.value;
+            
+            if (typeId) {
+                loadThemes(typeId);
+            } else {
+                resetThemeSelect();
+            }
+        });
+        
+        // Cargar temas si ya hay un tipo seleccionado (para mantener estado en errores de validación)
+        if (documentTypeSelect.value) {
+            loadThemes(documentTypeSelect.value);
+        }
     });
 </script>
+
+<!-- CSS adicional -->
+<style>
+    #document_theme_id:disabled {
+        background-color: #f3f4f6 !important;
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .focus\:ring-\[\#43883d\]:focus {
+        box-shadow: 0 0 0 3px rgba(67, 136, 61, 0.1);
+    }
+</style>
 @endsection

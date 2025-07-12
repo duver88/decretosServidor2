@@ -4,30 +4,77 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto my-8">
-    <!-- Cabecera con el logo institucional -->
     <!-- Cabecera del formulario con el color verde institucional -->
     <div class="bg-[#43883d] px-6 py-4">
         <h2 class="text-2xl font-ubuntu font-bold text-white">Editar Documento</h2>
     </div>
 
+    <!-- Debug temporal (quitar después) -->
+    @if(isset($documentTypes))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            ✅ Se encontraron {{ $documentTypes->count() }} tipos de documento
+        </div>
+    @else
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            ❌ Variable $documentTypes no está definida
+        </div>
+    @endif
+
     <div class="bg-white shadow-lg rounded-b-lg p-8">
-       
-        
         <form action="{{ route('document.update', $document->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
             <!-- Categoría -->
             <div class="mb-4">
-                <label for="category_id" class="block font-ubuntu font-medium text-gray-700 mb-2">Categoría</label>
+                <label for="category_id" class="block font-ubuntu font-medium text-gray-700 mb-2">Dependencia</label>
                 <select name="category_id" id="category_id" class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu">
-                    <option value="">-- Selecciona una categoría --</option>
+                    <option value="">-- Selecciona una Dependencia --</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ $document->category_id == $category->id ? 'selected' : '' }}>
                             {{ $category->nombre }}
                         </option>
                     @endforeach
                 </select>
+            </div>
+
+            <!-- 🆕 NUEVOS CAMPOS: DocumentType y DocumentTheme -->
+            <div class="grid md:grid-cols-2 gap-6 mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <h3 class="col-span-full text-lg font-semibold text-blue-800 font-ubuntu mb-4">Clasificación del Documento</h3>
+                
+                <!-- Tipo de Documento (DocumentType) -->
+                <div>
+                    <label for="document_type_id" class="block font-ubuntu font-medium text-gray-700 mb-2">
+                        Tipo de Documento <span class="text-red-500">*</span>
+                    </label>
+                    <select name="document_type_id" id="document_type_id" class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu" required>
+                        <option value="">-- Selecciona un tipo --</option>
+                        @if(isset($documentTypes))
+                            @foreach($documentTypes as $documentType)
+                                <option value="{{ $documentType->id }}" {{ old('document_type_id', $document->document_type_id) == $documentType->id ? 'selected' : '' }}>
+                                    {{ $documentType->nombre }}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
+                    @error('document_type_id')
+                        <p class="text-red-500 text-sm mt-1 font-ubuntu">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Tema Específico (DocumentTheme) -->
+                <div>
+                    <label for="document_theme_id" class="block font-ubuntu font-medium text-gray-700 mb-2">
+                        Tema Específico <span class="text-red-500">*</span>
+                    </label>
+                    <select name="document_theme_id" id="document_theme_id" class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu" disabled required>
+                        <option value="">Primero selecciona un tipo</option>
+                    </select>
+                    <small class="text-gray-500">Selecciona primero un tipo de documento</small>
+                    @error('document_theme_id')
+                        <p class="text-red-500 text-sm mt-1 font-ubuntu">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
@@ -64,12 +111,12 @@
                         value="{{ old('fecha', $document->fecha) }}">
                 </div>
 
-                <!-- Tipo -->
+                <!-- Tipo (Decreto/Resolución) -->
                 <div>
-                    <label for="tipo" class="block font-ubuntu font-medium text-gray-700 mb-2">Tipo de Documento</label>
+                    <label for="tipo" class="block font-ubuntu font-medium text-gray-700 mb-2">Clasificación</label>
                     <select name="tipo" id="tipo" class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu">
-                        <option value="decreto" {{ $document->tipo == 'decreto' ? 'selected' : '' }}>Decreto</option>
-                        <option value="resolución" {{ $document->tipo == 'resolución' ? 'selected' : '' }}>Resolución</option>
+                        <option value="decreto" {{ old('tipo', $document->tipo) == 'decreto' ? 'selected' : '' }}>Decreto</option>
+                        <option value="resolución" {{ old('tipo', $document->tipo) == 'resolución' ? 'selected' : '' }}>Resolución</option>
                     </select>
                 </div>
             </div>
@@ -102,7 +149,7 @@
             <!-- Descripción -->
             <div>
                 <label for="descripcion" class="block font-ubuntu font-medium text-gray-700 mb-2">Descripción</label>
-                <textarea name="descripcion" id="descripcion" rows="4" class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu resize-none">{{ old('descripcion', $document->descripcion) }}</textarea>
+                <textarea name="descripcion" id="descripcion" rows="4" class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu resize-none" placeholder="Describe brevemente el contenido del documento...">{{ old('descripcion', $document->descripcion) }}</textarea>
             </div>
 
             <!-- Botones -->
@@ -119,11 +166,110 @@
     </div>
 </div>
 
+<!-- Scripts -->
 <script>
-    // Script para mostrar el nombre del archivo seleccionado
-    document.getElementById('archivo').addEventListener('change', function(e) {
-        const fileName = e.target.files[0] ? e.target.files[0].name : 'Ningún archivo seleccionado';
-        document.getElementById('file-name').textContent = fileName;
+    document.addEventListener('DOMContentLoaded', function() {
+        // Script para mostrar el nombre del archivo seleccionado
+        const fileInput = document.getElementById('archivo');
+        const fileNameDisplay = document.getElementById('file-name');
+        
+        fileInput.addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'Ningún archivo seleccionado';
+            fileNameDisplay.textContent = fileName;
+        });
+
+        // Script para cargar temas dinámicamente
+        const documentTypeSelect = document.getElementById('document_type_id');
+        const documentThemeSelect = document.getElementById('document_theme_id');
+        const currentThemeId = '{{ old("document_theme_id", $document->document_theme_id) }}';
+        
+        function resetThemeSelect() {
+            documentThemeSelect.innerHTML = '<option value="">Primero selecciona un tipo</option>';
+            documentThemeSelect.disabled = true;
+            documentThemeSelect.classList.add('opacity-50');
+        }
+        
+        function loadThemes(typeId, selectedThemeId = null) {
+            documentThemeSelect.innerHTML = '<option value="">Cargando temas...</option>';
+            documentThemeSelect.disabled = true;
+            
+            fetch(`/documents/themes/${typeId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(themes => {
+                    documentThemeSelect.innerHTML = '<option value="">-- Selecciona un tema --</option>';
+                    
+                    if (themes && themes.length > 0) {
+                        themes.forEach(theme => {
+                            const option = document.createElement('option');
+                            option.value = theme.id;
+                            option.textContent = theme.nombre;
+                            
+                            // Seleccionar el tema actual o el enviado por parámetro
+                            if ((selectedThemeId && selectedThemeId == theme.id) || 
+                                (currentThemeId && currentThemeId == theme.id)) {
+                                option.selected = true;
+                            }
+                            
+                            documentThemeSelect.appendChild(option);
+                        });
+                        
+                        documentThemeSelect.disabled = false;
+                        documentThemeSelect.classList.remove('opacity-50');
+                    } else {
+                        documentThemeSelect.innerHTML = '<option value="">No hay temas disponibles</option>';
+                        documentThemeSelect.disabled = true;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar temas:', error);
+                    documentThemeSelect.innerHTML = '<option value="">Error al cargar temas</option>';
+                    documentThemeSelect.disabled = true;
+                    
+                    // Mostrar mensaje de error
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-2';
+                    errorDiv.innerHTML = '⚠️ Error al cargar los temas. Verifica la conexión.';
+                    documentThemeSelect.parentNode.appendChild(errorDiv);
+                    
+                    setTimeout(() => {
+                        if (errorDiv.parentNode) {
+                            errorDiv.remove();
+                        }
+                    }, 5000);
+                });
+        }
+        
+        // Event listener para cambio de tipo
+        documentTypeSelect.addEventListener('change', function() {
+            const typeId = this.value;
+            
+            if (typeId) {
+                loadThemes(typeId);
+            } else {
+                resetThemeSelect();
+            }
+        });
+        
+        // Cargar temas al inicio si ya hay un tipo seleccionado
+        if (documentTypeSelect.value) {
+            loadThemes(documentTypeSelect.value, currentThemeId);
+        }
+        
+        // Mejorar la experiencia visual
+        documentTypeSelect.addEventListener('focus', function() {
+            this.style.borderColor = '#43883d';
+            this.style.boxShadow = '0 0 0 3px rgba(67, 136, 61, 0.1)';
+        });
+        
+        documentTypeSelect.addEventListener('blur', function() {
+            this.style.borderColor = '';
+            this.style.boxShadow = '';
+        });
     });
 </script>
 
@@ -132,6 +278,16 @@
     
     .font-ubuntu {
         font-family: 'Ubuntu', sans-serif;
+    }
+    
+    #document_theme_id:disabled {
+        background-color: #f3f4f6 !important;
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .focus\:ring-\[\#43883d\]:focus {
+        box-shadow: 0 0 0 3px rgba(67, 136, 61, 0.1);
     }
 </style>
 @endsection

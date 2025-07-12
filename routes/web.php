@@ -75,6 +75,12 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
 
     // Ruta AJAX para obtener temas  
     Route::get('/dashboard/document-themes/{typeId}', [DocumentController::class, 'getThemes'])->name('documents.getThemes');  
+    // Rutas para filtros AJAX de Documentos
+Route::get('/api/document-stats', [DocumentController::class, 'getStats'])
+    ->name('api.document-stats');
+
+    Route::get('/documents/themes/{typeId}', [DocumentController::class, 'getThemesByType'])
+    ->name('documents.themes');
 });
 
 // Rutas de autenticación
