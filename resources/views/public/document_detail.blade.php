@@ -300,24 +300,7 @@
                 </div>
             </div>
 
-            <!-- Tarjeta de Badge de Seguridad (nueva) -->
-            <div class="info-card">
-                <div class="info-card-header">
-                    <i class="fas fa-shield-check me-2"></i>
-                    Verificación
-                </div>
-                <div class="info-card-body">
-                    <div class="text-center">
-                        <div class="security-badge-large mb-3">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h6 class="text-success fw-bold mb-2">Documento Oficial</h6>
-                        <p class="text-muted small mb-0">
-                            Documento oficial expedido por la Alcaldía de Bucaramanga
-                        </p>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>

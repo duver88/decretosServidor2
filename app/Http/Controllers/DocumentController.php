@@ -516,6 +516,8 @@ public function edit($id)
         $data['archivo'] = $request->file('archivo')->store('documents', 'public');  
     }  
       
+
+
     // Update document - SIN CAMBIOS
     $document->update($data);  
       
@@ -525,6 +527,14 @@ public function edit($id)
     } else {  
         return redirect()->route('user.dashboard')->with('success', 'Documento actualizado correctamente');  
     }  
+}
+
+public function show($id)
+{
+    $document = Document::with(['category', 'documentType', 'documentTheme'])
+                       ->findOrFail($id);
+    
+    return view('public.document_detail', compact('document'));
 }
 
     // Eliminar documento
