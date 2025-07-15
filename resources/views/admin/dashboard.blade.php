@@ -400,7 +400,7 @@
                 
                 @if($document->descripcion)
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                        {{ Str::limit($document->descripcion, 100) }}
+                        {{ Str::limit($document->descripcion, 40) }}
                     </p>
                 @endif
                 

@@ -173,6 +173,46 @@
 
 /* Responsive adicional para móviles pequeños */
 @media (max-width: 576px) {
+
+     .pagination-container {
+        padding: 15px 10px; /* Menos padding horizontal */
+        margin-top: 20px;
+    }
+    
+    .pagination .page-link {
+        padding: 6px 10px; /* Más compacto */
+        font-size: 0.8rem; /* Texto más pequeño */
+        min-width: 32px; /* Botones más pequeños */
+        margin: 0 1px; /* Menos espaciado */
+    }
+    
+    .pagination .page-item {
+        margin: 0 1px; /* Reducir margen entre elementos */
+    }
+    
+    .pagination-info {
+        text-align: center;
+        padding: 10px 12px; /* Más compacto */
+    }
+    
+    .pagination-info .badge {
+        font-size: 0.75rem; /* Badge más pequeño */
+        padding: 6px 10px;
+    }
+    
+    /* Ocultar algunos números en móvil para que no se desborde */
+    .pagination .page-item:not(.active):not(:first-child):not(:last-child):not(:nth-child(2)):not(:nth-last-child(2)) {
+        display: none;
+    }
+    
+    /* Mostrar solo: primera, anterior, actual, siguiente, última */
+    .pagination .page-item:first-child,
+    .pagination .page-item:last-child,
+    .pagination .page-item.active,
+    .pagination .page-item:has(.page-link[rel="prev"]),
+    .pagination .page-item:has(.page-link[rel="next"]) {
+        display: inline-block !important;
+    }
     .badge {
         font-size: 0.75rem !important;
         padding: 0.25rem 0.5rem !important;
@@ -312,8 +352,8 @@
         <div class="text-center mb-5">
             
             <h1 class="fw-bold" style="color: #43883d; font-family: 'Ubuntu', sans-serif;">
-                Relatoría de Actos Administrativos
-                <small class="d-block fs-5 mt-2 text-muted">Alcaldía de Bucaramanga</small>
+                Sistema de Normas Propios de la Entidad
+                <small class="d-block fs-5 mt-2 text-muted">Relatoría de Actos Administrativos</small>
             </h1>
         </div>
 
@@ -415,30 +455,49 @@
         </div>
 
         <!-- CHIPS DE CATEGORÍAS -->
-        <div class="mb-4">
-            @if(isset($categories) && $categories->count() > 0)
-                @foreach($categories as $categoria)
-                    @php
-                        $countCategoria = $stats['por_categoria']->firstWhere('id', $categoria->id)?->documents_count ?? 0;
-                    @endphp
-                    <form method="GET" action="{{ route('home') }}" class="d-inline">
-                        @foreach(request()->except(['category_id', 'page']) as $key => $value)
-                            @if(is_array($value))
-                                @foreach($value as $v)
-                                    <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
-                                @endforeach
-                            @else
-                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                            @endif
+<div class="mb-4">
+    @if(isset($años) && $años->count() > 0)
+        @foreach($años as $año)
+            @php
+                $countAño = $stats['por_año'][$año] ?? 0;
+                $currentAño = request()->get('año');
+            @endphp
+            <form method="GET" action="{{ route('home') }}" class="d-inline">
+                @foreach(request()->except(['año', 'page']) as $key => $value)
+                    @if(is_array($value))
+                        @foreach($value as $v)
+                            <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
                         @endforeach
-                        <input type="hidden" name="category_id" value="{{ $categoria->id }}">
-                        <button type="submit" class="chip {{ $currentCategory == $categoria->id ? 'active' : '' }}">
-                            {{ $categoria->nombre }} ({{ $countCategoria }})
-                        </button>
-                    </form>
+                    @else
+                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                    @endif
                 @endforeach
-            @endif
-        </div>
+                <input type="hidden" name="año" value="{{ $año }}">
+                <button type="submit" class="chip {{ $currentAño == $año ? 'active' : '' }}">
+                    {{ $año }} ({{ $countAño }})
+                </button>
+            </form>
+        @endforeach
+        
+        {{-- Botón para limpiar filtro de año --}}
+        @if(request()->filled('año'))
+            <form method="GET" action="{{ route('home') }}" class="d-inline">
+                @foreach(request()->except(['año', 'page']) as $key => $value)
+                    @if(is_array($value))
+                        @foreach($value as $v)
+                            <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
+                        @endforeach
+                    @else
+                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                    @endif
+                @endforeach
+                <button type="submit" class="chip clear-filter">
+                    Todos los años
+                </button>
+            </form>
+        @endif
+    @endif
+</div>
 
         <!-- BUSCADOR GENERAL -->
         <form method="GET" action="{{ route('home') }}">
@@ -487,19 +546,6 @@
             <!-- FILTROS AVANZADOS -->
             <div class="collapse mb-4" id="filtrosAvanzados">
                 <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="category_id" class="form-label"><i class="fas fa-folder-open me-1"></i> Dependencia</label>
-                        <select class="form-select" name="category_id" id="category_id">
-                            <option value="">Todas las Dependencias</option>
-                            @if(isset($categories))
-                                @foreach($categories as $categoria)
-                                    <option value="{{ $categoria->id }}" @selected(request('category_id') == $categoria->id)>
-                                        {{ $categoria->nombre }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
                     <div class="col-md-6">
                         <label for="tipo" class="form-label"><i class="fas fa-file-alt me-1"></i> Tipo de Documento</label>
                         <select class="form-select" name="tipo" id="tipo">
@@ -667,10 +713,14 @@
                     @endif
 
                     @if(request()->filled('mes'))
+                        @php
+                            $mesNumero = (int) request('mes');
+                            $mesNumero = ($mesNumero >= 1 && $mesNumero <= 12) ? $mesNumero : 1;
+                        @endphp
                         <a href="{{ route('home', array_merge($baseParams, ['mes' => null])) }}"
-                           class="badge text-white"
-                           style="background-color: #CCCC00;">
-                            Mes: {{ \Carbon\Carbon::create()->month(request('mes'))->translatedFormat('F') }} &times;
+                        class="badge text-white"
+                        style="background-color: #CCCC00;">
+                            Mes: {{ \Carbon\Carbon::create()->month($mesNumero)->translatedFormat('F') }} &times;
                         </a>
                     @endif
 
@@ -771,7 +821,7 @@
                             
                             @if($document->category)
                                 <span class="badge bg-primary text-white fw-semibold px-3 py-2 rounded-pill" style="font-size: 0.85rem;">
-                                    {{ Str::limit($document->category->nombre, 15) }}
+                                    {{ Str::limit($document->documentType->nombre, 15) }}
                                 </span>
                             @endif
                         </div>
@@ -794,19 +844,19 @@
                                     </a>
                                 </h5>
                                 <p class="card-text text-muted mb-0 small">
-                                    {{ Str::limit($document->descripcion, 50) }}
+                                    {{ Str::limit($document->descripcion, 30) }}
                                 </p>
                             </div>
                         </div>
 
                         <!-- Información de fecha -->
-                        <div class="d-flex flex-wrap gap-3 mb-3 small text-muted">
+                       <div class="d-flex flex-wrap gap-3 mb-3 small text-muted">
                             <div class="d-flex align-items-center gap-1">
-                                <i class="fas fa-calendar text-primary"></i>
+                                <i class="fas fa-calendar" style="color: #2D6A2F;"></i>
                                 <span>{{ \Carbon\Carbon::parse($document->fecha)->format('d \d\e F \d\e\l Y') }}</span>
                             </div>
                             <div class="d-flex align-items-center gap-1">
-                                <i class="fas fa-clock text-primary"></i>
+                                <i class="fas fa-clock" style="color: #2D6A2F;"></i>
                                 <span>{{ $document->created_at->diffForHumans() }}</span>
                             </div>
                         </div>

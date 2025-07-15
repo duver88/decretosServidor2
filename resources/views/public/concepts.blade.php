@@ -204,7 +204,73 @@
                 text-align: center;
                 padding: 12px 15px;
             }
+
+            .pagination-container {
+        padding: 15px 10px; /* Menos padding horizontal */
+        margin-top: 20px;
+    }
+    
+    .pagination .page-link {
+        padding: 6px 10px; /* Más compacto */
+        font-size: 0.8rem; /* Texto más pequeño */
+        min-width: 32px; /* Botones más pequeños */
+        margin: 0 1px; /* Menos espaciado */
+    }
+    
+    .pagination .page-item {
+        margin: 0 1px; /* Reducir margen entre elementos */
+    }
+    
+    .pagination-info {
+        text-align: center;
+        padding: 10px 12px; /* Más compacto */
+    }
+    
+    .pagination-info .badge {
+        font-size: 0.75rem; /* Badge más pequeño */
+        padding: 6px 10px;
+    }
+    
+    /* Ocultar algunos números en móvil para que no se desborde */
+    .pagination .page-item:not(.active):not(:first-child):not(:last-child):not(:nth-child(2)):not(:nth-last-child(2)) {
+        display: none;
+    }
+    
+    /* Mostrar solo: primera, anterior, actual, siguiente, última */
+    .pagination .page-item:first-child,
+    .pagination .page-item:last-child,
+    .pagination .page-item.active,
+    .pagination .page-item:has(.page-link[rel="prev"]),
+    .pagination .page-item:has(.page-link[rel="next"]) {
+        display: inline-block !important;
+    }
         }
+
+        @media (max-width: 400px) {
+    .pagination .page-link {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+        min-width: 28px;
+    }
+    
+    .pagination-container {
+        padding: 10px 5px;
+    }
+    
+    /* Ajustar también los badges de filtros aplicados en móvil */
+    .badge {
+        font-size: 0.7rem !important;
+        padding: 4px 8px !important;
+        margin: 2px !important;
+    }
+    
+    /* Chips más pequeños en móvil */
+    .chip {
+        padding: 4px 10px;
+        margin: 2px;
+        font-size: 0.8rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -311,8 +377,8 @@
        <h6><span style="color: #808080;"><a href="https://www.bucaramanga.gov.co/" title="Inicio" style="color: #808080;">Inicio</a> » <a href="https://www.bucaramanga.gov.co/transparencia/" title="Transparencia" style="color: #808080;">Transparencia</a> » <a href="https://www.bucaramanga.gov.co/transparencia-bucaramanga/sistema-de-busquedas-de-normas-propio-de-la-entidad/" title="Sistema de Normas Propios de la Entidad" style="color: #808080;">Sistema de Normas Propios de la Entidad</a></span></h6>
         <div class="text-center mb-5">
             <h1 class="fw-bold" style="color: #43883d; font-family: 'Ubuntu', sans-serif;">
-                Relatoría de Conceptos
-                <small class="d-block fs-5 mt-2 text-muted">Alcaldía de Bucaramanga</small>
+                Sistema De Normas Propios de la Entidad
+                <small class="d-block fs-5 mt-2 text-muted">Relatoría de Conceptos</small>
             </h1>
         </div>
 
@@ -448,7 +514,7 @@
                             @endforeach
                         </select>
                     </div>
-                    @if(isset($dependencias) && count($dependencias) > 0)
+                    {{-- @if(isset($dependencias) && count($dependencias) > 0)
                     <div class="col-md-6">
                         <label for="dependencia" class="form-label"><i class="fas fa-building me-1"></i> Dependencia</label>
                         <select class="form-select" name="dependencia" id="dependencia">
@@ -460,7 +526,7 @@
                             @endforeach
                         </select>
                     </div>
-                    @endif
+                    @endif --}}
                     <div class="col-md-6">
                         <label for="año" class="form-label"><i class="fas fa-calendar me-1"></i> Año</label>
                         <select class="form-select" name="año">
@@ -657,7 +723,7 @@
                                     </a>
                                 </h5>
                                 <p class="text-muted mb-0 small">
-                                    {{ Str::limit($concept->contenido, 50) }}
+                                    {{ Str::limit($concept->contenido, 30) }}
                                 </p>
                             </div>
                         </div>
