@@ -547,7 +547,7 @@
             <div class="collapse mb-4" id="filtrosAvanzados">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label for="tipo" class="form-label"><i class="fas fa-file-alt me-1"></i> Tipo de Documento</label>
+                        <label for="tipo" class="form-label"><i class="fas fa-file-alt me-1"></i> Acto Administrativo</label>
                         <select class="form-select" name="tipo" id="tipo">
                             <option value="">Todos los tipos</option>
                             @if(isset($tipos))
@@ -904,8 +904,20 @@
             </div>
         </div>
     @endif
+
+
 </div>
 
+<!-- Botón para Actos Administrativos antes de 2023 -->
+<div class="text-center mt-4 mb-4">
+    <a href="https://www.bucaramanga.gov.co/transparencia-bucaramanga/sistema-de-busquedas-de-normas-propio-de-la-entidad/" class="btn btn-success btn-lg px-4 py-3 rounded-3 shadow-sm fw-bold">
+        <i class="fas fa-archive me-2"></i>
+        Actos administrativos antes de 2023
+    </a>
+    <p class="small text-muted mt-2 mb-0">
+        Consulta documentos históricos anteriores al año 2023
+    </p>
+</div>
 
 
         <!-- SECCIÓN DE PAGINACIÓN MEJORADA -->
@@ -918,8 +930,7 @@
             </div>
         @endif
         
-    </div>
-
+</div>
     {{-- FIN SECCIÓN PRINCIPAL --}}
 
     {{-- FOOTER --}}
@@ -1211,7 +1222,7 @@
         });
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     const documentTypeSelect = document.getElementById('document_type_id');
     const documentThemeSelect = document.getElementById('document_theme_id');
     const loadingText = 'Cargando temas...';

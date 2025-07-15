@@ -66,7 +66,7 @@
             <!-- Tipo de Documento (DocumentType) -->
             <div>
                 <label for="document_type_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Tipo de Documento <span class="text-red-500">*</span>
+                     Categoría Conceptual <span class="text-red-500">*</span>
                 </label>
                 <select name="document_type_id" id="document_type_id" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu" required>
                     <option value="">-- Selecciona un tipo --</option>
