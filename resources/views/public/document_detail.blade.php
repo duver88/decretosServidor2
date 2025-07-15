@@ -125,8 +125,7 @@
 
     <!-- Header del documento -->
     <div class="header-title">
-        <h1>{{ ucfirst($document->tipo) }} N° {{ $document->numero }}</h1>
-        <p class="header-subtitle mb-0">{{ $document->nombre }} - {{ $document->category->nombre }}</p>
+        <h1>{{ ucfirst($document->tipo) }} N° {{ $document->numero }} de {{ $document->nombre }}</h1>
     </div>
 
     <div class="row">
@@ -241,13 +240,13 @@
                     Clasificación
                 </div>
                 <div class="info-card-body">
-                    <div class="metadata-item">
+                    {{-- <div class="metadata-item">
                         <div class="metadata-label">
                             <i class="fas fa-folder me-2"></i>
                             Dependencia
                         </div>
                         <div class="metadata-value">{{ $document->category->nombre }}</div>
-                    </div>
+                    </div> --}}
 
                     <div class="metadata-item">
                         <div class="metadata-label">

@@ -351,7 +351,7 @@
                                 Concepto No {{ $concept->titulo }} del {{ $concept->año }}
                             </a>
                         </h3>
-                        <p class="text-gray-600 dark:text-gray-400 mt-1 line-clamp-2 font-ubuntu text-sm">{{ $concept->contenido }}</p>
+                        <p class="text-gray-600 dark:text-gray-400 mt-1 line-clamp-2 font-ubuntu text-sm">{{ Str::limit($concept->contenido,30) }}</p>
                     </div>
                 </div>
                 
@@ -414,63 +414,142 @@
         @endforelse
     </div>
 
-    <!-- PAGINACIÓN MEJORADA -->
-    @if($concepts->hasPages())
-        <div class="mt-12 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl p-8 shadow-lg">
-            <!-- Enlaces de paginación con estilo personalizado -->
-            <div class="flex justify-center">
-                <nav class="flex items-center gap-1" role="navigation" aria-label="Pagination Navigation">
-                    {{-- Previous Page Link --}}
-                    @if ($concepts->onFirstPage())
-                        <span class="px-4 py-3 text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                            </svg>
-                        </span>
-                    @else
-                        <a href="{{ $concepts->appends(request()->query())->previousPageUrl() }}" 
-                           class="px-4 py-3 bg-white text-[#43883d] border border-gray-300 rounded-lg hover:bg-[#43883d] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                            </svg>
-                        </a>
-                    @endif
+@if($concepts->hasPages())
+    <div class="mt-12 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl p-4 sm:p-8 shadow-lg">
+        <!-- Enlaces de paginación con estilo personalizado y responsivo -->
+        <div class="flex justify-center">
+            <nav class="flex items-center gap-1" role="navigation" aria-label="Pagination Navigation">
+                {{-- Previous Page Link --}}
+                @if ($concepts->onFirstPage())
+                    <span class="px-2 sm:px-4 py-2 sm:py-3 text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </span>
+                @else
+                    <a href="{{ $concepts->appends(request()->query())->previousPageUrl() }}" 
+                       class="px-2 sm:px-4 py-2 sm:py-3 bg-white text-[#43883d] border border-gray-300 rounded-lg hover:bg-[#43883d] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </a>
+                @endif
 
-                    {{-- Pagination Elements --}}
-                    @foreach ($concepts->appends(request()->query())->getUrlRange(1, $concepts->lastPage()) as $page => $url)
-                        @if ($page == $concepts->currentPage())
-                            <span class="px-4 py-3 bg-[#43883d] text-white border border-[#43883d] rounded-lg font-semibold shadow-md transform -translate-y-0.5">
-                                {{ $page }}
-                            </span>
-                        @else
-                            <a href="{{ $url }}" 
-                               class="px-4 py-3 bg-white text-[#43883d] border border-gray-300 rounded-lg hover:bg-[#43883d] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
-                                {{ $page }}
-                            </a>
-                        @endif
-                    @endforeach
+                {{-- Pagination Elements con lógica responsiva --}}
+                @php
+                    $start = max(1, $concepts->currentPage() - 2);
+                    $end = min($concepts->lastPage(), $concepts->currentPage() + 2);
+                    
+                    // En móvil, mostrar menos páginas
+                    if (request()->userAgent() && strpos(request()->userAgent(), 'Mobile') !== false) {
+                        $start = max(1, $concepts->currentPage() - 1);
+                        $end = min($concepts->lastPage(), $concepts->currentPage() + 1);
+                    }
+                @endphp
 
-                    {{-- Next Page Link --}}
-                    @if ($concepts->hasMorePages())
-                        <a href="{{ $concepts->appends(request()->query())->nextPageUrl() }}" 
-                           class="px-4 py-3 bg-white text-[#43883d] border border-gray-300 rounded-lg hover:bg-[#43883d] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </a>
-                    @else
-                        <span class="px-4 py-3 text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
+                {{-- Primera página (solo si no está en rango) --}}
+                @if($start > 1)
+                    <a href="{{ $concepts->appends(request()->query())->url(1) }}" 
+                       class="px-2 sm:px-4 py-2 sm:py-3 bg-white text-[#43883d] border border-gray-300 rounded-lg hover:bg-[#43883d] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs sm:text-sm">
+                        1
+                    </a>
+                    @if($start > 2)
+                        <span class="px-1 sm:px-2 py-2 sm:py-3 text-gray-500 text-xs sm:text-sm">
+                            ...
                         </span>
                     @endif
-                </nav>
+                @endif
+
+                {{-- Páginas del rango actual --}}
+                @for ($page = $start; $page <= $end; $page++)
+                    @if ($page == $concepts->currentPage())
+                        <span class="px-2 sm:px-4 py-2 sm:py-3 bg-[#43883d] text-white border border-[#43883d] rounded-lg font-semibold shadow-md transform -translate-y-0.5 text-xs sm:text-sm min-w-[2rem] sm:min-w-[2.5rem] text-center">
+                            {{ $page }}
+                        </span>
+                    @else
+                        <a href="{{ $concepts->appends(request()->query())->url($page) }}" 
+                           class="px-2 sm:px-4 py-2 sm:py-3 bg-white text-[#43883d] border border-gray-300 rounded-lg hover:bg-[#43883d] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs sm:text-sm min-w-[2rem] sm:min-w-[2.5rem] text-center">
+                            {{ $page }}
+                        </a>
+                    @endif
+                @endfor
+
+                {{-- Última página (solo si no está en rango) --}}
+                @if($end < $concepts->lastPage())
+                    @if($end < $concepts->lastPage() - 1)
+                        <span class="px-1 sm:px-2 py-2 sm:py-3 text-gray-500 text-xs sm:text-sm">
+                            ...
+                        </span>
+                    @endif
+                    <a href="{{ $concepts->appends(request()->query())->url($concepts->lastPage()) }}" 
+                       class="px-2 sm:px-4 py-2 sm:py-3 bg-white text-[#43883d] border border-gray-300 rounded-lg hover:bg-[#43883d] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs sm:text-sm">
+                        {{ $concepts->lastPage() }}
+                    </a>
+                @endif
+
+                {{-- Next Page Link --}}
+                @if ($concepts->hasMorePages())
+                    <a href="{{ $concepts->appends(request()->query())->nextPageUrl() }}" 
+                       class="px-2 sm:px-4 py-2 sm:py-3 bg-white text-[#43883d] border border-gray-300 rounded-lg hover:bg-[#43883d] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                @else
+                    <span class="px-2 sm:px-4 py-2 sm:py-3 text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </span>
+                @endif
+            </nav>
+        </div>
+
+        <!-- Información adicional móvil-friendly -->
+        <div class="mt-4 flex justify-center">
+            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center">
+                <span class="hidden sm:inline">
+                    Mostrando {{ $concepts->firstItem() }} - {{ $concepts->lastItem() }} de {{ $concepts->total() }} conceptos
+                </span>
+                <span class="sm:hidden">
+                    Página {{ $concepts->currentPage() }} de {{ $concepts->lastPage() }}
+                </span>
             </div>
         </div>
-    @endif
-</div>
+    </div>
 
+    <!-- CSS adicional para mejorar responsividad -->
+    <style>
+    @media (max-width: 640px) {
+        /* Hacer más compactos los elementos en móvil */
+        nav[aria-label="Pagination Navigation"] {
+            gap: 0.25rem;
+        }
+        
+        /* Reducir padding en móviles muy pequeños */
+        @media (max-width: 375px) {
+            nav[aria-label="Pagination Navigation"] .px-2 {
+                padding-left: 0.375rem;
+                padding-right: 0.375rem;
+            }
+            
+            nav[aria-label="Pagination Navigation"] .py-2 {
+                padding-top: 0.375rem;
+                padding-bottom: 0.375rem;
+            }
+        }
+    }
+
+    /* Asegurar que los números estén centrados */
+    nav[aria-label="Pagination Navigation"] a,
+    nav[aria-label="Pagination Navigation"] span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    </style>
+@endif
+                                                 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Toggle para filtros avanzados

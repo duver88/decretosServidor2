@@ -1,4 +1,3 @@
-<!-- Vista dashboard con filtros avanzados -->
 @extends('layouts.app')
 
 @section('title', 'Dashboard - Documentos')
@@ -104,34 +103,53 @@
     </div>
 
     <!-- CHIPS DE CATEGORÍAS -->
-    <div class="mb-4">
-        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Filtrar por categoría:</h3>
-        <div class="flex flex-wrap gap-2">
-            @if(isset($categories) && $categories->count() > 0)
-                @foreach($categories as $categoria)
-                    @php
-                        $countCategoria = $stats['por_categoria']->firstWhere('id', $categoria->id)?->documents_count ?? 0;
-                    @endphp
-                    <form method="GET" action="{{ route('dashboard') }}" class="inline">
-                        @foreach(request()->except(['category_id', 'page']) as $key => $value)
-                            @if(is_array($value))
-                                @foreach($value as $v)
-                                    <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
-                                @endforeach
-                            @else
-                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                            @endif
-                        @endforeach
-                        <input type="hidden" name="category_id" value="{{ $categoria->id }}">
-                        <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors
-                            {{ $currentCategory == $categoria->id ? 'bg-[#43883d] text-white' : 'bg-gray-100 text-gray-700 hover:bg-[#43883d] hover:text-white' }}">
-                            {{ $categoria->nombre }} ({{ $countCategoria }})
-                        </button>
-                    </form>
-                @endforeach
+<div class="mb-4">
+    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Filtrar por Año:</h3>
+    <div class="flex flex-wrap gap-2">
+        @if(isset($años) && $años->count() > 0)
+            @foreach($años as $año)
+                @php
+                    $countAño = $stats['por_año'][$año] ?? 0;
+                    $currentAño = request()->get('año');
+                @endphp
+                <form method="GET" action="{{ route('dashboard') }}" class="inline">
+                    @foreach(request()->except(['año', 'page']) as $key => $value)
+                        @if(is_array($value))
+                            @foreach($value as $v)
+                                <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
+                            @endforeach
+                        @else
+                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                        @endif
+                    @endforeach
+                    <input type="hidden" name="año" value="{{ $año }}">
+                    <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors
+                        {{ $currentAño == $año ? 'bg-[#43883d] text-white' : 'bg-gray-100 text-gray-700 hover:bg-[#43883d] hover:text-white' }}">
+                        {{ $año }} ({{ $countAño }})
+                    </button>
+                </form>
+            @endforeach
+            
+            {{-- Botón para limpiar filtro de año --}}
+            @if(request()->filled('año'))
+                <form method="GET" action="{{ route('dashboard') }}" class="inline">
+                    @foreach(request()->except(['año', 'page']) as $key => $value)
+                        @if(is_array($value))
+                            @foreach($value as $v)
+                                <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
+                            @endforeach
+                        @else
+                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                        @endif
+                    @endforeach
+                    <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors bg-gray-200 text-gray-600 hover:bg-gray-300">
+                        Todos los años
+                    </button>
+                </form>
             @endif
-        </div>
+        @endif
     </div>
+</div>
 
     <!-- BUSCADOR GENERAL -->
     <form method="GET" action="{{ route('dashboard') }}">
@@ -192,25 +210,15 @@
             </div>
         </div>
 
+       
+<!-- FILTROS AVANZADOS -->
+
         <!-- FILTROS AVANZADOS -->
         <div id="filtrosAvanzados" class="hidden border-t pt-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dependencias</label>
-                    <select name="category_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]">
-                        <option value="">Todas las Dependencias</option>
-                        @if(isset($categories))
-                            @foreach($categories as $categoria)
-                                <option value="{{ $categoria->id }}" {{ request('category_id') == $categoria->id ? 'selected' : '' }}>
-                                    {{ $categoria->nombre }}
-                                </option>
-                            @endforeach
-                        @endif
-                    </select>
-                </div>
                 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Documento</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Documento (Decreto/Resolución)</label>
                     <select name="tipo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]">
                         <option value="">Todos los tipos</option>
                         @if(isset($tipos))
@@ -222,14 +230,36 @@
                         @endif
                     </select>
                 </div>
-                
+
                 <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Documento</label>
+                    <select name="document_type_id" id="document_type_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]">
+                        <option value="">Seleccione un tipo</option>
+                        @if(isset($documentTypes))
+                            @foreach($documentTypes as $documentType)
+                                <option value="{{ $documentType->id }}" {{ request('document_type_id') == $documentType->id ? 'selected' : '' }}>
+                                    {{ $documentType->nombre }}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tema Específico</label>
+                    <select name="document_theme_id" id="document_theme_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]" disabled>
+                        <option value="">Primero seleccione un tipo</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">Seleccione primero un tipo de documento</p>
+                </div>
+                
+                {{-- <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre o Tipo</label>
                     <input type="text" name="nombre" 
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]"
                            placeholder="Buscar por nombre del documento" 
                            value="{{ request('nombre') }}">
-                </div>
+                </div> --}}
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número</label>
@@ -296,10 +326,11 @@
                 </button>
             </div>
         </div>
-    </form>
+       
 
     <!-- Filtros aplicados -->
-    @if (request()->hasAny(['busqueda_general', 'category_id', 'tipo', 'nombre', 'numero', 'año', 'mes', 'fecha', 'fecha_desde', 'fecha_hasta', 'orden']))
+<!-- Filtros aplicados -->
+    @if (request()->hasAny(['busqueda_general', 'category_id', 'tipo', 'document_type_id', 'document_theme_id', 'nombre', 'numero', 'año', 'mes', 'fecha', 'fecha_desde', 'fecha_hasta', 'orden']))
         <div class="mt-4 pt-4 border-t">
             <h6 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Filtros aplicados:</h6>
             <div class="flex flex-wrap gap-2">
@@ -309,26 +340,126 @@
 
                 @if(request()->filled('busqueda_general'))
                     <a href="{{ route('dashboard', array_merge($baseParams, ['busqueda_general' => null])) }}"
-                       class="inline-flex items-center px-2 py-1 bg-[#43883d] text-white text-xs rounded-full">
+                       class="inline-flex items-center px-2 py-1 bg-[#43883d] text-white text-xs rounded-full hover:bg-[#3F8827] transition-colors">
                         🔍 {{ request('busqueda_general') }} ×
-                    </a>
-                @endif
-
-                @if(request()->filled('category_id'))
-                    <a href="{{ route('dashboard', array_merge($baseParams, ['category_id' => null])) }}"
-                       class="inline-flex items-center px-2 py-1 bg-[#43883d] text-white text-xs rounded-full">
-                        Categoría: {{ $categories->firstWhere('id', request('category_id'))?->nombre }} ×
                     </a>
                 @endif
 
                 @if(request()->filled('tipo'))
                     <a href="{{ route('dashboard', array_merge($baseParams, ['tipo' => null])) }}"
-                       class="inline-flex items-center px-2 py-1 bg-[#43883d] text-white text-xs rounded-full">
+                       class="inline-flex items-center px-2 py-1 bg-[#6A9739] text-white text-xs rounded-full hover:bg-[#5A8129] transition-colors">
                         Tipo: {{ ucfirst(request('tipo')) }} ×
                     </a>
                 @endif
 
-                <!-- Agregar más badges para otros filtros según necesidad -->
+                @if(request()->filled('document_type_id') && isset($documentTypes))
+                    @php
+                        $selectedDocumentType = $documentTypes->firstWhere('id', request('document_type_id'));
+                    @endphp
+                    <a href="{{ route('dashboard', array_merge($baseParams, ['document_type_id' => null])) }}"
+                       class="inline-flex items-center px-2 py-1 bg-[#4E7525] text-white text-xs rounded-full hover:bg-[#3E6015] transition-colors">
+                        Tipo Doc: {{ $selectedDocumentType ? Str::limit($selectedDocumentType->nombre, 20) : 'Desconocido' }} ×
+                    </a>
+                @endif
+
+                @if(request()->filled('document_theme_id') && isset($documentThemes))
+                    @php
+                        $selectedDocumentTheme = $documentThemes->firstWhere('id', request('document_theme_id'));
+                    @endphp
+                    <a href="{{ route('dashboard', array_merge($baseParams, ['document_theme_id' => null])) }}"
+                       class="inline-flex items-center px-2 py-1 bg-[#7A7A52] text-white text-xs rounded-full hover:bg-[#6A6A42] transition-colors">
+                        Tema: {{ $selectedDocumentTheme ? Str::limit($selectedDocumentTheme->nombre, 20) : 'Desconocido' }} ×
+                    </a>
+                @endif
+
+                @if(request()->filled('nombre'))
+                    <a href="{{ route('dashboard', array_merge($baseParams, ['nombre' => null])) }}"
+                       class="inline-flex items-center px-2 py-1 bg-[#8B8B52] text-white text-xs rounded-full hover:bg-[#7B7B42] transition-colors">
+                        Nombre: {{ Str::limit(request('nombre'), 20) }} ×
+                    </a>
+                @endif
+
+                @if(request()->filled('numero'))
+                    <a href="{{ route('dashboard', array_merge($baseParams, ['numero' => null])) }}"
+                       class="inline-flex items-center px-2 py-1 bg-[#9C9C52] text-white text-xs rounded-full hover:bg-[#8C8C42] transition-colors">
+                        Número: {{ request('numero') }} ×
+                    </a>
+                @endif
+
+                @if(request()->filled('año'))
+                    <a href="{{ route('dashboard', array_merge($baseParams, ['año' => null])) }}"
+                       class="inline-flex items-center px-2 py-1 bg-[#B2B700] text-white text-xs rounded-full hover:bg-[#A2A700] transition-colors">
+                        Año: {{ request('año') }} ×
+                    </a>
+                @endif
+
+                @if(request()->filled('mes'))
+                    @php
+                        $mesNumero = (int) request('mes');
+                        $mesNumero = ($mesNumero >= 1 && $mesNumero <= 12) ? $mesNumero : 1;
+                    @endphp
+                    <a href="{{ route('dashboard', array_merge($baseParams, ['mes' => null])) }}"
+                       class="inline-flex items-center px-2 py-1 bg-[#CCCC00] text-white text-xs rounded-full hover:bg-[#BCBC00] transition-colors">
+                        Mes: {{ \Carbon\Carbon::create()->month($mesNumero)->translatedFormat('F') }} ×
+                    </a>
+                @endif
+
+                @if(request()->filled('fecha'))
+                    <a href="{{ route('dashboard', array_merge($baseParams, ['fecha' => null])) }}"
+                       class="inline-flex items-center px-2 py-1 bg-[#878D47] text-white text-xs rounded-full hover:bg-[#777D37] transition-colors">
+                        Fecha: {{ request('fecha') }} ×
+                    </a>
+                @endif
+
+                @if(request()->filled('fecha_desde'))
+                    <a href="{{ route('dashboard', array_merge($baseParams, ['fecha_desde' => null])) }}"
+                       class="inline-flex items-center px-2 py-1 bg-[#878D47] text-white text-xs rounded-full hover:bg-[#777D37] transition-colors">
+                        Desde: {{ request('fecha_desde') }} ×
+                    </a>
+                @endif
+
+                @if(request()->filled('fecha_hasta'))
+                    <a href="{{ route('dashboard', array_merge($baseParams, ['fecha_hasta' => null])) }}"
+                       class="inline-flex items-center px-2 py-1 bg-[#878D47] text-white text-xs rounded-full hover:bg-[#777D37] transition-colors">
+                        Hasta: {{ request('fecha_hasta') }} ×
+                    </a>
+                @endif
+
+                @if(request()->filled('orden') && request('orden') !== 'fecha_desc')
+                    <a href="{{ route('dashboard', array_merge($baseParams, ['orden' => null])) }}"
+                       class="inline-flex items-center px-2 py-1 bg-gray-500 text-white text-xs rounded-full hover:bg-gray-600 transition-colors">
+                        Orden: {{
+                            match(request('orden')) {
+                                'fecha_asc' => 'Más antiguos',
+                                'nombre_asc' => 'Nombre A-Z',
+                                'numero_asc' => 'Por número',
+                                'tipo_asc' => 'Por tipo',
+                                'categoria_asc' => 'Por categoría',
+                                'document_type_asc' => 'Por tipo doc',
+                                'document_theme_asc' => 'Por tema',
+                                default => request('orden')
+                            }
+                        }} ×
+                    </a>
+                @endif
+
+                @if(request()->filled('category_id') && isset($categories))
+                    @php
+                        $selectedCategory = $categories->firstWhere('id', request('category_id'));
+                    @endphp
+                    <a href="{{ route('dashboard', array_merge($baseParams, ['category_id' => null])) }}"
+                       class="inline-flex items-center px-2 py-1 bg-[#2D6A2F] text-white text-xs rounded-full hover:bg-[#1D5A1F] transition-colors">
+                        Categoría: {{ $selectedCategory ? Str::limit($selectedCategory->nombre, 20) : 'Desconocida' }} ×
+                    </a>
+                @endif
+
+                <!-- Botón para limpiar todos los filtros -->
+                @if(request()->hasAny(['busqueda_general', 'category_id', 'tipo', 'document_type_id', 'document_theme_id', 'nombre', 'numero', 'año', 'mes', 'fecha', 'fecha_desde', 'fecha_hasta', 'orden']))
+                    <a href="{{ route('dashboard') }}"
+                       class="inline-flex items-center px-3 py-1 bg-red-500 text-white text-xs rounded-full hover:bg-red-600 transition-colors font-semibold">
+                        🗑️ Limpiar todos ×
+                    </a>
+                @endif
             </div>
         </div>
     @endif
@@ -376,7 +507,10 @@
                     <!-- Categoría y Tipo -->
                     <div>
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#D8E5B0] text-[#285F19]">
-                            {{ $document->category->nombre ?? 'Sin categoría' }}
+                            {{ $document->documentType->nombre ?? 'Sin categoría' }}
+                        </span>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#2757f1] text-[#ffffff]">
+                            {{ $document->documentTheme->nombre ?? 'Sin categoría' }}
                         </span>
                         <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $document->tipo == 'decreto' ? 'bg-[#FCF2B1] text-amber-800' : 'bg-[#F0A9AA] text-red-800' }}">
                             {{ ucfirst($document->tipo) }}
@@ -400,7 +534,7 @@
                 
                 @if($document->descripcion)
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                        {{ Str::limit($document->descripcion, 40) }}
+                        {{ Str::limit($document->descripcion, 30) }}
                     </p>
                 @endif
                 
@@ -486,6 +620,7 @@
 </div>
 
 <!-- Paginación mejorada -->
+<!-- Paginación mejorada responsiva -->
 @if($documents->hasPages())
     <div class="mt-8">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
@@ -519,23 +654,23 @@
                         
                         <select name="per_page" onchange="document.getElementById('perPageForm').submit()" 
                                 class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-[#43883d] focus:border-[#43883d]">
-                            <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10</option>
-                            <option value="25" {{ request('per_page', 10) == 25 ? 'selected' : '' }}>25</option>
-                            <option value="50" {{ request('per_page', 10) == 50 ? 'selected' : '' }}>50</option>
-                            <option value="100" {{ request('per_page', 10) == 100 ? 'selected' : '' }}>100</option>
+                            <option value="9" {{ request('per_page', 9) == 9 ? 'selected' : '' }}>9</option>
+                            <option value="18" {{ request('per_page', 9) == 18 ? 'selected' : '' }}>18</option>
+                            <option value="27" {{ request('per_page', 9) == 27 ? 'selected' : '' }}>27</option>
+                            <option value="36" {{ request('per_page', 9) == 36 ? 'selected' : '' }}>36</option>
                         </select>
                     </form>
                     <span class="text-sm text-gray-700 dark:text-gray-300">por página</span>
                 </div>
             </div>
 
-            <!-- Enlaces de paginación -->
+            <!-- Enlaces de paginación responsivos -->
             <div class="flex justify-center">
-                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm" aria-label="Pagination">
                     {{-- Botón anterior --}}
                     @if ($documents->onFirstPage())
                         <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-sm font-medium text-gray-400 dark:text-gray-500 cursor-not-allowed">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <svg class="h-4 w-4 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                             </svg>
                             <span class="sr-only">Anterior</span>
@@ -543,39 +678,75 @@
                     @else
                         <a href="{{ $documents->appends(request()->query())->previousPageUrl() }}" 
                            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-[#43883d] hover:text-white hover:border-[#43883d] transition-colors">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <svg class="h-4 w-4 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                             </svg>
                             <span class="sr-only">Anterior</span>
                         </a>
                     @endif
 
-                    {{-- Números de página --}}
-                    @foreach ($documents->appends(request()->query())->getUrlRange(1, $documents->lastPage()) as $page => $url)
+                    {{-- Números de página con lógica responsiva --}}
+                    @php
+                        $start = max(1, $documents->currentPage() - 2);
+                        $end = min($documents->lastPage(), $documents->currentPage() + 2);
+                        
+                        // En móvil, mostrar menos páginas
+                        $mobileStart = max(1, $documents->currentPage() - 1);
+                        $mobileEnd = min($documents->lastPage(), $documents->currentPage() + 1);
+                    @endphp
+
+                    {{-- Primera página (solo si no está en rango) --}}
+                    @if($start > 1)
+                        <a href="{{ $documents->appends(request()->query())->url(1) }}" 
+                           class="relative inline-flex items-center px-2 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[#43883d] hover:text-white hover:border-[#43883d] transition-colors">
+                            1
+                        </a>
+                        @if($start > 2)
+                            <span class="relative inline-flex items-center px-2 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+                                ...
+                            </span>
+                        @endif
+                    @endif
+
+                    {{-- Páginas del rango actual --}}
+                    @for ($page = $start; $page <= $end; $page++)
                         @if ($page == $documents->currentPage())
-                            <span class="relative inline-flex items-center px-4 py-2 border border-[#43883d] bg-[#43883d] text-sm font-medium text-white">
+                            <span class="relative inline-flex items-center px-2 sm:px-4 py-2 border border-[#43883d] bg-[#43883d] text-xs sm:text-sm font-medium text-white">
                                 {{ $page }}
                             </span>
                         @else
-                            <a href="{{ $url }}" 
-                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[#43883d] hover:text-white hover:border-[#43883d] transition-colors">
+                            <a href="{{ $documents->appends(request()->query())->url($page) }}" 
+                               class="relative inline-flex items-center px-2 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[#43883d] hover:text-white hover:border-[#43883d] transition-colors">
                                 {{ $page }}
                             </a>
                         @endif
-                    @endforeach
+                    @endfor
+
+                    {{-- Última página (solo si no está en rango) --}}
+                    @if($end < $documents->lastPage())
+                        @if($end < $documents->lastPage() - 1)
+                            <span class="relative inline-flex items-center px-2 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+                                ...
+                            </span>
+                        @endif
+                        <a href="{{ $documents->appends(request()->query())->url($documents->lastPage()) }}" 
+                           class="relative inline-flex items-center px-2 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[#43883d] hover:text-white hover:border-[#43883d] transition-colors">
+                            {{ $documents->lastPage() }}
+                        </a>
+                    @endif
 
                     {{-- Botón siguiente --}}
                     @if ($documents->hasMorePages())
                         <a href="{{ $documents->appends(request()->query())->nextPageUrl() }}" 
                            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-[#43883d] hover:text-white hover:border-[#43883d] transition-colors">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <svg class="h-4 w-4 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                             </svg>
                             <span class="sr-only">Siguiente</span>
                         </a>
                     @else
                         <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-sm font-medium text-gray-400 dark:text-gray-500 cursor-not-allowed">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <svg class="h-4 w-4 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                             </svg>
                             <span class="sr-only">Siguiente</span>
@@ -584,10 +755,10 @@
                 </nav>
             </div>
 
-            <!-- Información adicional de navegación rápida -->
+            <!-- Información adicional de navegación rápida (solo en desktop) -->
             @if($documents->lastPage() > 1)
                 <div class="mt-4 flex justify-center">
-                    <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+                    <div class="hidden sm:flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                         <span>Ir a página:</span>
                         <form method="GET" action="{{ route('dashboard') }}" class="inline-flex">
                             @foreach(request()->except(['page']) as $key => $value)
@@ -606,6 +777,11 @@
                                    onchange="this.form.submit()">
                             <span class="ml-1">de {{ $documents->lastPage() }}</span>
                         </form>
+                    </div>
+
+                    <!-- Navegación simplificada para móvil -->
+                    <div class="flex sm:hidden items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+                        <span>Página {{ $documents->currentPage() }} de {{ $documents->lastPage() }}</span>
                     </div>
                 </div>
             @endif
@@ -647,6 +823,117 @@ document.addEventListener('DOMContentLoaded', function() {
                 mesSelect.style.borderColor = '';
                 mesSelect.value = '';
             }
+        });
+    }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const documentTypeSelect = document.getElementById('document_type_id');
+    const documentThemeSelect = document.getElementById('document_theme_id');
+    const loadingText = 'Cargando temas...';
+    const emptyText = 'No hay temas disponibles';
+    const selectTypeText = 'Primero seleccione un tipo';
+    
+    // Estado inicial
+    function resetThemeSelect() {
+        documentThemeSelect.innerHTML = `<option value="">${selectTypeText}</option>`;
+        documentThemeSelect.disabled = true;
+        documentThemeSelect.classList.add('text-gray-400');
+    }
+    
+    // Función para cargar temas
+    function loadThemes(typeId) {
+        // Mostrar estado de carga
+        documentThemeSelect.innerHTML = `<option value="">${loadingText}</option>`;
+        documentThemeSelect.disabled = true;
+        documentThemeSelect.classList.add('text-gray-400');
+        
+        // Hacer petición AJAX
+        fetch(`/documents/themes/${typeId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return response.json();
+            })
+            .then(themes => {
+                // Limpiar select
+                documentThemeSelect.innerHTML = '<option value="">Todos los temas</option>';
+                
+                // Agregar temas
+                if (themes && themes.length > 0) {
+                    themes.forEach(theme => {
+                        const option = document.createElement('option');
+                        option.value = theme.id;
+                        option.textContent = theme.nombre;
+                        
+                        // Mantener selección si existe
+                        if ({{ request('document_theme_id') ? request('document_theme_id') : 'null' }} == theme.id) {
+                            option.selected = true;
+                        }
+                        
+                        documentThemeSelect.appendChild(option);
+                    });
+                    
+                    // Habilitar select
+                    documentThemeSelect.disabled = false;
+                    documentThemeSelect.classList.remove('text-gray-400');
+                } else {
+                    documentThemeSelect.innerHTML = `<option value="">${emptyText}</option>`;
+                    documentThemeSelect.disabled = true;
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar temas:', error);
+                documentThemeSelect.innerHTML = '<option value="">Error al cargar temas</option>';
+                documentThemeSelect.disabled = true;
+            });
+    }
+    
+    // Event listener para cambio de tipo
+    if (documentTypeSelect) {
+        documentTypeSelect.addEventListener('change', function() {
+            const typeId = this.value;
+            
+            if (typeId) {
+                loadThemes(typeId);
+            } else {
+                resetThemeSelect();
+            }
+        });
+        
+        // Cargar temas si ya hay un tipo seleccionado (para mantener estado en recarga)
+        if (documentTypeSelect.value) {
+            loadThemes(documentTypeSelect.value);
+        }
+    }
+    
+    // Mejorar experiencia visual con focus
+    if (documentTypeSelect) {
+        documentTypeSelect.addEventListener('focus', function() {
+            this.style.borderColor = '#43883d';
+            this.style.boxShadow = '0 0 0 0.2rem rgba(67, 136, 61, 0.25)';
+        });
+        
+        documentTypeSelect.addEventListener('blur', function() {
+            this.style.borderColor = '';
+            this.style.boxShadow = '';
+        });
+    }
+    
+    if (documentThemeSelect) {
+        documentThemeSelect.addEventListener('focus', function() {
+            if (!this.disabled) {
+                this.style.borderColor = '#43883d';
+                this.style.boxShadow = '0 0 0 0.2rem rgba(67, 136, 61, 0.25)';
+            }
+        });
+        
+        documentThemeSelect.addEventListener('blur', function() {
+            this.style.borderColor = '';
+            this.style.boxShadow = '';
         });
     }
 });

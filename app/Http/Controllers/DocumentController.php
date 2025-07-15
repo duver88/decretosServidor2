@@ -218,7 +218,14 @@ public function index(Request $request)
     $query = Document::with('category');
 
     /* --- FILTROS (mismos que listPublic()) --- */
-    
+        if ($request->filled('document_type_id')) {
+        $query->where('document_type_id', $request->document_type_id);
+    }
+
+    // Filtro por DocumentTheme (NUEVO)
+    if ($request->filled('document_theme_id')) {
+        $query->where('document_theme_id', $request->document_theme_id);
+    }
     // Filtro por tipo de documento
     if ($request->filled('tipo')) {
         $query->where('tipo', $request->tipo);
