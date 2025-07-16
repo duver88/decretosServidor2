@@ -161,7 +161,7 @@
                     <i class="fas fa-align-left me-2"></i>
                     Contenido del Concepto
                 </h5>
-                <div class="content-text">
+                <div class="content-text text-break text-wrap overflow-auto" style="word-wrap: break-word; word-break: break-word;">
                     {!! nl2br(e($concept->contenido)) !!}
                 </div>
             </div>
