@@ -5,253 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentos</title>
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-    <link rel="stylesheet" href="{{ asset('css/cabecera.css') }}">   
+    <link rel="stylesheet" href="{{ asset('css/cabecera.css') }}">  
+    <link rel="stylesheet" href="{{ asset('css/document.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/accesbilidad.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Agregamos Font Awesome 5 para los íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-    <style>
-
-        
-                /* Solo las fuentes y colores básicos necesarios */
-        .ubuntu-font { font-family: 'Ubuntu', sans-serif !important; }
-        .oswald-font { font-family: 'Oswald', sans-serif !important; }
-        .bg-bucaramanga { background-color: #43883D !important; }
-        .text-bucaramanga { color: #43883D !important; }
-   
-
-        body { 
-            font-family: 'Ubuntu', sans-serif; 
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Estilos para los tabs de sistema */
-        .sistema-tab {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .sistema-tab:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-
-        /* ESTILOS PARA CHIPS DE FILTRADO */
-        .chip {
-            display: inline-block;
-            background-color: #E6F0E5;
-            color: #285F19;
-            padding: 5px 14px;
-            margin: 3px;
-            border-radius: 20px;
-            font-family: 'Ubuntu', sans-serif;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-        }
-
-        .chip.active {
-            background-color: #43883d;
-            color: white;
-        }
-
-        .order-option {
-            margin-right: 10px;
-            font-weight: 500;
-            color: #6c757d;
-            cursor: pointer;
-        }
-
-        .order-option.active {
-            color: #285F19;
-            font-weight: 700;
-        }
-
-        .toggle-advanced {
-            color: #285F19;
-            font-size: 0.9rem;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        /* ESTILOS MEJORADOS PARA PAGINACIÓN */
-        .pagination-container {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 25px;
-            margin-top: 40px;
-            border-radius: 15px;
-            border: 1px solid #e9ecef;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-        .pagination-info {
-            background-color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            border: 1px solid #e3e6ea;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .pagination-info .badge {
-            background-color: #43883d !important;
-            color: white;
-            font-size: 0.9rem;
-            padding: 8px 12px;
-            border-radius: 8px;
-        }
-
-        .pagination {
-            justify-content: center;
-            margin: 0;
-            gap: 5px;
-        }
-
-        .pagination .page-item {
-            margin: 0 2px;
-        }
-
-        .pagination .page-link {
-            color: #43883d;
-            border: 2px solid #e9ecef;
-            border-radius: 10px !important;
-            padding: 12px 16px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            min-width: 45px;
-            text-align: center;
-        }
-
-        .pagination .page-link:hover {
-            background-color: #43883d;
-            border-color: #43883d;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(67, 136, 61, 0.3);
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: #43883d;
-            border-color: #43883d;
-            color: white;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(67, 136, 61, 0.4);
-        }
-
-        .pagination .page-item.disabled .page-link {
-            color: #9ca3af;
-            background-color: #f3f4f6;
-            border-color: #e5e7eb;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Solo CSS mínimo para complementar Bootstrap */
-.card {
-    transition: all 0.3s ease !important;
-}
-
-.stretched-link:hover {
-    transition: color 0.3s ease;
-}
-
-/* Responsive adicional para móviles pequeños */
-@media (max-width: 576px) {
-
-     .pagination-container {
-        padding: 15px 10px; /* Menos padding horizontal */
-        margin-top: 20px;
-    }
-    
-    .pagination .page-link {
-        padding: 6px 10px; /* Más compacto */
-        font-size: 0.8rem; /* Texto más pequeño */
-        min-width: 32px; /* Botones más pequeños */
-        margin: 0 1px; /* Menos espaciado */
-    }
-    
-    .pagination .page-item {
-        margin: 0 1px; /* Reducir margen entre elementos */
-    }
-    
-    .pagination-info {
-        text-align: center;
-        padding: 10px 12px; /* Más compacto */
-    }
-    
-    .pagination-info .badge {
-        font-size: 0.75rem; /* Badge más pequeño */
-        padding: 6px 10px;
-    }
-    
-    /* Ocultar algunos números en móvil para que no se desborde */
-    .pagination .page-item:not(.active):not(:first-child):not(:last-child):not(:nth-child(2)):not(:nth-last-child(2)) {
-        display: none;
-    }
-    
-    /* Mostrar solo: primera, anterior, actual, siguiente, última */
-    .pagination .page-item:first-child,
-    .pagination .page-item:last-child,
-    .pagination .page-item.active,
-    .pagination .page-item:has(.page-link[rel="prev"]),
-    .pagination .page-item:has(.page-link[rel="next"]) {
-        display: inline-block !important;
-    }
-    .badge {
-        font-size: 0.75rem !important;
-        padding: 0.25rem 0.5rem !important;
-    }
-    
-    .card-body {
-        padding: 1rem !important;
-    }
-    
-    .gap-3 {
-        gap: 0.75rem !important;
-    }
-    
-    .gap-2 {
-        gap: 0.5rem !important;
-    }
-}
-
-        /* Responsive para móviles */
-        @media (max-width: 576px) {
-            .pagination-container {
-                padding: 15px;
-                margin-top: 20px;
-            }
-            
-            .pagination .page-link {
-                padding: 8px 12px;
-                font-size: 0.85rem;
-                min-width: 35px;
-            }
-            
-            .pagination-info {
-                text-align: center;
-                padding: 12px 15px;
-            }
-        }
-    </style>
+    <script src="{{ asset('js/accesibilidad.js') }}"></script>
+    <script src="{{ asset('js/document.js') }}"></script>
+    <script src="{{ asset('js/documentoOne.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+
+    
+<!-- Barra Lateral de Accesibilidad -->
+<div id="accessibilityBar" class="accessibility-bar">
+    <!-- Botón de toggle -->
+    <button id="accessibilityToggle" class="accessibility-toggle" title="Opciones de Accesibilidad">
+        <i class="fas fa-universal-access"></i>
+    </button>
+    
+    <!-- Panel de opciones -->
+    <div id="accessibilityPanel" class="accessibility-panel">
+        <div class="accessibility-header">
+            <h4 class="text-white mb-0">
+                <i class="fas fa-universal-access me-2"></i>
+                Accesibilidad
+            </h4>
+        </div>
+        
+        <div class="accessibility-content">
+            <!-- Control de Tamaño de Fuente -->
+            <div class="accessibility-section">
+                <h6 class="section-title">
+                    <i class="fas fa-text-height me-2"></i>
+                    Tamaño de Texto
+                </h6>
+                <div class="button-group">
+                    <button id="decreaseFont" class="accessibility-btn" title="Reducir texto">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button id="resetFont" class="accessibility-btn" title="Tamaño normal">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button id="increaseFont" class="accessibility-btn" title="Aumentar texto">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Control de Contraste -->
+            <div class="accessibility-section">
+                <h6 class="section-title">
+                    <i class="fas fa-adjust me-2"></i>
+                    Contraste
+                </h6>
+                <div class="button-group">
+                    <button id="normalContrast" class="accessibility-btn active" title="Contraste normal">
+                        <i class="fas fa-circle"></i>
+                    </button>
+                    <button id="highContrast" class="accessibility-btn" title="Alto contraste">
+                        <i class="fas fa-circle-half-stroke"></i>
+                    </button>
+                    <button id="darkMode" class="accessibility-btn" title="Modo oscuro">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Centro de Relevo -->
+            <div class="accessibility-section">
+                <h6 class="section-title">
+                    <i class="fas fa-sign-language me-2"></i>
+                    Centro de Relevo
+                </h6>
+                <a href="https://centroderelevo.gov.co/" 
+                   target="_blank" 
+                   class="centro-relevo-btn"
+                   title="Centro de Relevo Colombia">
+                    <img src="https://centroderelevo.gov.co/632/channels-511_centrorelevo/img/logo-centro-relevo.png" 
+                         alt="Centro de Relevo Colombia" 
+                         class="centro-relevo-logo">
+                    <span>Centro de Relevo</span>
+                </a>
+            </div>
+            
+            <!-- Botón de Reset -->
+            <div class="accessibility-section">
+                <button id="resetAll" class="reset-btn">
+                    <i class="fas fa-refresh me-2"></i>
+                    Restablecer Todo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
     {{-- Header --}}
     <nav class="navbar navbar-expand-lg barra-superior-govco" aria-label="Barra superior">
             <a href="https://www.gov.co/" target="_blank" aria-label="Portal del Estado Colombiano - GOV.CO"></a>
@@ -1175,172 +1027,5 @@
     </div>
 </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mejorar la experiencia con el filtro de mes
-            const añoSelect = document.getElementById('año');
-            const mesSelect = document.getElementById('mes');
-            
-            // Función para validar la selección de mes
-            function validarMes() {
-                if (mesSelect.value && !añoSelect.value) {
-                    alert('Para filtrar por mes, primero debe seleccionar un año.');
-                    mesSelect.value = '';
-                }
-            }
-            
-            // Agregar event listener al select de mes
-            if (mesSelect) {
-                mesSelect.addEventListener('change', validarMes);
-            }
-            
-            // Agregar indicador visual cuando se selecciona año
-            if (añoSelect) {
-                añoSelect.addEventListener('change', function() {
-                    if (this.value) {
-                        mesSelect.style.border = '2px solid #43883d';
-                        mesSelect.removeAttribute('disabled');
-                    } else {
-                        mesSelect.style.border = '';
-                        mesSelect.value = '';
-                    }
-                });
-            }
-            
-            // Preservar estado de filtros en chips
-            const chips = document.querySelectorAll('.chip');
-            chips.forEach(chip => {
-                chip.addEventListener('click', function(e) {
-                    // Pequeña animación visual
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 100);
-                });
-            });
-        });
-    </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const documentTypeSelect = document.getElementById('document_type_id');
-    const documentThemeSelect = document.getElementById('document_theme_id');
-    const loadingText = 'Cargando temas...';
-    const emptyText = 'No hay temas disponibles';
-    const selectTypeText = 'Primero seleccione un tipo';
-    
-    // Estado inicial
-    function resetThemeSelect() {
-        documentThemeSelect.innerHTML = `<option value="">${selectTypeText}</option>`;
-        documentThemeSelect.disabled = true;
-        documentThemeSelect.classList.add('text-muted');
-    }
-    
-    // Función para cargar temas
-    function loadThemes(typeId) {
-        // Mostrar estado de carga
-        documentThemeSelect.innerHTML = `<option value="">${loadingText}</option>`;
-        documentThemeSelect.disabled = true;
-        documentThemeSelect.classList.add('text-muted');
-        
-        // Hacer petición AJAX
-        fetch(`/documents/themes/${typeId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor');
-                }
-                return response.json();
-            })
-            .then(themes => {
-                // Limpiar select
-                documentThemeSelect.innerHTML = '<option value="">Todos los temas</option>';
-                
-                // Agregar temas
-                if (themes && themes.length > 0) {
-                    themes.forEach(theme => {
-                        const option = document.createElement('option');
-                        option.value = theme.id;
-                        option.textContent = theme.nombre;
-                        
-                        // Mantener selección si existe
-                        if ({{ request('document_theme_id') ? request('document_theme_id') : 'null' }} == theme.id) {
-                            option.selected = true;
-                        }
-                        
-                        documentThemeSelect.appendChild(option);
-                    });
-                    
-                    // Habilitar select
-                    documentThemeSelect.disabled = false;
-                    documentThemeSelect.classList.remove('text-muted');
-                } else {
-                    documentThemeSelect.innerHTML = `<option value="">${emptyText}</option>`;
-                    documentThemeSelect.disabled = true;
-                }
-            })
-            .catch(error => {
-                console.error('Error al cargar temas:', error);
-                documentThemeSelect.innerHTML = '<option value="">Error al cargar temas</option>';
-                documentThemeSelect.disabled = true;
-                
-                // Mostrar mensaje de error al usuario
-                const errorAlert = document.createElement('div');
-                errorAlert.className = 'alert alert-warning alert-dismissible fade show mt-2';
-                errorAlert.innerHTML = `
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    Error al cargar los temas. Por favor, recargue la página.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                `;
-                documentThemeSelect.parentNode.appendChild(errorAlert);
-                
-                // Auto-ocultar después de 5 segundos
-                setTimeout(() => {
-                    if (errorAlert.parentNode) {
-                        errorAlert.remove();
-                    }
-                }, 5000);
-            });
-    }
-    
-    // Event listener para cambio de tipo
-    documentTypeSelect.addEventListener('change', function() {
-        const typeId = this.value;
-        
-        if (typeId) {
-            loadThemes(typeId);
-        } else {
-            resetThemeSelect();
-        }
-    });
-    
-    // Cargar temas si ya hay un tipo seleccionado (para mantener estado en recarga)
-    if (documentTypeSelect.value) {
-        loadThemes(documentTypeSelect.value);
-    }
-    
-    // Mejorar experiencia visual
-    documentTypeSelect.addEventListener('focus', function() {
-        this.style.borderColor = '#43883d';
-        this.style.boxShadow = '0 0 0 0.2rem rgba(67, 136, 61, 0.25)';
-    });
-    
-    documentTypeSelect.addEventListener('blur', function() {
-        this.style.borderColor = '';
-        this.style.boxShadow = '';
-    });
-    
-    documentThemeSelect.addEventListener('focus', function() {
-        if (!this.disabled) {
-            this.style.borderColor = '#43883d';
-            this.style.boxShadow = '0 0 0 0.2rem rgba(67, 136, 61, 0.25)';
-        }
-    });
-    
-    documentThemeSelect.addEventListener('blur', function() {
-        this.style.borderColor = '';
-        this.style.boxShadow = '';
-    });
-});
-    </script>
 </body>
 </html>
