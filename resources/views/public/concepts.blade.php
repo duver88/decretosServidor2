@@ -9,269 +9,19 @@
     <link rel="stylesheet" href="{{ asset('js/accesibilidad.js') }}"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styleConcepts.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/Concepts.js') }}"></script>
+    <script src="{{ asset('js/conceptosfunciones.js') }}"></script>
     <!-- Agregamos Font Awesome 5 para los íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    <style>
-        /* Solo las fuentes y colores básicos necesarios */
-        .ubuntu-font { font-family: 'Ubuntu', sans-serif !important; }
-        .oswald-font { font-family: 'Oswald', sans-serif !important; }
-        .bg-bucaramanga { background-color: #43883D !important; }
-        .text-bucaramanga { color: #43883D !important; }
-
-        body { 
-            font-family: 'Ubuntu', sans-serif; 
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Estilos para los tabs de sistema */
-        .sistema-tab {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .sistema-tab:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-
-        .chip {
-            display: inline-block;
-            background-color: #E6F0E5;
-            color: #285F19;
-            padding: 5px 14px;
-            margin: 3px;
-            border-radius: 20px;
-            font-family: 'Ubuntu', sans-serif;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-        }
-
-        .chip.active {
-            background-color: #43883d;
-            color: white;
-        }
-
-        .order-option {
-            margin-right: 10px;
-            font-weight: 500;
-            color: #6c757d;
-            cursor: pointer;
-        }
-
-        .order-option.active {
-            color: #285F19;
-            font-weight: 700;
-        }
-
-        .toggle-advanced {
-            color: #285F19;
-            font-size: 0.9rem;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        /* ESTILOS MEJORADOS PARA PAGINACIÓN */
-        .pagination-container {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 25px;
-            margin-top: 40px;
-            border-radius: 15px;
-            border: 1px solid #e9ecef;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-        .pagination-info {
-            background-color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            border: 1px solid #e3e6ea;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .pagination-info .badge {
-            background-color: #43883d !important;
-            color: white;
-            font-size: 0.9rem;
-            padding: 8px 12px;
-            border-radius: 8px;
-        }
-
-        .pagination {
-            justify-content: center;
-            margin: 0;
-            gap: 5px;
-        }
-
-        .pagination .page-item {
-            margin: 0 2px;
-        }
-
-        .pagination .page-link {
-            color: #43883d;
-            border: 2px solid #e9ecef;
-            border-radius: 10px !important;
-            padding: 12px 16px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            min-width: 45px;
-            text-align: center;
-        }
-
-        .pagination .page-link:hover {
-            background-color: #43883d;
-            border-color: #43883d;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(67, 136, 61, 0.3);
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: #43883d;
-            border-color: #43883d;
-            color: white;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(67, 136, 61, 0.4);
-        }
-
-        .pagination .page-item.disabled .page-link {
-            color: #9ca3af;
-            background-color: #f3f4f6;
-            border-color: #e5e7eb;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Iconos para primera/última página */
-        .pagination .page-link[aria-label*="First"]::before {
-            content: "⟪";
-            margin-right: 5px;
-        }
-
-        .pagination .page-link[aria-label*="Previous"]::before {
-            content: "‹";
-            margin-right: 5px;
-        }
-
-        .pagination .page-link[aria-label*="Next"]::after {
-            content: "›";
-            margin-left: 5px;
-        }
-
-        .pagination .page-link[aria-label*="Last"]::after {
-            content: "⟫";
-            margin-left: 5px;
-        }
-
-        
-
-        /* Responsive para móviles */
-        @media (max-width: 576px) {
-            .pagination-container {
-                padding: 15px;
-                margin-top: 20px;
-            }
-            
-            .pagination .page-link {
-                padding: 8px 12px;
-                font-size: 0.85rem;
-                min-width: 35px;
-            }
-            
-            .pagination-info {
-                text-align: center;
-                padding: 12px 15px;
-            }
-
-            .pagination-container {
-        padding: 15px 10px; /* Menos padding horizontal */
-        margin-top: 20px;
-    }
-    
-    .pagination .page-link {
-        padding: 6px 10px; /* Más compacto */
-        font-size: 0.8rem; /* Texto más pequeño */
-        min-width: 32px; /* Botones más pequeños */
-        margin: 0 1px; /* Menos espaciado */
-    }
-    
-    .pagination .page-item {
-        margin: 0 1px; /* Reducir margen entre elementos */
-    }
-    
-    .pagination-info {
-        text-align: center;
-        padding: 10px 12px; /* Más compacto */
-    }
-    
-    .pagination-info .badge {
-        font-size: 0.75rem; /* Badge más pequeño */
-        padding: 6px 10px;
-    }
-    
-    /* Ocultar algunos números en móvil para que no se desborde */
-    .pagination .page-item:not(.active):not(:first-child):not(:last-child):not(:nth-child(2)):not(:nth-last-child(2)) {
-        display: none;
-    }
-    
-    /* Mostrar solo: primera, anterior, actual, siguiente, última */
-    .pagination .page-item:first-child,
-    .pagination .page-item:last-child,
-    .pagination .page-item.active,
-    .pagination .page-item:has(.page-link[rel="prev"]),
-    .pagination .page-item:has(.page-link[rel="next"]) {
-        display: inline-block !important;
-    }
-        }
-
-        @media (max-width: 400px) {
-    .pagination .page-link {
-        padding: 5px 8px;
-        font-size: 0.75rem;
-        min-width: 28px;
-    }
-    
-    .pagination-container {
-        padding: 10px 5px;
-    }
-    
-    /* Ajustar también los badges de filtros aplicados en móvil */
-    .badge {
-        font-size: 0.7rem !important;
-        padding: 4px 8px !important;
-        margin: 2px !important;
-    }
-    
-    /* Chips más pequeños en móvil */
-    .chip {
-        padding: 4px 10px;
-        margin: 2px;
-        font-size: 0.8rem;
-    }
-}
-    </style>
 </head>
 <body>
     {{-- Header --}}
@@ -491,6 +241,19 @@
             <!-- FILTROS AVANZADOS -->
             <div class="collapse mb-4" id="filtrosAvanzados">
                 <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label for="concept_type_id" class="form-label"><i class="fas fa-folder-open me-1"></i> Tipo de Concepto</label>
+                        <select class="form-select" name="concept_type_id" id="concept_type_id">
+                            <option value="">Todos</option>
+                            @foreach($conceptTypes as $tipo)
+                                <option value="{{ $tipo->id }}" @selected(request('concept_type_id') == $tipo->id)>
+                                    {{ $tipo->nombre }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="col-md-6">
                         <label for="concept_theme_id" class="form-label"><i class="fas fa-tags me-1"></i> Tema específico</label>
                         <select class="form-select" name="concept_theme_id" id="concept_theme_id" onchange="asignarTipoDesdeTema()">
@@ -499,17 +262,6 @@
                                 <option value="{{ $tema->id }}" data-type-id="{{ $tema->concept_type_id }}"
                                     @selected(request('concept_theme_id') == $tema->id)>
                                     {{ $tema->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="concept_type_id" class="form-label"><i class="fas fa-folder-open me-1"></i> Tipo de Concepto</label>
-                        <select class="form-select" name="concept_type_id" id="concept_type_id">
-                            <option value="">Todos</option>
-                            @foreach($conceptTypes as $tipo)
-                                <option value="{{ $tipo->id }}" @selected(request('concept_type_id') == $tipo->id)>
-                                    {{ $tipo->nombre }}
                                 </option>
                             @endforeach
                         </select>
@@ -1040,50 +792,6 @@
         </div>
     </div>
 </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const typeSel  = document.getElementById('concept_type_id');
-        const themeSel = document.getElementById('concept_theme_id');
-
-        async function loadThemes(typeId){
-            themeSel.innerHTML = '<option value="">Cargando temas...</option>';
-            try {
-                const r = await fetch(`/api/concept-themes-by-type/${typeId}`);
-                const list = await r.json();
-                themeSel.innerHTML = '<option value="">Todos los temas</option>';
-                list.forEach(t => {
-                    const opt = new Option(t.nombre, t.id, false, t.id == '{{ request('concept_theme_id') }}');
-                    themeSel.add(opt);
-                });
-            } catch (error) {
-                themeSel.innerHTML = '<option value="">Error al cargar temas</option>';
-            }
-        }
-
-        if(typeSel.value) loadThemes(typeSel.value);
-        typeSel.addEventListener('change', e => {
-            if(e.target.value){ 
-                loadThemes(e.target.value); 
-            } else { 
-                themeSel.innerHTML = '<option value="">Todos los temas</option>'; 
-            }
-        });
-    });
-
-    </script>
-    <script>
-    function asignarTipoDesdeTema() {
-        const temaSelect = document.getElementById('concept_theme_id');
-        const tipoSelect = document.getElementById('concept_type_id');
-        const selectedOption = temaSelect.options[temaSelect.selectedIndex];
-        const typeId = selectedOption.getAttribute('data-type-id');
-        if (typeId) {
-            tipoSelect.value = typeId;
-        }
-    }
-    </script>
 
 
 </body>
