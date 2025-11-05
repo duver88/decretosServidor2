@@ -510,6 +510,63 @@
                         <input type="date" name="fecha" class="form-control" value="{{ request('fecha') }}">
                         <small class="text-muted">Solo si no usa rango de fechas</small>
                     </div>
+
+                    <!-- NUEVA SECCIÓN: Campos opcionales de archivo -->
+                    <div class="col-12">
+                        <hr class="my-3">
+                        <h6 class="text-success fw-bold mb-3">
+                            <i class="fas fa-archive me-2"></i>Información de Archivo (Opcional)
+                        </h6>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="referencia_ubicacion" class="form-label">
+                            <i class="fas fa-map-marker-alt me-1"></i> Referencia y Ubicación
+                        </label>
+                        <input type="text" name="referencia_ubicacion" id="referencia_ubicacion" class="form-control"
+                               placeholder="Ej: T1VD2.1000.32.001" value="{{ request('referencia_ubicacion') }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="soporte" class="form-label">
+                            <i class="fas fa-file-alt me-1"></i> Soporte
+                        </label>
+                        <input type="text" name="soporte" id="soporte" class="form-control"
+                               placeholder="Ej: Papel, Digital" value="{{ request('soporte') }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="volumen" class="form-label">
+                            <i class="fas fa-book me-1"></i> Volumen
+                        </label>
+                        <input type="text" name="volumen" id="volumen" class="form-control"
+                               placeholder="Ej: Tomo 2 (1931-1933)" value="{{ request('volumen') }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="nombre_productor" class="form-label">
+                            <i class="fas fa-user-tie me-1"></i> Nombre del Productor
+                        </label>
+                        <input type="text" name="nombre_productor" id="nombre_productor" class="form-control"
+                               placeholder="Ej: DESPACHO ALCALDE (1000)" value="{{ request('nombre_productor') }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="informacion_valoracion" class="form-label">
+                            <i class="fas fa-clipboard-check me-1"></i> Información sobre Valoración
+                        </label>
+                        <input type="text" name="informacion_valoracion" id="informacion_valoracion" class="form-control"
+                               placeholder="Ej: Conservación Total" value="{{ request('informacion_valoracion') }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="lengua_documentos" class="form-label">
+                            <i class="fas fa-language me-1"></i> Lengua de los Documentos
+                        </label>
+                        <input type="text" name="lengua_documentos" id="lengua_documentos" class="form-control"
+                               placeholder="Ej: ESPAÑOL Código ISO 639-2 spa" value="{{ request('lengua_documentos') }}">
+                    </div>
+
                     <div class="col-md-6 d-flex align-items-end">
                         <div class="w-100">
                             <button class="btn btn-outline-secondary me-2" type="button" onclick="window.location.href='{{ route('home') }}'">
@@ -537,7 +594,13 @@
     request()->filled('fecha') ||
     request()->filled('fecha_desde') ||
     request()->filled('fecha_hasta') ||
-    request()->filled('orden')
+    request()->filled('orden') ||
+    request()->filled('referencia_ubicacion') ||
+    request()->filled('soporte') ||
+    request()->filled('volumen') ||
+    request()->filled('nombre_productor') ||
+    request()->filled('informacion_valoracion') ||
+    request()->filled('lengua_documentos')
 )
     <div class="mt-4 pt-3 border-top">
         <h6 class="fw-bold text-success mb-2">Filtros aplicados:</h6>
@@ -674,6 +737,55 @@
                     }} &times;
                 </a>
             @endif
+
+            {{-- Filtros de campos opcionales de archivo --}}
+            @if(request()->filled('referencia_ubicacion'))
+                <a href="{{ route('home', array_merge($baseParams, ['referencia_ubicacion' => null])) }}"
+                   class="badge text-white"
+                   style="background-color: #6A9B4C;">
+                    📍 Referencia: {{ Str::limit(request('referencia_ubicacion'), 30) }} &times;
+                </a>
+            @endif
+
+            @if(request()->filled('soporte'))
+                <a href="{{ route('home', array_merge($baseParams, ['soporte' => null])) }}"
+                   class="badge text-white"
+                   style="background-color: #7AAA5C;">
+                    📄 Soporte: {{ request('soporte') }} &times;
+                </a>
+            @endif
+
+            @if(request()->filled('volumen'))
+                <a href="{{ route('home', array_merge($baseParams, ['volumen' => null])) }}"
+                   class="badge text-white"
+                   style="background-color: #8AB96C;">
+                    📚 Volumen: {{ Str::limit(request('volumen'), 30) }} &times;
+                </a>
+            @endif
+
+            @if(request()->filled('nombre_productor'))
+                <a href="{{ route('home', array_merge($baseParams, ['nombre_productor' => null])) }}"
+                   class="badge text-white"
+                   style="background-color: #9AC87C;">
+                    👤 Productor: {{ Str::limit(request('nombre_productor'), 30) }} &times;
+                </a>
+            @endif
+
+            @if(request()->filled('informacion_valoracion'))
+                <a href="{{ route('home', array_merge($baseParams, ['informacion_valoracion' => null])) }}"
+                   class="badge text-white"
+                   style="background-color: #AAD78C;">
+                    ✓ Valoración: {{ request('informacion_valoracion') }} &times;
+                </a>
+            @endif
+
+            @if(request()->filled('lengua_documentos'))
+                <a href="{{ route('home', array_merge($baseParams, ['lengua_documentos' => null])) }}"
+                   class="badge text-white"
+                   style="background-color: #BAE69C;">
+                    🌐 Lengua: {{ Str::limit(request('lengua_documentos'), 30) }} &times;
+                </a>
+            @endif
         </div>
     </div>
 @endif
@@ -734,11 +846,20 @@
                                  {{ Str::limit($document->documentTheme->nombre, 15) }}
                             </span>
                             @endif
-                            
+
                             <span class="badge bg-secondary text-white fw-semibold px-3 py-2 rounded-pill" style="font-size: 0.85rem;">
                                 {{ \Carbon\Carbon::parse($document->fecha)->format('Y') }}
                             </span>
-                            
+
+                            {{-- Etiqueta de Documento Histórico si tiene información de archivo --}}
+                            @if($document->referencia_ubicacion || $document->soporte || $document->volumen ||
+                                $document->nombre_productor || $document->informacion_valoracion || $document->lengua_documentos)
+                                <span class="badge text-white fw-semibold px-3 py-2 rounded-pill"
+                                      style="background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); font-size: 0.85rem;"
+                                      title="Este documento contiene información histórica archivística">
+                                    <i class="fas fa-archive me-1"></i>Documento Histórico
+                                </span>
+                            @endif
 
                         </div>
 

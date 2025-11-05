@@ -79,21 +79,52 @@ public function listPublic(Request $request)
     if ($request->filled('mes') && $request->filled('año')) {
         $mes = (int) $request->mes;
         $año = trim($request->año);
-        
+
         if ($mes >= 1 && $mes <= 12 && !empty($año)) {
             $query->whereMonth('fecha', $mes)
                   ->where('nombre', 'LIKE', '%' . $año . '%');
         }
     }
 
-    // Búsqueda general (busca en nombre, número, descripción y tipo)
+    // Filtros de campos opcionales de archivo
+    if ($request->filled('referencia_ubicacion')) {
+        $query->where('referencia_ubicacion', 'LIKE', '%' . trim($request->referencia_ubicacion) . '%');
+    }
+
+    if ($request->filled('soporte')) {
+        $query->where('soporte', 'LIKE', '%' . trim($request->soporte) . '%');
+    }
+
+    if ($request->filled('volumen')) {
+        $query->where('volumen', 'LIKE', '%' . trim($request->volumen) . '%');
+    }
+
+    if ($request->filled('nombre_productor')) {
+        $query->where('nombre_productor', 'LIKE', '%' . trim($request->nombre_productor) . '%');
+    }
+
+    if ($request->filled('informacion_valoracion')) {
+        $query->where('informacion_valoracion', 'LIKE', '%' . trim($request->informacion_valoracion) . '%');
+    }
+
+    if ($request->filled('lengua_documentos')) {
+        $query->where('lengua_documentos', 'LIKE', '%' . trim($request->lengua_documentos) . '%');
+    }
+
+    // Búsqueda general (busca en nombre, número, descripción, tipo y campos opcionales de archivo)
     if ($request->filled('busqueda_general')) {
         $busqueda = trim($request->busqueda_general);
         $query->where(function($q) use ($busqueda) {
             $q->where('nombre', 'LIKE', '%' . $busqueda . '%')
               ->orWhere('numero', 'LIKE', '%' . $busqueda . '%')
               ->orWhere('descripcion', 'LIKE', '%' . $busqueda . '%')
-              ->orWhere('tipo', 'LIKE', "%{$busqueda}%");
+              ->orWhere('tipo', 'LIKE', "%{$busqueda}%")
+              ->orWhere('referencia_ubicacion', 'LIKE', '%' . $busqueda . '%')
+              ->orWhere('soporte', 'LIKE', '%' . $busqueda . '%')
+              ->orWhere('volumen', 'LIKE', '%' . $busqueda . '%')
+              ->orWhere('nombre_productor', 'LIKE', '%' . $busqueda . '%')
+              ->orWhere('informacion_valoracion', 'LIKE', '%' . $busqueda . '%')
+              ->orWhere('lengua_documentos', 'LIKE', '%' . $busqueda . '%');
         });
     }
 
@@ -430,6 +461,13 @@ public function store(Request $request)
         'category_id' => 'required|exists:categories,id',
         'document_type_id' => 'required|exists:document_types,id',
         'document_theme_id' => 'required|exists:document_themes,id',
+        // Campos opcionales de archivo
+        'referencia_ubicacion' => 'nullable|string|max:255',
+        'soporte' => 'nullable|string|max:255',
+        'volumen' => 'nullable|string|max:255',
+        'nombre_productor' => 'nullable|string|max:255',
+        'informacion_valoracion' => 'nullable|string|max:255',
+        'lengua_documentos' => 'nullable|string|max:255',
     ]);
 
     // ✅ VALIDACIÓN ADICIONAL PARA FECHA (OPCIONAL - EXTRA SEGURIDAD)
@@ -457,6 +495,13 @@ public function store(Request $request)
         $documento->document_theme_id = $request->document_theme_id;
         $documento->descripcion = $request->descripcion;
         $documento->archivo = $ruta;
+        // Campos opcionales de archivo
+        $documento->referencia_ubicacion = $request->referencia_ubicacion;
+        $documento->soporte = $request->soporte;
+        $documento->volumen = $request->volumen;
+        $documento->nombre_productor = $request->nombre_productor;
+        $documento->informacion_valoracion = $request->informacion_valoracion;
+        $documento->lengua_documentos = $request->lengua_documentos;
         $documento->save();
         
         // ✅ REDIRECT CORRECTO SEGÚN TIPO DE USUARIO
@@ -507,17 +552,24 @@ public function edit($id)
     $document = Document::findOrFail($id);  
   
     // Validate request data - AGREGAMOS los nuevos campos pero mantenemos todo lo demás
-    $request->validate([  
-        'nombre' => 'required|string|max:255',  
-        'numero' => 'required|string|max:50',  
-        'tipo' => 'required|in:decreto,resolución',  
-        'fecha' => 'required|date',  
-        'archivo' => 'nullable|file|mimes:pdf,doc,docx',  
-        'descripcion' => 'nullable|string',  
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'numero' => 'required|string|max:50',
+        'tipo' => 'required|in:decreto,resolución',
+        'fecha' => 'required|date',
+        'archivo' => 'nullable|file|mimes:pdf,doc,docx',
+        'descripcion' => 'nullable|string',
         'category_id' => 'required|exists:categories,id',
         // 🆕 NUEVOS CAMPOS - pero opcionales para no romper documentos existentes
         'document_type_id' => 'nullable|exists:document_types,id',
         'document_theme_id' => 'nullable|exists:document_themes,id',
+        // Campos opcionales de archivo
+        'referencia_ubicacion' => 'nullable|string|max:255',
+        'soporte' => 'nullable|string|max:255',
+        'volumen' => 'nullable|string|max:255',
+        'nombre_productor' => 'nullable|string|max:255',
+        'informacion_valoracion' => 'nullable|string|max:255',
+        'lengua_documentos' => 'nullable|string|max:255',
     ]);  
       
     if (!auth()->user()->is_admin) {  
@@ -537,14 +589,21 @@ public function edit($id)
       
     // Continue with document update logic - AGREGAMOS los nuevos campos
     $data = $request->only([
-        'nombre', 
-        'numero', 
-        'tipo', 
-        'fecha', 
-        'descripcion', 
+        'nombre',
+        'numero',
+        'tipo',
+        'fecha',
+        'descripcion',
         'category_id',
         'document_type_id',    // 🆕 NUEVO
-        'document_theme_id'    // 🆕 NUEVO
+        'document_theme_id',    // 🆕 NUEVO
+        // Campos opcionales de archivo
+        'referencia_ubicacion',
+        'soporte',
+        'volumen',
+        'nombre_productor',
+        'informacion_valoracion',
+        'lengua_documentos'
     ]);  
       
     // Handle file upload if present - SIN CAMBIOS
