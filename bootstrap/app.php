@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Registrar el middleware con alias
         $middleware->alias([
             'Is_admin' => \App\Http\Middleware\IsAdmin::class,
+            'module.access' => \App\Http\Middleware\CheckModuleAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -105,6 +105,24 @@
   <ul class="space-y-2">
     @if(auth()->user()->is_admin)
       {{-- SIDEBAR PARA ADMINISTRADORES --}}
+
+      <!-- Sección: Gestión de Usuarios (solo admin) -->
+      <li>
+        <div class="px-4 py-2 text-sm font-medium text-[#43883d] dark:text-[#93C01F] uppercase tracking-wider">
+          Administración
+        </div>
+        <ul class="pl-2">
+          <li>
+            <a href="{{ route('users.index') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+              <span>Gestión de Usuarios</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
       <!-- Sección: Relatoría actos administrativos -->
       <li>
         <div class="px-4 py-2 text-sm font-medium text-[#43883d] dark:text-[#93C01F] uppercase tracking-wider">
@@ -196,87 +214,109 @@
       </li>
 
     @else
-      {{-- SIDEBAR PARA USUARIOS NORMALES --}}
-      <!-- Sección: Mis documentos -->
-      <li>
-        <div class="px-4 py-2 text-sm font-medium text-[#43883d] dark:text-[#93C01F] uppercase tracking-wider">
-          Relatoria de Actos Administrativos
-        </div>
-        <ul class="pl-2">
-          <li>
-            <a href="{{ route('user.dashboard') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-              </svg>
-              <span>Inicio</span>
-            </a>
-          </li>
-          @if(auth()->user()->categoryPermissions()->where('can_create', true)->exists())
+      {{-- SIDEBAR PARA USUARIOS NORMALES - DINÁMICO BASADO EN MÓDULOS --}}
+      @php
+        $userModules = auth()->user()->getAccessibleModules();
+      @endphp
+
+      @if($userModules->isEmpty())
+        <!-- Usuario sin módulos asignados -->
+        <li>
+          <div class="px-4 py-4 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              No tienes módulos asignados.<br>
+              Contacta al administrador.
+            </p>
+          </div>
+        </li>
+      @else
+        @foreach($userModules as $module)
+          @if($module->slug === 'actos-administrativos')
+            <!-- Módulo: Relatoría de Actos Administrativos -->
             <li>
-              <a href="{{ route('user.document.create') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-                <span>Crear Documento</span>
-              </a>
+              <div class="px-4 py-2 text-sm font-medium text-[#43883d] dark:text-[#93C01F] uppercase tracking-wider">
+                {{ $module->name }}
+              </div>
+              <ul class="pl-2">
+                <li>
+                  <a href="{{ route('user.dashboard') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                    </svg>
+                    <span>Inicio</span>
+                  </a>
+                </li>
+                @if(auth()->user()->categoryPermissions()->where('can_create', true)->exists())
+                  <li>
+                    <a href="{{ route('user.document.create') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                      </svg>
+                      <span>Crear Documento</span>
+                    </a>
+                  </li>
+                @endif
+              </ul>
+            </li>
+
+          @elseif($module->slug === 'conceptos')
+            <!-- Módulo: Relatoría de Conceptos -->
+            <li class="mt-4">
+              <div class="px-4 py-2 text-sm font-medium text-[#43883d] dark:text-[#93C01F] uppercase tracking-wider">
+                {{ $module->name }}
+              </div>
+              <ul class="pl-2">
+                <li>
+                  <a href="{{ route('concepts.index') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
+                    <span>Ver Conceptos</span>
+                  </a>
+                </li>
+                @if(auth()->user()->conceptTypes()->wherePivot('can_create', true)->exists())
+                  <li>
+                    <a href="{{ route('concepts.create') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                      </svg>
+                      <span>Crear Concepto</span>
+                    </a>
+                  </li>
+                @endif
+              </ul>
             </li>
           @endif
-        </ul>
-      </li>
-      
-      <!-- Sección: Mis conceptos (solo si tiene permisos) -->
-      @if(auth()->user()->conceptTypes()->exists())
+        @endforeach
+
+        <!-- Sección: Enlaces públicos (siempre visible) -->
         <li class="mt-4">
           <div class="px-4 py-2 text-sm font-medium text-[#43883d] dark:text-[#93C01F] uppercase tracking-wider">
-            Relatoria de Conceptos 
+            Consulta pública
           </div>
           <ul class="pl-2">
             <li>
-              <a href="{{ route('concepts.index') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+              <a href="{{ route('home') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                <span>Ver Conceptos</span>
+                <span>Buscar Documentos</span>
               </a>
             </li>
-            @if(auth()->user()->conceptTypes()->wherePivot('can_create', true)->exists())
-              <li>
-                <a href="{{ route('concepts.create') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                  </svg>
-                  <span>Crear Concepto</span>
-                </a>
-              </li>
-            @endif
+            <li>
+              <a href="{{ route('concepts.public') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                <span>Buscar Conceptos</span>
+              </a>
+            </li>
           </ul>
         </li>
       @endif
-
-      <!-- Sección: Enlaces públicos para usuarios -->
-      <li class="mt-4">
-        <div class="px-4 py-2 text-sm font-medium text-[#43883d] dark:text-[#93C01F] uppercase tracking-wider">
-          Consulta pública
-        </div>
-        <ul class="pl-2">
-          <li>
-            <a href="{{ route('home') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-              </svg>
-              <span>Buscar Documentos</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ route('concepts.public') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-              </svg>
-              <span>Buscar Conceptos</span>
-            </a>
-          </li>
-        </ul>
-      </li>
     @endif
 
     <!-- Cerrar sesión -->

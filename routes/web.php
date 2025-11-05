@@ -11,7 +11,8 @@ use App\Http\Controllers\ConceptThemeController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\DocumentThemeController;
 use App\Http\Controllers\ConceptPermissionController;
-use App\Http\Controllers\UserCategoryPermissionController;  
+use App\Http\Controllers\UserCategoryPermissionController;
+use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
@@ -107,34 +108,46 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 }); 
 
-// Rutas para gestionar permisos de usuarios (solo admin)  
-Route::middleware(['auth', IsAdmin::class])->group(function () {  
-    Route::get('/dashboard/permisos', [UserCategoryPermissionController::class, 'index'])  
-         ->name('permissions.index');  
-    Route::post('/dashboard/permisos', [UserCategoryPermissionController::class, 'store'])  
-         ->name('permissions.store');  
-    Route::delete('/dashboard/permisos/{id}', [UserCategoryPermissionController::class, 'destroy'])  
-         ->name('permissions.destroy');  
-});  
-  
-// Rutas para usuarios normales  
-Route::middleware(['auth'])->group(function () {  
-    Route::get('/users/dashboard', [DocumentController::class, 'userDashboard'])  
-         ->name('user.dashboard');  
-    Route::get('/users/dashboard/documento/crear', [DocumentController::class, 'create'])  
-         ->name('user.document.create');  
-    Route::post('/users/dashboard/documento', [DocumentController::class, 'store'])  
-         ->name('user.document.store');  
-    Route::get('/users/dashboard/documento/{id}/editar', [DocumentController::class, 'edit'])  
-         ->name('user.document.edit');  
-    Route::put('/users/dashboard/documento/{id}', [DocumentController::class, 'update'])  
-         ->name('user.document.update');  
-    Route::delete('/users/dashboard/documento/{id}', [DocumentController::class, 'destroy'])  
-         ->name('user.document.destroy');  
+// Rutas para gestionar permisos de usuarios (solo admin)
+Route::middleware(['auth', IsAdmin::class])->group(function () {
+    Route::get('/dashboard/permisos', [UserCategoryPermissionController::class, 'index'])
+         ->name('permissions.index');
+    Route::post('/dashboard/permisos', [UserCategoryPermissionController::class, 'store'])
+         ->name('permissions.store');
+    Route::delete('/dashboard/permisos/{id}', [UserCategoryPermissionController::class, 'destroy'])
+         ->name('permissions.destroy');
 });
 
-// Rutas para conceptos
-Route::middleware(['auth'])->prefix('concepts')->name('concepts.')->group(function () {
+// Rutas para gestión de usuarios (solo admin)
+Route::middleware(['auth', IsAdmin::class])->prefix('dashboard/usuarios')->name('users.')->group(function () {
+    Route::get('/', [UserManagementController::class, 'index'])->name('index');
+    Route::get('/crear', [UserManagementController::class, 'create'])->name('create');
+    Route::post('/', [UserManagementController::class, 'store'])->name('store');
+    Route::get('/{user}/editar', [UserManagementController::class, 'edit'])->name('edit');
+    Route::put('/{user}', [UserManagementController::class, 'update'])->name('update');
+    Route::delete('/{user}', [UserManagementController::class, 'destroy'])->name('destroy');
+    Route::get('/{user}/modulos', [UserManagementController::class, 'manageModules'])->name('modules');
+    Route::put('/{user}/modulos', [UserManagementController::class, 'updateModules'])->name('updateModules');
+});  
+  
+// Rutas para usuarios normales - Módulo de Actos Administrativos
+Route::middleware(['auth', 'module.access:actos-administrativos'])->group(function () {
+    Route::get('/users/dashboard', [DocumentController::class, 'userDashboard'])
+         ->name('user.dashboard');
+    Route::get('/users/dashboard/documento/crear', [DocumentController::class, 'create'])
+         ->name('user.document.create');
+    Route::post('/users/dashboard/documento', [DocumentController::class, 'store'])
+         ->name('user.document.store');
+    Route::get('/users/dashboard/documento/{id}/editar', [DocumentController::class, 'edit'])
+         ->name('user.document.edit');
+    Route::put('/users/dashboard/documento/{id}', [DocumentController::class, 'update'])
+         ->name('user.document.update');
+    Route::delete('/users/dashboard/documento/{id}', [DocumentController::class, 'destroy'])
+         ->name('user.document.destroy');
+});
+
+// Rutas para conceptos - Módulo de Conceptos
+Route::middleware(['auth', 'module.access:conceptos'])->prefix('concepts')->name('concepts.')->group(function () {
     // Rutas principales (sin parámetros)
     Route::get('/', [ConceptController::class, 'index'])->name('index');
     Route::get('/create', [ConceptController::class, 'create'])->name('create');

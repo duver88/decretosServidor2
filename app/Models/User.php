@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -85,7 +86,7 @@ class User extends Authenticatable
         public function hasConceptPermissionFor($conceptTypeId, $permission = 'create')
         {
             $permissionColumn = 'can_' . $permission;
-            
+
             return $this->is_admin || $this->conceptTypes()
                 ->where('concept_type_id', $conceptTypeId)
                 ->wherePivot($permissionColumn, true)
@@ -97,31 +98,69 @@ class User extends Authenticatable
         if ($this->is_admin) {
             return true;
         }
-        
+
         $allTypes = ConceptType::all();
         if ($allTypes->count() === 0) {
             return false;
         }
-        
+
         $types = $this->conceptTypes;
         if ($types->count() !== $allTypes->count()) {
             return false;
         }
-        
+
         // Verificar que todos los tipos tengan el mismo permiso
         $permissionColumn = 'can_' . $permission;
         $firstValue = $types->first()->pivot->{$permissionColumn};
-        
+
         if (!$firstValue) {
             return false;
         }
-        
+
         return $types->every(function($type) use ($permissionColumn, $firstValue) {
             return $type->pivot->{$permissionColumn} === $firstValue;
         });
     }
 
-        
+    // Relaciones para módulos del sistema
+    public function modules()
+    {
+        return $this->belongsToMany(Module::class, 'user_module_access')
+            ->withTimestamps();
+    }
 
-        
+    /**
+     * Verifica si el usuario tiene acceso a un módulo específico
+     */
+    public function hasModuleAccess($moduleSlug)
+    {
+        // Los administradores tienen acceso a todos los módulos
+        if ($this->is_admin) {
+            return true;
+        }
+
+        return $this->modules()
+            ->where('slug', $moduleSlug)
+            ->where('is_active', true)
+            ->exists();
+    }
+
+    /**
+     * Obtiene todos los módulos a los que el usuario tiene acceso
+     */
+    public function getAccessibleModules()
+    {
+        if ($this->is_admin) {
+            return Module::active()->ordered()->get();
+        }
+
+        return $this->modules()
+            ->where('is_active', true)
+            ->orderBy('order')
+            ->get();
+    }
+
+
+
+
 }
