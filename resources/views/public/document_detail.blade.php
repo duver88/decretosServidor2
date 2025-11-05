@@ -412,6 +412,77 @@
                 </div>
             </div>
 
+            <!-- Tarjeta de Información de Archivo (Campos Opcionales) -->
+            @if($document->referencia_ubicacion || $document->soporte || $document->volumen ||
+                $document->nombre_productor || $document->informacion_valoracion || $document->lengua_documentos)
+            <div class="info-card">
+                <div class="info-card-header">
+                    <i class="fas fa-archive me-2"></i>
+                    Información de Archivo
+                </div>
+                <div class="info-card-body">
+                    @if($document->referencia_ubicacion)
+                    <div class="metadata-item">
+                        <div class="metadata-label">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            Referencia y Ubicación
+                        </div>
+                        <div class="metadata-value">{{ $document->referencia_ubicacion }}</div>
+                    </div>
+                    @endif
+
+                    @if($document->soporte)
+                    <div class="metadata-item">
+                        <div class="metadata-label">
+                            <i class="fas fa-file-alt me-2"></i>
+                            Soporte
+                        </div>
+                        <div class="metadata-value">{{ $document->soporte }}</div>
+                    </div>
+                    @endif
+
+                    @if($document->volumen)
+                    <div class="metadata-item">
+                        <div class="metadata-label">
+                            <i class="fas fa-book me-2"></i>
+                            Volumen
+                        </div>
+                        <div class="metadata-value">{{ $document->volumen }}</div>
+                    </div>
+                    @endif
+
+                    @if($document->nombre_productor)
+                    <div class="metadata-item">
+                        <div class="metadata-label">
+                            <i class="fas fa-user-tie me-2"></i>
+                            Nombre del Productor
+                        </div>
+                        <div class="metadata-value">{{ $document->nombre_productor }}</div>
+                    </div>
+                    @endif
+
+                    @if($document->informacion_valoracion)
+                    <div class="metadata-item">
+                        <div class="metadata-label">
+                            <i class="fas fa-clipboard-check me-2"></i>
+                            Información sobre Valoración
+                        </div>
+                        <div class="metadata-value">{{ $document->informacion_valoracion }}</div>
+                    </div>
+                    @endif
+
+                    @if($document->lengua_documentos)
+                    <div class="metadata-item">
+                        <div class="metadata-label">
+                            <i class="fas fa-language me-2"></i>
+                            Lengua de los Documentos
+                        </div>
+                        <div class="metadata-value">{{ $document->lengua_documentos }}</div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            @endif
 
         </div>
     </div>

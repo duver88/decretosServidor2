@@ -170,6 +170,104 @@
             @enderror
         </div>
 
+        <!-- Campos Opcionales de Archivo -->
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4 font-ubuntu">Información de Archivo (Opcional)</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Los siguientes campos son opcionales y pueden ser completados según la información archivística disponible.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Referencia y Ubicación -->
+                <div>
+                    <label for="referencia_ubicacion" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Referencia y Ubicación
+                        <span class="text-xs text-gray-500">(Opcional)</span>
+                    </label>
+                    <input type="text" name="referencia_ubicacion" id="referencia_ubicacion"
+                        class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                        placeholder="Ej: T1VD2.1000.32.001"
+                        value="{{ old('referencia_ubicacion') }}">
+                    @error('referencia_ubicacion')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Soporte -->
+                <div>
+                    <label for="soporte" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Soporte
+                        <span class="text-xs text-gray-500">(Opcional)</span>
+                    </label>
+                    <input type="text" name="soporte" id="soporte"
+                        class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                        placeholder="Ej: Papel, Digital"
+                        value="{{ old('soporte') }}">
+                    @error('soporte')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Volumen -->
+                <div>
+                    <label for="volumen" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Volumen
+                        <span class="text-xs text-gray-500">(Opcional)</span>
+                    </label>
+                    <input type="text" name="volumen" id="volumen"
+                        class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                        placeholder="Ej: Tomo 2 (1931-1933)"
+                        value="{{ old('volumen') }}">
+                    @error('volumen')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Nombre del Productor -->
+                <div>
+                    <label for="nombre_productor" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Nombre del Productor
+                        <span class="text-xs text-gray-500">(Opcional)</span>
+                    </label>
+                    <input type="text" name="nombre_productor" id="nombre_productor"
+                        class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                        placeholder="Ej: DESPACHO ALCALDE (1000)"
+                        value="{{ old('nombre_productor') }}">
+                    @error('nombre_productor')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Información sobre Valoración -->
+                <div>
+                    <label for="informacion_valoracion" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Información sobre Valoración
+                        <span class="text-xs text-gray-500">(Opcional)</span>
+                    </label>
+                    <input type="text" name="informacion_valoracion" id="informacion_valoracion"
+                        class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                        placeholder="Ej: Conservación Total"
+                        value="{{ old('informacion_valoracion') }}">
+                    @error('informacion_valoracion')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Lengua de los Documentos -->
+                <div>
+                    <label for="lengua_documentos" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Lengua de los Documentos
+                        <span class="text-xs text-gray-500">(Opcional)</span>
+                    </label>
+                    <input type="text" name="lengua_documentos" id="lengua_documentos"
+                        class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                        placeholder="Ej: ESPAÑOL Código ISO 639-2 spa"
+                        value="{{ old('lengua_documentos') }}">
+                    @error('lengua_documentos')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
         <!-- Botones de acción -->
         <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
             <a href="{{ route('dashboard') }}" class="px-4 py-2 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 rounded-md transition-colors font-ubuntu">

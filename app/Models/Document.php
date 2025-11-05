@@ -9,7 +9,24 @@ class Document extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nombre','numero', 'tipo', 'fecha', 'archivo', 'descripcion', 'category_id','document_type_id', 'document_theme_id'];
+    protected $fillable = [
+        'nombre',
+        'numero',
+        'tipo',
+        'fecha',
+        'archivo',
+        'descripcion',
+        'category_id',
+        'document_type_id',
+        'document_theme_id',
+        // Campos opcionales de archivo
+        'referencia_ubicacion',
+        'soporte',
+        'volumen',
+        'nombre_productor',
+        'informacion_valoracion',
+        'lengua_documentos'
+    ];
 
         public function documentType()  
     {  

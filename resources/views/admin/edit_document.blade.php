@@ -152,6 +152,104 @@
                 <textarea name="descripcion" id="descripcion" rows="4" class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu resize-none" placeholder="Describe brevemente el contenido del documento...">{{ old('descripcion', $document->descripcion) }}</textarea>
             </div>
 
+            <!-- Campos Opcionales de Archivo -->
+            <div class="border-t-2 border-gray-200 pt-6 mt-6">
+                <h3 class="text-lg font-ubuntu font-bold text-gray-800 mb-2">Información de Archivo (Opcional)</h3>
+                <p class="text-sm text-gray-500 mb-4 font-ubuntu">Los siguientes campos son opcionales y pueden ser completados según la información archivística disponible.</p>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Referencia y Ubicación -->
+                    <div>
+                        <label for="referencia_ubicacion" class="block font-ubuntu font-medium text-gray-700 mb-2">
+                            Referencia y Ubicación
+                            <span class="text-xs text-gray-500">(Opcional)</span>
+                        </label>
+                        <input type="text" name="referencia_ubicacion" id="referencia_ubicacion"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                            placeholder="Ej: T1VD2.1000.32.001"
+                            value="{{ old('referencia_ubicacion', $document->referencia_ubicacion) }}">
+                        @error('referencia_ubicacion')
+                            <p class="text-red-500 text-sm mt-1 font-ubuntu">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Soporte -->
+                    <div>
+                        <label for="soporte" class="block font-ubuntu font-medium text-gray-700 mb-2">
+                            Soporte
+                            <span class="text-xs text-gray-500">(Opcional)</span>
+                        </label>
+                        <input type="text" name="soporte" id="soporte"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                            placeholder="Ej: Papel, Digital"
+                            value="{{ old('soporte', $document->soporte) }}">
+                        @error('soporte')
+                            <p class="text-red-500 text-sm mt-1 font-ubuntu">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Volumen -->
+                    <div>
+                        <label for="volumen" class="block font-ubuntu font-medium text-gray-700 mb-2">
+                            Volumen
+                            <span class="text-xs text-gray-500">(Opcional)</span>
+                        </label>
+                        <input type="text" name="volumen" id="volumen"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                            placeholder="Ej: Tomo 2 (1931-1933)"
+                            value="{{ old('volumen', $document->volumen) }}">
+                        @error('volumen')
+                            <p class="text-red-500 text-sm mt-1 font-ubuntu">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Nombre del Productor -->
+                    <div>
+                        <label for="nombre_productor" class="block font-ubuntu font-medium text-gray-700 mb-2">
+                            Nombre del Productor
+                            <span class="text-xs text-gray-500">(Opcional)</span>
+                        </label>
+                        <input type="text" name="nombre_productor" id="nombre_productor"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                            placeholder="Ej: DESPACHO ALCALDE (1000)"
+                            value="{{ old('nombre_productor', $document->nombre_productor) }}">
+                        @error('nombre_productor')
+                            <p class="text-red-500 text-sm mt-1 font-ubuntu">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Información sobre Valoración -->
+                    <div>
+                        <label for="informacion_valoracion" class="block font-ubuntu font-medium text-gray-700 mb-2">
+                            Información sobre Valoración
+                            <span class="text-xs text-gray-500">(Opcional)</span>
+                        </label>
+                        <input type="text" name="informacion_valoracion" id="informacion_valoracion"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                            placeholder="Ej: Conservación Total"
+                            value="{{ old('informacion_valoracion', $document->informacion_valoracion) }}">
+                        @error('informacion_valoracion')
+                            <p class="text-red-500 text-sm mt-1 font-ubuntu">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Lengua de los Documentos -->
+                    <div>
+                        <label for="lengua_documentos" class="block font-ubuntu font-medium text-gray-700 mb-2">
+                            Lengua de los Documentos
+                            <span class="text-xs text-gray-500">(Opcional)</span>
+                        </label>
+                        <input type="text" name="lengua_documentos" id="lengua_documentos"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-3 focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                            placeholder="Ej: ESPAÑOL Código ISO 639-2 spa"
+                            value="{{ old('lengua_documentos', $document->lengua_documentos) }}">
+                        @error('lengua_documentos')
+                            <p class="text-red-500 text-sm mt-1 font-ubuntu">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
             <!-- Botones -->
             <div class="flex justify-end space-x-4 pt-4">
                 <a href="{{ route('dashboard') }}" class="bg-gray-400 text-white px-6 py-3 rounded-lg shadow hover:bg-gray-500 transition font-ubuntu">Cancelar</a>
