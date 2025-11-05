@@ -27,6 +27,7 @@ class Module extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_module_access')
+            ->withPivot('can_create', 'can_edit', 'can_delete')
             ->withTimestamps();
     }
 

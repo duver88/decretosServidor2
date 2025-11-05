@@ -97,6 +97,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Ruta para "Mi Cuenta"
+    Route::get('/mi-cuenta', [UserManagementController::class, 'myAccount'])->name('my-account.edit');
+    Route::put('/mi-cuenta', [UserManagementController::class, 'updateMyAccount'])->name('my-account.update');
 });
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])

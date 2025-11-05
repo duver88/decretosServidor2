@@ -1,0 +1,7 @@
+Por la complejidad de los cambios y la longitud del archivo edit.blade.php, voy a:
+
+1. Primero actualizar la sección de permisos por módulo para incluir categorías y conceptos
+2. Luego eliminar las secciones duplicadas de categorías y conceptos más abajo
+3. Actualizar el JavaScript para remover referencias a las secciones eliminadas
+
+Dado que el patrón es similar al create.blade.php, voy a crear un script más eficiente.

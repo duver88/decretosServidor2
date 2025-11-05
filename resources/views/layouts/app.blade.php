@@ -319,8 +319,18 @@
       @endif
     @endif
 
+    <!-- Mi Cuenta -->
+    <li class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-4">
+      <a href="{{ route('my-account.edit') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+        </svg>
+        <span>Mi Cuenta</span>
+      </a>
+    </li>
+
     <!-- Cerrar sesión -->
-    <li class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-4 pb-6">
+    <li class="pb-6">
       <form method="POST" action="{{ route('logout') }}" id="logout-form">
         @csrf
         <button type="submit" class="flex items-center w-full px-4 py-3 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors rounded">

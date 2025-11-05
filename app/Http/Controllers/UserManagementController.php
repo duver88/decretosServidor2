@@ -59,9 +59,20 @@ class UserManagementController extends Controller
             'is_admin' => $request->boolean('is_admin'),
         ]);
 
-        // Asignar módulos si no es admin
+        // Asignar módulos con permisos si no es admin
         if (!$user->is_admin && $request->has('modules')) {
-            $user->modules()->sync($request->modules);
+            $modulesData = [];
+            foreach ($request->modules as $moduleId => $modulePermissions) {
+                // Solo agregar si el módulo está habilitado
+                if (isset($modulePermissions['enabled']) && $modulePermissions['enabled']) {
+                    $modulesData[$moduleId] = [
+                        'can_create' => isset($modulePermissions['can_create']) ? 1 : 0,
+                        'can_edit' => isset($modulePermissions['can_edit']) ? 1 : 0,
+                        'can_delete' => isset($modulePermissions['can_delete']) ? 1 : 0,
+                    ];
+                }
+            }
+            $user->modules()->sync($modulesData);
         }
 
         // Asignar permisos de categorías
@@ -166,9 +177,20 @@ class UserManagementController extends Controller
 
         $user->save();
 
-        // Actualizar módulos si no es admin
+        // Actualizar módulos con permisos si no es admin
         if (!$user->is_admin && $request->has('modules')) {
-            $user->modules()->sync($request->modules);
+            $modulesData = [];
+            foreach ($request->modules as $moduleId => $modulePermissions) {
+                // Solo agregar si el módulo está habilitado
+                if (isset($modulePermissions['enabled']) && $modulePermissions['enabled']) {
+                    $modulesData[$moduleId] = [
+                        'can_create' => isset($modulePermissions['can_create']) ? 1 : 0,
+                        'can_edit' => isset($modulePermissions['can_edit']) ? 1 : 0,
+                        'can_delete' => isset($modulePermissions['can_delete']) ? 1 : 0,
+                    ];
+                }
+            }
+            $user->modules()->sync($modulesData);
         } elseif ($user->is_admin) {
             // Si es admin, remover todos los módulos asignados (no los necesita)
             $user->modules()->detach();
@@ -271,5 +293,38 @@ class UserManagementController extends Controller
 
         return redirect()->route('users.index')
             ->with('success', 'Módulos actualizados exitosamente');
+    }
+
+    /**
+     * Mostrar formulario de Mi Cuenta (edición de perfil del usuario actual)
+     */
+    public function myAccount()
+    {
+        $user = auth()->user();
+        return view('admin.users.my-account', compact('user'));
+    }
+
+    /**
+     * Actualizar perfil del usuario actual (Mi Cuenta)
+     */
+    public function updateMyAccount(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        // Solo permitir cambio de contraseña
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            return redirect()->route('my-account.edit')
+                ->with('success', 'Contraseña actualizada exitosamente');
+        }
+
+        return redirect()->route('my-account.edit')
+            ->with('info', 'No se realizaron cambios');
     }
 }
