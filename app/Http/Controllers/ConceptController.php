@@ -262,7 +262,7 @@ public function create(Request $request)
             'tipo_documento' => 'required|in:Concepto',
             'año' => 'required|string|max:4',
             'fecha' => 'required|date',
-            'archivo' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:2048',
+            'archivo' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:50048',
             'dependencia' => 'nullable|string',
         ]);
 

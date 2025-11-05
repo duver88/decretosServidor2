@@ -13,6 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/accesbilidad.css') }}">
+    <script src="{{ asset('js/accesibilidad.js') }}"></script>
         <style>
                 /* Solo las fuentes y colores básicos necesarios */
         .ubuntu-font { font-family: 'Ubuntu', sans-serif !important; }
@@ -22,6 +24,117 @@
     </style>
 </head>
 <body>
+
+    <div class="accessibility-bar">
+    <div class="accessibility-container">
+        <!-- Botón toggle para móvil (oculto en escritorio) -->
+        <button id="accessibilityToggle" class="accessibility-toggle" title="Opciones de Accesibilidad">
+            <i class="fas fa-universal-access"></i>
+        </button>
+        
+        <!-- Panel de botones -->
+        <div id="accessibilityPanel" class="accessibility-panel">
+            <!-- Controles de Fuente -->
+            <button id="decreaseFont" 
+                    class="accessibility-btn font-btn-decrease" 
+                    data-tooltip="Disminuir texto" 
+                    title="Disminuir tamaño de texto">
+                <i class="fas fa-search-minus"></i>
+            </button>
+            
+            <button id="resetFont" 
+                    class="accessibility-btn font-btn-reset active" 
+                    data-tooltip="Tamaño normal" 
+                    title="Tamaño normal de texto">
+                <i class="fas fa-refresh"></i>
+            </button>
+            
+            <button id="increaseFont" 
+                    class="accessibility-btn font-btn-increase" 
+                    data-tooltip="Aumentar texto" 
+                    title="Aumentar tamaño de texto">
+                <i class="fas fa-search-plus"></i>
+            </button>
+            
+            <!-- Separador visual -->
+            <div class="accessibility-separator"></div>
+            
+            <!-- Controles de Contraste -->
+            <button id="normalContrast" 
+                    class="accessibility-btn contrast-btn-normal active" 
+                    data-tooltip="Contraste normal" 
+                    title="Contraste normal">
+                <i class="fas fa-eye"></i>
+            </button>
+            
+            <button id="highContrast" 
+                    class="accessibility-btn contrast-btn-high" 
+                    data-tooltip="Alto contraste" 
+                    title="Alto contraste">
+                <i class="fas fa-adjust"></i>
+            </button>
+            
+            <button id="darkMode" 
+                    class="accessibility-btn contrast-btn-dark" 
+                    data-tooltip="Modo oscuro" 
+                    title="Modo oscuro">
+                <i class="fas fa-moon"></i>
+            </button>
+            
+            <!-- Separador visual -->
+            <div class="accessibility-separator"></div>
+            
+            <!-- Centro de Relevo con ícono oficial -->
+            <a id="centroRelevo" 
+               href="https://centroderelevo.gov.co/" 
+               target="_blank" 
+               class="accessibility-btn centro-relevo-btn" 
+               data-tooltip="Centro de Relevo Colombia" 
+               title="Centro de Relevo Colombia">
+                <svg class="centro-relevo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Figura principal - persona -->
+                    <circle cx="16" cy="8" r="3" fill="currentColor"/>
+                    <path d="M16 12c-3 0-6 1.5-6 4v2h12v-2c0-2.5-3-4-6-4z" fill="currentColor"/>
+                    
+                    <!-- Manos en lenguaje de señas -->
+                    <g fill="currentColor">
+                        <!-- Mano izquierda -->
+                        <path d="M8 16c0-1 .5-2 1.5-2.5l1 .5c.5.3.5 1 0 1.3l-1 .5c-1 .5-1.5 1.5-1.5 2.5v2h2v-2z"/>
+                        
+                        <!-- Mano derecha -->
+                        <path d="M24 16c0-1-.5-2-1.5-2.5l-1 .5c-.5.3-.5 1 0 1.3l1 .5c1 .5 1.5 1.5 1.5 2.5v2h-2v-2z"/>
+                        
+                        <!-- Dedos en movimiento -->
+                        <circle cx="7" cy="14" r="1" fill="currentColor"/>
+                        <circle cx="6" cy="16" r="0.8" fill="currentColor"/>
+                        <circle cx="25" cy="14" r="1" fill="currentColor"/>
+                        <circle cx="26" cy="16" r="0.8" fill="currentColor"/>
+                    </g>
+                    
+                    <!-- Símbolo de comunicación -->
+                    <g stroke="currentColor" stroke-width="1.5" fill="none">
+                        <path d="M12 22c2-1 4-1 6 0"/>
+                        <path d="M10 24c4-2 8-2 12 0"/>
+                    </g>
+                    
+                    <!-- Indicador de accesibilidad -->
+                    <circle cx="26" cy="6" r="4" fill="currentColor" opacity="0.8"/>
+                    <path d="M24 6h4M26 4v4" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+            </a>
+            
+            <!-- Reset completo -->
+            <button id="resetAll" 
+                    class="accessibility-btn reset-btn" 
+                    data-tooltip="Restablecer todo" 
+                    title="Restablecer toda la configuración">
+                <i class="fas fa-undo-alt"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+
         {{-- Header --}}
     <nav class="navbar navbar-expand-lg barra-superior-govco" aria-label="Barra superior">
             <a href="https://www.gov.co/" target="_blank" aria-label="Portal del Estado Colombiano - GOV.CO"></a>

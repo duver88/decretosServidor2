@@ -51,7 +51,7 @@
                 <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Año</label>
                 <select name="nombre" id="nombre" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu" required>
                     <option value="">Selecciona el año</option>
-                    @foreach(range(2022, 2027) as $year)
+                    @foreach(range(2009, 2027) as $year)
                         <option value="{{ $year }}" {{ old('nombre') == $year ? 'selected' : '' }}>{{ $year }}</option>
                     @endforeach
                 </select>

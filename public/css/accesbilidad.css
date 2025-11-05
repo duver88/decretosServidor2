@@ -1,263 +1,567 @@
-/* Variables CSS para facilitar cambios */
-:root {
-    --accessibility-primary: #43883D;
-    --accessibility-secondary: #3F8827;
-    --accessibility-dark: #285F19;
-    --font-size-base: 1rem;
-    --font-size-multiplier: 1;
+/* Mejora visual: panel más espacioso en escritorio */
+@media (min-width: 1025px) {
+    .accessibility-panel {
+        padding: 14px;
+        gap: 12px;
+        border-radius: 10px 0 0 10px;
+        box-shadow: -8px 0 32px rgba(67, 136, 61, 0.15);
+    }
+    
+    .accessibility-separator {
+        width: 28px;
+        margin: 6px auto;
+    }
 }
 
-/* Barra lateral de accesibilidad */
+/* Sombra mejorada para tablets */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .accessibility-panel {
+        box-shadow: -6px 0 24px rgba(67, 136, 61, 0.12);
+        border-radius: 8px 0 0 8px;
+    }
+}/* Logo del Centro de Relevo */
+.centro-relevo-logo {
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 4px;
+    background: white;
+    padding: 2px;
+    transition: all 0.25s ease;
+}
+
+.centro-relevo-btn:hover .centro-relevo-logo {
+    background: white;
+    transform: scale(1.05);
+}/* Variables CSS basadas en el Manual de Identidad Visual de Bucaramanga */
+:root {
+    /* Solo verde institucional y blanco */
+    --bga-primary: #43883D;         /* Verde institucional principal */
+    --bga-secondary: #3F8827;       /* Verde secundario */
+    --bga-dark: #285F19;           /* Verde oscuro */
+    --bga-light: #E8F5E8;          /* Verde claro */
+    
+    /* Variables de diseño minimalista */
+    --font-size-base: 1rem;
+    --font-size-multiplier: 1;
+    --border-radius: 8px;
+    --transition-speed: 0.25s;
+    --btn-size: 50px;
+    --btn-gap: 8px;
+    --shadow-subtle: 0 2px 8px rgba(67, 136, 61, 0.1);
+    --shadow-hover: 0 4px 16px rgba(67, 136, 61, 0.2);
+}
+
+/* Aplicar multiplicador de fuente globalmente */
+body {
+    font-size: calc(var(--font-size-base) * var(--font-size-multiplier)) !important;
+    transition: font-size 0.2s ease;
+}
+
+h1 { font-size: calc(2.5rem * var(--font-size-multiplier)) !important; }
+h2 { font-size: calc(2rem * var(--font-size-multiplier)) !important; }
+h3 { font-size: calc(1.75rem * var(--font-size-multiplier)) !important; }
+h4 { font-size: calc(1.5rem * var(--font-size-multiplier)) !important; }
+h5 { font-size: calc(1.25rem * var(--font-size-multiplier)) !important; }
+h6 { font-size: calc(1rem * var(--font-size-multiplier)) !important; }
+
+p, span, div, a, li, td, th, label {
+    font-size: calc(1rem * var(--font-size-multiplier)) !important;
+}
+
+/* Barra lateral de accesibilidad - Diseño Minimalista Bucaramanga */
 .accessibility-bar {
     position: fixed;
     top: 50%;
     right: 0;
     transform: translateY(-50%);
     z-index: 9999;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Ubuntu', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* Botón de toggle */
-.accessibility-toggle {
-    background: var(--accessibility-primary);
-    color: white;
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 8px 0 0 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: -2px 2px 10px rgba(0,0,0,0.2);
+/* Contenedor principal */
+.accessibility-container {
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--btn-gap);
+}
+
+/* Botón toggle para móvil */
+.accessibility-toggle {
+    width: var(--btn-size);
+    height: var(--btn-size);
+    background: var(--bga-primary);
+    color: white !important;
+    border: none;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    display: none; /* Oculto por defecto (escritorio) */
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.2rem !important;
+    box-shadow: var(--shadow-subtle);
 }
 
 .accessibility-toggle:hover {
-    background: var(--accessibility-secondary);
-    transform: translateX(-5px);
+    background: var(--bga-secondary);
+    transform: translateX(-4px);
+    box-shadow: var(--shadow-hover);
 }
 
-/* Panel de opciones */
+/* Panel de botones - Diseño Minimalista */
 .accessibility-panel {
-    position: absolute;
-    top: 0;
-    right: 50px;
-    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--btn-gap);
     background: white;
-    border-radius: 8px 0 0 8px;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.15);
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
+    padding: 12px;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    box-shadow: var(--shadow-hover);
+    border-left: 3px solid var(--bga-primary);
+    transition: all var(--transition-speed) ease;
+}
+
+/* Separadores visuales minimalistas */
+.accessibility-separator {
+    width: 24px;
+    height: 1px;
+    background: var(--bga-light);
+    margin: 4px auto;
+    opacity: 0.8;
+}
+
+/* Botón base - Estilo Minimalista */
+.accessibility-btn {
+    width: var(--btn-size);
+    height: var(--btn-size);
+    background: white;
+    color: var(--bga-primary) !important;
+    border: 1px solid #e5e7eb;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem !important;
+    position: relative;
+    text-decoration: none !important;
+    box-shadow: var(--shadow-subtle);
+}
+
+.accessibility-btn:hover {
+    background: var(--bga-primary);
+    color: white !important;
+    border-color: var(--bga-primary);
+    transform: translateX(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.accessibility-btn:active {
+    transform: translateX(-4px) scale(0.98);
+}
+
+.accessibility-btn:focus {
+    outline: 2px solid var(--bga-primary);
+    outline-offset: 2px;
+}
+
+/* Estados activos con colores de Bucaramanga */
+.accessibility-btn.active {
+    background: var(--bga-primary) !important;
+    color: white !important;
+    border-color: var(--bga-primary) !important;
+    box-shadow: var(--shadow-hover);
+}
+
+/* Botones específicos - Solo verde y blanco */
+
+/* Todos los botones usan el mismo estilo verde/blanco */
+.font-btn-decrease,
+.font-btn-reset,
+.font-btn-increase,
+.contrast-btn-normal,
+.contrast-btn-high,
+.contrast-btn-dark,
+.centro-relevo-btn,
+.reset-btn {
+    border-color: var(--bga-primary) !important;
+    color: var(--bga-primary) !important;
+}
+
+.font-btn-decrease:hover,
+.font-btn-decrease.active,
+.font-btn-reset:hover,
+.font-btn-reset.active,
+.font-btn-increase:hover,
+.font-btn-increase.active,
+.contrast-btn-normal:hover,
+.contrast-btn-normal.active,
+.contrast-btn-high:hover,
+.contrast-btn-high.active,
+.contrast-btn-dark:hover,
+.contrast-btn-dark.active,
+.centro-relevo-btn:hover,
+.reset-btn:hover,
+.reset-btn.active {
+    background: var(--bga-primary) !important;
+    color: white !important;
+    border-color: var(--bga-primary) !important;
+}
+
+/* Tooltips minimalistas */
+.accessibility-btn::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bga-dark);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem !important;
+    font-weight: 500;
+    white-space: nowrap;
     opacity: 0;
     visibility: hidden;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    z-index: 10001;
+    font-family: 'Ubuntu', sans-serif;
 }
 
-.accessibility-panel.show {
-    transform: translateX(0);
+.accessibility-btn:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(-2px);
+}
+
+/* Flecha del tooltip */
+.accessibility-btn::before {
+    content: '';
+    position: absolute;
+    right: calc(100% + 6px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid var(--bga-dark);
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 10001;
+}
+
+.accessibility-btn:hover::before {
     opacity: 1;
     visibility: visible;
 }
 
-/* Header del panel */
-.accessibility-header {
-    background: var(--accessibility-primary);
-    color: white;
-    padding: 1rem;
-    border-radius: 8px 0 0 0;
+/* DISEÑO DESPLEGABLE PARA TODOS LOS DISPOSITIVOS */
+
+/* Escritorio: mostrar toggle y panel desplegable */
+@media (min-width: 1025px) {
+    .accessibility-toggle {
+        display: flex !important;
+        border-radius: var(--border-radius) 0 0 var(--border-radius);
+    }
+    
+    .accessibility-panel {
+        display: none;
+        position: absolute;
+        right: calc(var(--btn-size) + 4px);
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-speed) ease;
+    }
+    
+    .accessibility-panel.show {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        animation: slideInFromRight 0.3s ease-out;
+    }
+    
+    :root {
+        --btn-size: 52px;
+        --btn-gap: 10px;
+    }
+    
+    /* Tooltips habilitados en escritorio */
+    .accessibility-btn::after,
+    .accessibility-btn::before {
+        display: block !important;
+    }
 }
 
-/* Contenido del panel */
-.accessibility-content {
-    padding: 1rem;
-    max-height: 400px;
-    overflow-y: auto;
+/* Tablets: también desplegable */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .accessibility-toggle {
+        display: flex !important;
+        border-radius: var(--border-radius) 0 0 var(--border-radius);
+    }
+    
+    .accessibility-panel {
+        display: none;
+        position: absolute;
+        right: calc(var(--btn-size) + 4px);
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-speed) ease;
+    }
+    
+    .accessibility-panel.show {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        animation: slideInFromRight 0.3s ease-out;
+    }
+    
+    :root {
+        --btn-size: 48px;
+        --btn-gap: 8px;
+    }
+    
+    .accessibility-bar {
+        top: 45%;
+    }
+    
+    /* Tooltips habilitados en tablet */
+    .accessibility-btn::after,
+    .accessibility-btn::before {
+        display: block !important;
+    }
 }
 
-/* Secciones dentro del panel */
-.accessibility-section {
-    margin-bottom: 1.5rem;
+/* Móvil: mostrar toggle, ocultar panel inicialmente */
+@media (max-width: 768px) {
+    .accessibility-toggle {
+        display: flex !important;
+        border-radius: var(--border-radius) 0 0 var(--border-radius);
+    }
+    
+    .accessibility-panel {
+        display: none;
+        position: absolute;
+        right: calc(var(--btn-size) + 4px);
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-speed) ease;
+    }
+    
+    .accessibility-panel.show {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        animation: slideInFromRight 0.3s ease-out;
+    }
+    
+    :root {
+        --btn-size: 46px;
+        --btn-gap: 6px;
+    }
+    
+    .accessibility-bar {
+        top: 40%;
+    }
+    
+    /* Ocultar tooltips solo en móviles pequeños */
+    .accessibility-btn::after,
+    .accessibility-btn::before {
+        display: none !important;
+    }
 }
 
-.section-title {
-    color: var(--accessibility-dark);
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
+/* Móviles pequeños */
+@media (max-width: 480px) {
+    :root {
+        --btn-size: 44px;
+        --btn-gap: 6px;
+    }
+    
+    .accessibility-bar {
+        top: 35%;
+    }
+    
+    .accessibility-toggle {
+        font-size: 1rem !important;
+    }
+    
+    .accessibility-btn {
+        font-size: 1rem !important;
+    }
+    
+    .centro-relevo-btn .centro-relevo-logo {
+        width: 20px !important;
+        height: 20px !important;
+    }
 }
 
-/* Grupo de botones */
-.button-group {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: space-between;
+/* Móviles muy pequeños */
+@media (max-width: 360px) {
+    :root {
+        --btn-size: 42px;
+        --btn-gap: 5px;
+    }
+    
+    .accessibility-bar {
+        top: 30%;
+    }
+    
+    .accessibility-toggle {
+        font-size: 0.9rem !important;
+    }
+    
+    .accessibility-btn {
+        font-size: 0.9rem !important;
+    }
+    
+    .centro-relevo-btn .centro-relevo-logo {
+        width: 18px !important;
+        height: 18px !important;
+    }
 }
 
-.accessibility-btn {
-    flex: 1;
-    background: #f8f9fa;
-    border: 2px solid #e9ecef;
-    color: #495057;
-    padding: 0.75rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Animaciones minimalistas */
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) translateX(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
 }
 
-.accessibility-btn:hover {
-    background: var(--accessibility-primary);
-    border-color: var(--accessibility-primary);
-    color: white;
-    transform: translateY(-2px);
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
-.accessibility-btn.active {
-    background: var(--accessibility-primary);
-    border-color: var(--accessibility-primary);
-    color: white;
+/* Animación de entrada suave */
+.accessibility-bar {
+    animation: slideInFromRight 0.4s ease-out;
 }
 
-/* Botón del Centro de Relevo */
-.centro-relevo-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: #0066cc;
-    color: white;
-    padding: 0.75rem;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    width: 100%;
-}
+/* Animación escalonada minimalista */
+.accessibility-btn:nth-child(1) { animation: fadeInScale 0.3s ease-out 0.1s both; }
+.accessibility-btn:nth-child(2) { animation: fadeInScale 0.3s ease-out 0.15s both; }
+.accessibility-btn:nth-child(3) { animation: fadeInScale 0.3s ease-out 0.2s both; }
+.accessibility-btn:nth-child(4) { animation: fadeInScale 0.3s ease-out 0.25s both; }
+.accessibility-btn:nth-child(5) { animation: fadeInScale 0.3s ease-out 0.3s both; }
+.accessibility-btn:nth-child(6) { animation: fadeInScale 0.3s ease-out 0.35s both; }
+.accessibility-btn:nth-child(7) { animation: fadeInScale 0.3s ease-out 0.4s both; }
+.accessibility-btn:nth-child(8) { animation: fadeInScale 0.3s ease-out 0.45s both; }
 
-.centro-relevo-btn:hover {
-    background: #0052a3;
-    color: white;
-    text-decoration: none;
-    transform: translateY(-2px);
+/* MODOS DE CONTRASTE */
+.accessibility-bar {
+    filter: none !important;
 }
-
-.centro-relevo-logo {
-    width: 24px;
-    height: 24px;
-    background: white;
-    border-radius: 3px;
-    padding: 2px;
-}
-
-/* Botón de reset */
-.reset-btn {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 0.75rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    font-size: 0.9rem;
-}
-
-.reset-btn:hover {
-    background: #c82333;
-    transform: translateY(-2px);
-}
-
-/* Clases para modificaciones de accesibilidad */
-.font-size-small {
-    --font-size-multiplier: 0.85;
-}
-
-.font-size-large {
-    --font-size-multiplier: 1.15;
-}
-
-.font-size-xl {
-    --font-size-multiplier: 1.3;
-}
-
-/* Aplicar tamaño de fuente */
-body {
-    font-size: calc(var(--font-size-base) * var(--font-size-multiplier));
-}
-
-h1 { font-size: calc(2.5rem * var(--font-size-multiplier)); }
-h2 { font-size: calc(2rem * var(--font-size-multiplier)); }
-h3 { font-size: calc(1.75rem * var(--font-size-multiplier)); }
-h4 { font-size: calc(1.5rem * var(--font-size-multiplier)); }
-h5 { font-size: calc(1.25rem * var(--font-size-multiplier)); }
-h6 { font-size: calc(1rem * var(--font-size-multiplier)); }
 
 /* Alto contraste */
-.high-contrast {
-    filter: contrast(150%) brightness(1.2);
-}
-
-.high-contrast * {
+body.high-contrast *:not(.accessibility-bar):not(.accessibility-bar *) {
     color: #000 !important;
     background-color: #fff !important;
     border-color: #000 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    filter: contrast(180%) brightness(1.1) !important;
 }
 
-.high-contrast .bg-bucaramanga,
-.high-contrast .bg-success {
-    background-color: #000 !important;
+body.high-contrast .accessibility-bar,
+body.high-contrast .accessibility-toggle,
+body.high-contrast .accessibility-panel {
+    background-color: #fff !important;
+    border: 2px solid #000 !important;
+    filter: none !important;
+}
+
+body.high-contrast .accessibility-btn {
+    background: #fff !important;
+    color: #000 !important;
+    border: 2px solid #000 !important;
+    filter: none !important;
+}
+
+body.high-contrast .accessibility-btn.active {
+    background: #000 !important;
     color: #fff !important;
 }
 
 /* Modo oscuro */
 .dark-mode {
-    background-color: #1a1a1a !important;
-    color: #ffffff !important;
+    background-color: #0f0f0f !important;
+    color: #e0e0e0 !important;
 }
 
 .dark-mode * {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
-    border-color: #555 !important;
+    background-color: #1a1a1a !important;
+    color: #e0e0e0 !important;
+    border-color: #404040 !important;
 }
 
-.dark-mode .card,
-.dark-mode .btn {
-    background-color: #3d3d3d !important;
-    border-color: #555 !important;
+.dark-mode .accessibility-panel {
+    background: #1a1a1a !important;
+    border-left-color: var(--bga-primary) !important;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .accessibility-panel {
-        width: 240px;
+.dark-mode .accessibility-btn {
+    background: #2a2a2a !important;
+    border-color: #404040 !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .accessibility-btn::after {
+    background: #1f2937 !important;
+    color: #e0e0e0 !important;
+}
+
+/* Mejoras para dispositivos touch */
+@media (hover: none) and (pointer: coarse) {
+    .accessibility-btn:hover {
+        transform: none !important;
     }
     
-    .accessibility-toggle {
-        width: 45px;
-        height: 45px;
-        font-size: 1rem;
+    .accessibility-btn:active {
+        transform: scale(0.95) !important;
+        transition: transform 0.1s ease !important;
+    }
+    
+    .accessibility-toggle:hover {
+        transform: translateY(-50%) !important;
+    }
+    
+    .accessibility-toggle:active {
+        transform: translateY(-50%) scale(0.95) !important;
     }
 }
 
-@media (max-width: 480px) {
-    .accessibility-panel {
-        width: 200px;
-        right: 45px;
+/* Mejoras para safe areas */
+@supports (padding: max(0px)) {
+    .accessibility-bar {
+        right: max(0px, env(safe-area-inset-right));
     }
     
-    .accessibility-toggle {
-        width: 40px;
-        height: 40px;
-        font-size: 0.9rem;
-    }
-    
-    .button-group {
-        flex-direction: column;
-        gap: 0.25rem;
+    @media (max-width: 768px) {
+        .accessibility-bar {
+            right: max(4px, env(safe-area-inset-right));
+        }
     }
 }

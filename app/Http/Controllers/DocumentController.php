@@ -332,9 +332,24 @@ public function index(Request $request)
     }
 
     // Paginación con número configurable de elementos
-    $perPage = $request->get('per_page', 9); // Por defecto 10
-    $perPage = in_array($perPage, [10, 25, 50, 100]) ? $perPage : 9; // Validar valores permitidos
-    $documents = $query->paginate($perPage)->withQueryString();
+    $perPage = $request->get('per_page', 9); // Por defecto 9
+
+    // Si se selecciona "todos", obtener todos los documentos sin paginar
+    if ($perPage === 'todos') {
+        $documents = $query->get();
+        // Crear un objeto paginador falso para compatibilidad con la vista
+        $documents = new \Illuminate\Pagination\LengthAwarePaginator(
+            $documents,
+            $documents->count(),
+            $documents->count(),
+            1,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+    } else {
+        // Validar valores permitidos
+        $perPage = in_array($perPage, [9, 18, 27, 36, 50, 100]) ? $perPage : 9;
+        $documents = $query->paginate($perPage)->withQueryString();
+    }
 
     // Datos adicionales para los filtros
     $categories = Category::orderBy('nombre')->get();
@@ -406,16 +421,24 @@ public function create()
 public function store(Request $request)
 {
     $request->validate([
-        'archivo' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:2048',
+        'archivo' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:51200',
         'nombre' => 'required|string|max:255',
         'numero' => 'required|string|max:50',
         'tipo' => 'required|string',
         'descripcion' => 'nullable|string',
-        'fecha' => 'required|date',
+        'fecha' => 'required|date|date_format:Y-m-d|after:1990-01-01|before:2050-12-31', // ✅ VALIDACIÓN MÁS ESTRICTA
         'category_id' => 'required|exists:categories,id',
-        'document_type_id' => 'required|exists:document_types,id',     // AGREGAR
-        'document_theme_id' => 'required|exists:document_themes,id',   // AGREGAR
+        'document_type_id' => 'required|exists:document_types,id',
+        'document_theme_id' => 'required|exists:document_themes,id',
     ]);
+
+    // ✅ VALIDACIÓN ADICIONAL PARA FECHA (OPCIONAL - EXTRA SEGURIDAD)
+    $fecha = $request->fecha;
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha)) {
+        return redirect()->back()
+                        ->withErrors(['fecha' => 'Formato de fecha inválido. Use YYYY-MM-DD'])
+                        ->withInput();
+    }
 
     if ($request->hasFile('archivo')) {
         $archivo = $request->file('archivo');
@@ -430,16 +453,26 @@ public function store(Request $request)
         $documento->tipo = $request->tipo;
         $documento->fecha = $request->fecha;
         $documento->category_id = $request->category_id;
-        $documento->document_type_id = $request->document_type_id;      // AGREGAR
-        $documento->document_theme_id = $request->document_theme_id;    // AGREGAR
+        $documento->document_type_id = $request->document_type_id;
+        $documento->document_theme_id = $request->document_theme_id;
         $documento->descripcion = $request->descripcion;
         $documento->archivo = $ruta;
         $documento->save();
         
-        return redirect()->back()->with('success', 'Documento subido correctamente.');
+        // ✅ REDIRECT CORRECTO SEGÚN TIPO DE USUARIO
+        if (auth()->user()->is_admin) {
+            return redirect()->route('dashboard')->with('success', 'Documento subido correctamente.');
+        } else {
+            return redirect()->route('user.dashboard')->with('success', 'Documento subido correctamente.');
+        }
     }
 
-    return redirect()->back()->with('error', 'Error al subir el documento.');
+    // ✅ REDIRECT CORRECTO TAMBIÉN EN CASO DE ERROR
+    if (auth()->user()->is_admin) {
+        return redirect()->route('document.create')->with('error', 'Error al subir el documento.');
+    } else {
+        return redirect()->route('user.document.create')->with('error', 'Error al subir el documento.');
+    }
 }
 
     // Formulario para editar documento
@@ -573,13 +606,77 @@ public function show($id)
     }
 
 
-    public function userDashboard()  
+public function userDashboard(Request $request)  
 {  
-    // Obtener documentos filtrados por permisos del usuario  
+    // Verificar que el usuario esté autenticado
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+
     $user = auth()->user();  
-    $documents = Document::whereHas('category', function($query) use ($user) {  
-        $query->whereIn('id', $user->categoryPermissions()->pluck('category_id'));  
-    })->orderBy('fecha', 'desc')->get();  
+    
+    // Obtener documentos según permisos del usuario CON FILTROS
+    $query = Document::with(['category', 'documentType', 'documentTheme'])
+        ->whereHas('category', function($q) use ($user) {  
+            $q->whereIn('id', $user->categoryPermissions()->pluck('category_id'));  
+        });
+
+    // APLICAR FILTROS SIMILARES AL ADMIN
+    
+    // Filtro por búsqueda general
+    if ($request->filled('busqueda_general')) {
+        $busqueda = trim($request->busqueda_general);
+        $query->where(function($q) use ($busqueda) {
+            $q->where('nombre', 'LIKE', '%' . $busqueda . '%')
+              ->orWhere('numero', 'LIKE', '%' . $busqueda . '%')
+              ->orWhere('descripcion', 'LIKE', '%' . $busqueda . '%')
+              ->orWhere('tipo', 'LIKE', "%{$busqueda}%");
+        });
+    }
+
+    // Filtro por tipo de documento
+    if ($request->filled('tipo')) {
+        $query->where('tipo', $request->tipo);
+    }
+
+    // Filtro por categoría (solo las que tiene permisos)
+    if ($request->filled('category_id')) {
+        $allowedCategories = $user->categoryPermissions()->pluck('category_id')->toArray();
+        if (in_array($request->category_id, $allowedCategories)) {
+            $query->where('category_id', $request->category_id);
+        }
+    }
+
+    // Filtro por número
+    if ($request->filled('numero')) {
+        $numero = trim($request->numero);
+        $query->where('numero', 'LIKE', '%' . $numero . '%');
+    }
+
+    // Filtros de fecha
+    if ($request->filled('fecha_desde')) {
+        $query->whereDate('fecha', '>=', $request->fecha_desde);
+    }
+
+    if ($request->filled('fecha_hasta')) {
+        $query->whereDate('fecha', '<=', $request->fecha_hasta);
+    }
+
+    // Ordenamiento
+    $orden = $request->get('orden', 'fecha_desc');
+    switch ($orden) {
+        case 'nombre_asc':
+            $query->orderBy('nombre', 'asc');
+            break;
+        case 'fecha_asc':
+            $query->orderBy('fecha', 'asc');
+            break;
+        default: // fecha_desc
+            $query->orderBy('fecha', 'desc');
+    }
+
+    // Obtener documentos
+    $documents = $query->get();
       
     return view('users.dashboard', compact('documents'));  
 }

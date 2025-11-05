@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatoría de Actos Administrativos</title>
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-    <link rel="stylesheet" href="{{ asset('css/cabecera.css') }}">  
-    <link rel="stylesheet" href="{{ asset('css/document.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/accesbilidad.css') }}">
+    <title>Conoce el Sistema de Búsqueda</title>
+     <link rel="stylesheet" href="{{ asset('css/cabecera.css') }}">   
+    <link rel="stylesheet" href="{{ asset('css/conceptsDetails.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Agregamos Font Awesome 5 para los íconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/accesbilidad.css') }}">
     <script src="{{ asset('js/accesibilidad.js') }}"></script>
     <script src="{{ asset('js/document.js') }}"></script>
     <script src="{{ asset('js/documentoOne.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+                /* Solo las fuentes y colores básicos necesarios */
+        .ubuntu-font { font-family: 'Ubuntu', sans-serif !important; }
+        .oswald-font { font-family: 'Oswald', sans-serif !important; }
+        .bg-bucaramanga { background-color: #43883D !important; }
+        .text-bucaramanga { color: #43883D !important; }
+    </style>
 </head>
-<body>
 
-    
-<!-- Barra Lateral de Accesibilidad -->
-<!-- Barra de Accesibilidad - Alcaldía de Bucaramanga -->
-<div class="accessibility-bar">
+    <div class="accessibility-bar">
     <div class="accessibility-container">
         <!-- Botón toggle para móvil (oculto en escritorio) -->
         <button id="accessibilityToggle" class="accessibility-toggle" title="Opciones de Accesibilidad">
@@ -133,8 +136,7 @@
     </div>
 </div>
 
-
-    {{-- Header --}}
+        {{-- Header --}}
     <nav class="navbar navbar-expand-lg barra-superior-govco" aria-label="Barra superior">
             <a href="https://www.gov.co/" target="_blank" aria-label="Portal del Estado Colombiano - GOV.CO"></a>
     </nav>
@@ -225,17 +227,16 @@
             </nav>
         </div>
     </header>
+    <br>
     {{-- Fin Header --}}
 
-    {{-- SECCIÓN PRINCIPAL: Relatoría de Actos Administrativos --}}
-    
+        {{-- SECCIÓN PRINCIPAL: Relatoría de Conceptos --}}
     <div class="container my-5" style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-        <h6><span style="color: #808080;"><a href="https://www.bucaramanga.gov.co/" title="Inicio" style="color: #808080;">Inicio</a> » <a href="https://www.bucaramanga.gov.co/transparencia/" title="Transparencia" style="color: #808080;">Transparencia</a> » <a href="https://www.bucaramanga.gov.co/transparencia-bucaramanga/sistema-de-busquedas-de-normas-propio-de-la-entidad/" title="Sistema de Normas Propios de la Entidad" style="color: #808080;">Sistema de Normas Propios de la Entidad</a></span></h6>
+       <h6><span style="color: #808080;"><a href="https://www.bucaramanga.gov.co/" title="Inicio" style="color: #808080;">Inicio</a> » <a href="https://www.bucaramanga.gov.co/transparencia/" title="Transparencia" style="color: #808080;">Transparencia</a> » <a href="https://www.bucaramanga.gov.co/transparencia-bucaramanga/sistema-de-busquedas-de-normas-propio-de-la-entidad/" title="Sistema de Normas Propios de la Entidad" style="color: #808080;">Sistema de Normas Propios de la Entidad</a></span></h6>
         <div class="text-center mb-5">
-            
             <h1 class="fw-bold" style="color: #43883d; font-family: 'Ubuntu', sans-serif;">
-                Sistema de Normas Propios de la Entidad
-                <small class="d-block fs-5 mt-2 text-muted">Relatoría de Actos Administrativos</small>
+                Sistema De Normas Propios de la Entidad
+                <small class="d-block fs-5 mt-2 text-muted">Relatoría de Conceptos</small>
             </h1>
         </div>
 
@@ -269,7 +270,7 @@
 
             <!-- Botón 3: Relatoría de Actos Administrativos -->
             <div class="col">
-                <div class="card h-100 border-0 cursor-pointer"  style="background-color: #43883d; color: white; border-radius: 10px; overflow: hidden; transition: all 0.3s ease; cursor: pointer;">
+                <div class="card h-100 border-0 cursor-pointer" onclick="window.location.href='{{ route('home') }}'"  style="background-color: #43883d; color: white; border-radius: 10px; overflow: hidden; transition: all 0.3s ease; cursor: pointer;">
                     <div class="card-body text-center p-4">
                         <div class="mb-3">
                             <i class="fas fa-gavel" style="font-size: 2rem;"></i>
@@ -294,564 +295,438 @@
             </div>
         </div>
 
-        <!-- FORMULARIO MEJORADO CON FILTROS AVANZADOS -->
-        @php
-            $selectedTipo = request('tipo');
-            $selectedOrder = request('orden', 'fecha_desc');
-            $currentCategory = request('category_id');
-        @endphp
-
-        <!-- CHIPS DE TIPOS DE DOCUMENTO -->
-        <div class="mb-3">
-            @if(isset($tipos) && $tipos->count() > 0)
-                @foreach($tipos as $tipo)
-                    <form method="GET" action="{{ route('home') }}" class="d-inline">
-                        @foreach(request()->except(['tipo', 'page']) as $key => $value)
-                            @if(is_array($value))
-                                @foreach($value as $v)
-                                    <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
-                                @endforeach
-                            @else
-                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                            @endif
-                        @endforeach
-                        <input type="hidden" name="tipo" value="{{ $tipo }}">
-                        <button type="submit" class="chip {{ $selectedTipo == $tipo ? 'active' : '' }}">
-                            {{ ucfirst($tipo) }} ({{ $stats['por_tipo'][$tipo] ?? 0 }})
-                        </button>
-                    </form>
-                @endforeach
-            @endif
-            <form method="GET" action="{{ route('home') }}" class="d-inline">
-                @foreach(request()->except(['tipo', 'page']) as $key => $value)
-                    @if(is_array($value))
-                        @foreach($value as $v)
-                            <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
-                        @endforeach
-                    @else
-                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                    @endif
-                @endforeach
-                <button type="submit" class="chip {{ !$selectedTipo ? 'active' : '' }}">Todos los tipos</button>
-            </form>
-        </div>
-
-        <!-- CHIPS DE CATEGORÍAS -->
-<div class="mb-4">
-    @if(isset($años) && $años->count() > 0)
-        @foreach($años as $año)
-            @php
-                $countAño = $stats['por_año'][$año] ?? 0;
-                $currentAño = request()->get('año');
-            @endphp
-            <form method="GET" action="{{ route('home') }}" class="d-inline">
-                @foreach(request()->except(['año', 'page']) as $key => $value)
-                    @if(is_array($value))
-                        @foreach($value as $v)
-                            <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
-                        @endforeach
-                    @else
-                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                    @endif
-                @endforeach
-                <input type="hidden" name="año" value="{{ $año }}">
-                <button type="submit" class="chip {{ $currentAño == $año ? 'active' : '' }}">
-                    {{ $año }} ({{ $countAño }})
-                </button>
-            </form>
-        @endforeach
-        
-        {{-- Botón para limpiar filtro de año --}}
-        @if(request()->filled('año'))
-            <form method="GET" action="{{ route('home') }}" class="d-inline">
-                @foreach(request()->except(['año', 'page']) as $key => $value)
-                    @if(is_array($value))
-                        @foreach($value as $v)
-                            <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
-                        @endforeach
-                    @else
-                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                    @endif
-                @endforeach
-                <button type="submit" class="chip clear-filter">
-                    Todos los años
-                </button>
-            </form>
-        @endif
-    @endif
-</div>
-
-        <!-- BUSCADOR GENERAL -->
-        <form method="GET" action="{{ route('home') }}">
-            <!-- Preservar otros filtros cuando se usa búsqueda general -->
-            @foreach(request()->except(['busqueda_general', 'page']) as $key => $value)
-                @if(is_array($value))
-                    @foreach($value as $v)
-                        <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
-                    @endforeach
-                @else
-                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                @endif
-            @endforeach
-            
-            <div class="input-group mb-3">
-                <span class="input-group-text bg-light text-secondary"><i class="fas fa-search"></i></span>
-                <input type="search" name="busqueda_general" class="form-control"
-                       placeholder="Buscar por nombre, número, descripción o tipo..." value="{{ request('busqueda_general') }}">
-                <button class="btn btn-success" type="submit">Buscar</button>
-            </div>
-
-            <!-- ORDEN Y TOGGLE AVANZADO -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="fas fa-sort text-muted"></i>
-                    <label class="fw-bold text-muted mb-0">Ordenar:</label>
-                    @foreach([
-                        'fecha_desc' => 'Recientes',
-                        'fecha_asc' => 'Antiguos',
-                        'nombre_asc' => 'A-Z',
-                    ] as $key => $label)
-                        <label class="order-option {{ $selectedOrder == $key ? 'active' : '' }}">
-                            <input type="radio" name="orden" value="{{ $key }}" onchange="this.form.submit()" hidden
-                                   {{ $selectedOrder == $key ? 'checked' : '' }}>
-                            {{ $label }}
-                        </label>
-                    @endforeach
-                </div>
-                <div>
-                    <a class="toggle-advanced text-decoration-none" data-bs-toggle="collapse" href="#filtrosAvanzados" role="button">
-                        <i class="fas fa-sliders-h me-1"></i> Filtros avanzados
-                    </a>
-                </div>
-            </div>
-
-            <!-- FILTROS AVANZADOS -->
-            <div class="collapse mb-4" id="filtrosAvanzados">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="tipo" class="form-label"><i class="fas fa-file-alt me-1"></i> Acto Administrativo</label>
-                        <select class="form-select" name="tipo" id="tipo">
-                            <option value="">Todos los tipos</option>
-                            @if(isset($tipos))
-                                @foreach($tipos as $tipo)
-                                    <option value="{{ $tipo }}" @selected(request('tipo') == $tipo)>
-                                        {{ ucfirst($tipo) }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-
-                    <!-- Filtros de DocumentType y DocumentTheme mejorados -->
-                    <div class="col-md-6">
-                        <label for="document_type_id" class="form-label">
-                            <i class="fas fa-tags me-1"></i> Tipo de Documento
-                        </label>
-                        <select name="document_type_id" id="document_type_id" class="form-select">
-                            <option value="">Seleccione un tipo</option>
-                            @if(isset($documentTypes))
-                                @foreach($documentTypes as $documentType)
-                                    <option value="{{ $documentType->id }}" {{ request('document_type_id') == $documentType->id ? 'selected' : '' }}>
-                                        {{ $documentType->nombre }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="document_theme_id" class="form-label">
-                            <i class="fas fa-bookmark me-1"></i> Tema Específico
-                        </label>
-                        <select name="document_theme_id" id="document_theme_id" class="form-select" disabled>
-                            <option value="">Primero seleccione un tipo</option>
-                        </select>
-                        <small class="text-muted">Seleccione primero un tipo de documento</small>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="numero" class="form-label"><i class="fas fa-hashtag me-1"></i> Número</label>
-                        <input type="text" name="numero" id="numero" class="form-control" 
-                               placeholder="Buscar por número del documento" value="{{ request('numero') }}">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="año" class="form-label"><i class="fas fa-calendar me-1"></i> Año</label>
-                        <select class="form-select" name="año" id="año">
-                            <option value="">Todos los años</option>
-                            @if(isset($años))
-                                @foreach($años as $a)
-                                    <option value="{{ $a }}" @selected(request('año') == $a)>{{ $a }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="mes" class="form-label"><i class="fas fa-calendar-week me-1"></i> Mes</label>
-                        <select class="form-select" name="mes" id="mes">
-                            <option value="">Todos los meses</option>
-                            @for($i = 1; $i <= 12; $i++)
-                                <option value="{{ $i }}" @selected(request('mes') == $i)>
-                                    {{ \Carbon\Carbon::create()->month($i)->translatedFormat('F') }}
-                                </option>
-                            @endfor
-                        </select>
-                        <small class="text-muted">Requiere seleccionar un año</small>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label"><i class="fas fa-calendar-day me-1"></i> Fecha desde</label>
-                        <input type="date" name="fecha_desde" class="form-control" value="{{ request('fecha_desde') }}">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label"><i class="fas fa-calendar-day me-1"></i> Fecha hasta</label>
-                        <input type="date" name="fecha_hasta" class="form-control" value="{{ request('fecha_hasta') }}">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label"><i class="fas fa-calendar-check me-1"></i> Fecha exacta</label>
-                        <input type="date" name="fecha" class="form-control" value="{{ request('fecha') }}">
-                        <small class="text-muted">Solo si no usa rango de fechas</small>
-                    </div>
-                    <div class="col-md-6 d-flex align-items-end">
-                        <div class="w-100">
-                            <button class="btn btn-outline-secondary me-2" type="button" onclick="window.location.href='{{ route('home') }}'">
-                                <i class="fas fa-times me-1"></i> Limpiar filtros
-                            </button>
-                            <button class="btn btn-success" type="submit">
-                                <i class="fas fa-filter me-1"></i> Aplicar filtros
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-
-        @if (
-    request()->filled('busqueda_general') ||
-    request()->filled('category_id') ||
-    request()->filled('tipo') ||
-    request()->filled('document_type_id') ||
-    request()->filled('document_theme_id') ||
-    request()->filled('nombre') ||
-    request()->filled('numero') ||
-    request()->filled('año') ||
-    request()->filled('mes') ||
-    request()->filled('fecha') ||
-    request()->filled('fecha_desde') ||
-    request()->filled('fecha_hasta') ||
-    request()->filled('orden')
-)
-    <div class="mt-4 pt-3 border-top">
-        <h6 class="fw-bold text-success mb-2">Filtros aplicados:</h6>
-        <div class="d-flex flex-wrap gap-2">
-            @php
-                $baseParams = request()->except([
-                    '_token', 'page'
-                ]);
-            @endphp
-
-            @if(request()->filled('busqueda_general'))
-                <a href="{{ route('home', array_merge($baseParams, ['busqueda_general' => null])) }}"
-                   class="badge text-white"
-                   style="background-color: #43883D;">
-                    🔍 {{ request('busqueda_general') }} &times;
-                </a>
-            @endif
-
-            @if(request()->filled('category_id'))
-                <a href="{{ route('home', array_merge($baseParams, ['category_id' => null])) }}"
-                   class="badge text-white"
-                   style="background-color: #4E7525;">
-                    Categoría: {{ $categories->firstWhere('id', request('category_id'))?->nombre }} &times;
-                </a>
-            @endif
-
-            @if(request()->filled('tipo'))
-                <a href="{{ route('home', array_merge($baseParams, ['tipo' => null])) }}"
-                   class="badge text-white"
-                   style="background-color: #6A9739;">
-                    Tipo: {{ ucfirst(request('tipo')) }} &times;
-                </a>
-            @endif
-
-            {{-- NUEVO: Filtro de Tipo de Documento --}}
-            @if(request()->filled('document_type_id'))
-                @php
-                    $selectedDocumentType = $documentTypes->firstWhere('id', request('document_type_id'));
-                @endphp
-                <a href="{{ route('home', array_merge($baseParams, ['document_type_id' => null])) }}"
-                   class="badge text-white"
-                   style="background-color: #5A8B3A;">
-                    Tipo: {{ $selectedDocumentType ? $selectedDocumentType->nombre : 'Desconocido' }} &times;
-                </a>
-            @endif
-
-            {{-- NUEVO: Filtro de Tema Específico --}}
-            @if(request()->filled('document_theme_id'))
-                @php
-                    // Aquí necesitarías obtener el tema específico desde tu controlador
-                    // Por ahora uso un placeholder, pero deberías pasar $documentThemes desde el controlador
-                    $selectedTheme = isset($documentThemes) ? $documentThemes->firstWhere('id', request('document_theme_id')) : null;
-                @endphp
-                <a href="{{ route('home', array_merge($baseParams, ['document_theme_id' => null])) }}"
-                   class="badge text-white"
-                   style="background-color: #4A7C2A;">
-                    Tema: {{ $selectedTheme ? $selectedTheme->nombre : 'ID: ' . request('document_theme_id') }} &times;
-                </a>
-            @endif
-
-            @if(request()->filled('nombre'))
-                <a href="{{ route('home', array_merge($baseParams, ['nombre' => null])) }}"
-                   class="badge text-white"
-                   style="background-color: #7A7A52;">
-                    Nombre: {{ request('nombre') }} &times;
-                </a>
-            @endif
-
-            @if(request()->filled('numero'))
-                <a href="{{ route('home', array_merge($baseParams, ['numero' => null])) }}"
-                   class="badge text-white"
-                   style="background-color: #8B8B52;">
-                    Número: {{ request('numero') }} &times;
-                </a>
-            @endif
-
-            @if(request()->filled('año'))
-                <a href="{{ route('home', array_merge($baseParams, ['año' => null])) }}"
-                   class="badge text-white"
-                   style="background-color: #B2B700;">
-                    Año: {{ request('año') }} &times;
-                </a>
-            @endif
-
-            @if(request()->filled('mes'))
-                @php
-                    $mesNumero = (int) request('mes');
-                    $mesNumero = ($mesNumero >= 1 && $mesNumero <= 12) ? $mesNumero : 1;
-                @endphp
-                <a href="{{ route('home', array_merge($baseParams, ['mes' => null])) }}"
-                class="badge text-white"
-                style="background-color: #CCCC00;">
-                    Mes: {{ \Carbon\Carbon::create()->month($mesNumero)->translatedFormat('F') }} &times;
-                </a>
-            @endif
-
-            @if(request()->filled('fecha'))
-                <a href="{{ route('home', array_merge($baseParams, ['fecha' => null])) }}"
-                   class="badge text-white"
-                   style="background-color: #878D47;">
-                    Fecha: {{ request('fecha') }} &times;
-                </a>
-            @endif
-
-            @if(request()->filled('fecha_desde'))
-                <a href="{{ route('home', array_merge($baseParams, ['fecha_desde' => null])) }}"
-                   class="badge text-white"
-                   style="background-color: #878D47;">
-                    Desde: {{ request('fecha_desde') }} &times;
-                </a>
-            @endif
-
-            @if(request()->filled('fecha_hasta'))
-                <a href="{{ route('home', array_merge($baseParams, ['fecha_hasta' => null])) }}"
-                   class="badge text-white"
-                   style="background-color: #878D47;">
-                    Hasta: {{ request('fecha_hasta') }} &times;
-                </a>
-            @endif
-
-            @if(request()->filled('orden'))
-                <a href="{{ route('home', array_merge($baseParams, ['orden' => null])) }}"
-                   class="badge text-dark bg-light border border-secondary">
-                    Orden: {{
-                        match(request('orden')) {
-                            'fecha_desc' => 'Más reciente',
-                            'fecha_asc' => 'Más antiguo',
-                            'nombre_asc' => 'Nombre A-Z',
-                            'numero_asc' => 'Por número',
-                            'tipo_asc' => 'Por tipo',
-                            'categoria_asc' => 'Por categoría',
-                            default => request('orden')
-                        }
-                    }} &times;
-                </a>
-            @endif
-        </div>
-    </div>
-@endif
-
-        <!-- Listado de documentos -->
-<!-- Listado de documentos con Bootstrap puro -->
-<div class="row g-3">
-    @if($documents->count() > 0)
-        @foreach($documents as $document)
-            @php
-            $extension = strtolower(pathinfo($document->archivo, PATHINFO_EXTENSION));
-            $iconClass = '';
-            $bgClass = '';
-            $textClass = '';
-            $icon = '';
-    
-            if ($extension == 'pdf') {
-                $iconClass = 'text-danger';
-                $bgClass = 'bg-danger bg-opacity-10';
-                $textClass = 'text-danger';
-                $icon = '<i class="fas fa-file-pdf"></i>';
-            } elseif (in_array($extension, ['doc', 'docx'])) {
-                $iconClass = 'text-primary';
-                $bgClass = 'bg-primary bg-opacity-10';
-                $textClass = 'text-primary';
-                $icon = '<i class="fas fa-file-word"></i>';
-            } elseif (in_array($extension, ['xls', 'xlsx'])) {
-                $iconClass = 'text-success';
-                $bgClass = 'bg-success bg-opacity-10';
-                $textClass = 'text-success';
-                $icon = '<i class="fas fa-file-excel"></i>';
-            } else {
-                $iconClass = 'text-secondary';
-                $bgClass = 'bg-secondary bg-opacity-10';
-                $textClass = 'text-secondary';
-                $icon = '<i class="fas fa-file-alt"></i>';
-            }
-            @endphp
-    
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card h-100 border border-2 border-light shadow-sm" style="border-radius: 12px; transition: all 0.3s ease;" 
-                     onmouseover="this.style.transform='translateY(-3px)'; this.classList.add('shadow');" 
-                     onmouseout="this.style.transform='translateY(0)'; this.classList.remove('shadow');">
+        <!-- SECCIÓN DE BANNER RESPONSIVO -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="banner-container">
+                    <!-- Banner para escritorio (pantallas medianas y grandes) -->
+                    <img src="https://www.bucaramanga.gov.co/wp-content/uploads/2025/07/Banner-2-scaled.jpg" 
+                        alt="Banner Alcaldía de Bucaramanga" 
+                        class="img-fluid w-100 d-none d-md-block"
+                        style="border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                     
-                    <div class="card-body p-4">
-                        
-                        <!-- Badges superiores -->
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-
-                            @if($document->category)
-                                <span class="badge text-white fw-semibold px-3 py-2 rounded-pill fs-6" style="background-color: #2d6a2f; font-size: 0.85rem;">
-                                    {{ Str::limit($document->documentType->nombre, 15) }}
-                                </span>
-                            @endif
-
-                            @if($document->category)
-                            <span class="badge text-white fw-semibold px-3 py-2 rounded-pill" style="background-color: #2d6a2f; font-size: 0.85rem;">
-                                 {{ Str::limit($document->documentTheme->nombre, 15) }}
-                            </span>
-                            @endif
-                            
-                            <span class="badge bg-secondary text-white fw-semibold px-3 py-2 rounded-pill" style="font-size: 0.85rem;">
-                                {{ \Carbon\Carbon::parse($document->fecha)->format('Y') }}
-                            </span>
-                            
-
-                        </div>
-
-                        <!-- Contenido principal con ícono y título -->
-                        <div class="d-flex align-items-start gap-3 mb-3">
-                            <div class="flex-shrink-0 {{ $bgClass }} rounded d-flex align-items-center justify-content-center" 
-                                 style="width: 48px; height: 48px;">
-                                <span class="{{ $iconClass }}" style="font-size: 1.5rem;">
-                                    {!! $icon !!}
-                                </span>
-                            </div>
-                            <div class="flex-grow-1 min-w-0">
-                                <h5 class="card-title mb-2 fw-bold text-dark lh-sm" style="font-size: 1.1rem;">
-                                    <a href="{{ route('document.show', $document->id) }}" 
-                                       class="text-decoration-none text-dark stretched-link"
-                                       onmouseover="this.classList.add('text-success');" 
-                                       onmouseout="this.classList.remove('text-success');">
-                                        {{ ucfirst($document->tipo) }}: No {{ $document->numero }} de {{ $document->nombre }}
-                                    </a>
-                                </h5>
-                                <p class="card-text text-muted mb-0 small">
-                                    {{ Str::limit($document->descripcion, 30) }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Información de fecha -->
-                       <div class="d-flex flex-wrap gap-3 mb-3 small text-muted">
-                            <div class="d-flex align-items-center gap-1">
-                                <i class="fas fa-calendar" style="color: #2D6A2F;"></i>
-                                <span>{{ \Carbon\Carbon::parse($document->fecha)->format('d \d\e F \d\e\l Y') }}</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-1">
-                                <i class="fas fa-clock" style="color: #2D6A2F;"></i>
-                                <span>{{ $document->created_at->diffForHumans() }}</span>
-                            </div>
-                        </div>
-
-                        <!-- Botón Ver / Descargar -->
-                        <div class="d-grid">
-                            <a href="{{ asset('storage/' . $document->archivo) }}" 
-                               target="_blank" 
-                               rel="noopener noreferrer" 
-                               class="btn text-white fw-bold py-2 rounded-2"
-                               style="background-color: #2d6a2f; transition: background-color 0.3s ease;"
-                               onmouseover="this.style.backgroundColor='#1f4e21';" 
-                               onmouseout="this.style.backgroundColor='#2d6a2f';">
-                                Ver / Descargar
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    @else
-        <!-- Estado vacío -->
-        <div class="col-12">
-            <div class="card border border-2 border-light shadow-sm bg-light" style="border-radius: 12px;">
-                <div class="card-body text-center py-5">
-                    <div class="mb-4">
-                        <i class="fas fa-gavel text-muted opacity-25" style="font-size: 4rem;"></i>
-                    </div>
-                    <h4 class="text-success fw-bold mb-3">No hay documentos disponibles</h4>
-                    <p class="text-muted mb-4">
-                        @if(request()->hasAny(['busqueda_general', 'category_id', 'tipo', 'nombre', 'numero', 'año', 'mes', 'fecha', 'fecha_desde', 'fecha_hasta']))
-                            No se encontraron documentos que coincidan con los filtros aplicados.
-                        @else
-                            Utilice los filtros de búsqueda para encontrar documentos específicos.
-                        @endif
-                    </p>
-                    @if(request()->hasAny(['busqueda_general', 'category_id', 'tipo', 'nombre', 'numero', 'año', 'mes', 'fecha', 'fecha_desde', 'fecha_hasta']))
-                        <a href="{{ route('home') }}" class="btn btn-outline-success">
-                            <i class="fas fa-refresh me-2"></i>
-                            Limpiar Filtros
-                        </a>
-                    @endif
+                    <!-- Banner para móvil (pantallas pequeñas) -->
+                    <img src="https://www.bucaramanga.gov.co/wp-content/uploads/2025/07/Celular-2-1-scaled.jpg" 
+                        alt="Banner Móvil Alcaldía de Bucaramanga" 
+                        class="img-fluid w-100 d-block d-md-none"
+                        style="border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                 </div>
             </div>
         </div>
-    @endif
 
+        <!-- VERSIÓN MÓVIL - ANCHO COMPLETO -->
+<div class="container-fluid px-1 d-md-none">
+    <div class="bg-light p-3" style="border-radius: 25px;">
+        
+        <!-- Título Principal -->
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-success mb-3 ubuntu-font">
+                ¿Qué es el Sistema de Búsqueda Jurídica de Bucaramanga?
+            </h2>
+            <p class="lead text-muted mx-auto ubuntu-font" style="max-width: 800px;">
+                Una herramienta moderna y eficiente para consultar documentos oficiales de manera pública, ágil y segura
+            </p>
+        </div>
 
-</div>
-
-<!-- Botón para Actos Administrativos antes de 2023 -->
-<div class="text-center mt-4 mb-4">
-    <a href="https://www.bucaramanga.gov.co/transparencia-bucaramanga/sistema-de-busquedas-de-normas-propio-de-la-entidad/" class="btn btn-success btn-lg px-4 py-3 rounded-3 shadow-sm fw-bold">
-        <i class="fas fa-archive me-2"></i>
-        Actos administrativos antes de 2023
-    </a>
-    <p class="small text-muted mt-2 mb-0">
-        Consulta documentos históricos anteriores al año 2023
-    </p>
-</div>
-
-
-        <!-- SECCIÓN DE PAGINACIÓN MEJORADA -->
-        @if($documents->hasPages())
-            <div class="pagination-container">
-                <!-- Enlaces de paginación -->
-                <div class="d-flex justify-content-center">
-                    {{ $documents->appends(request()->query())->links('pagination::bootstrap-4') }}
+        <!-- Descripción Principal -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-lg" style="border-radius: 25px;">
+                    <div class="card-body p-3 text-center">
+                        <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-search fa-lg"></i>
+                        </div>
+                        <p class="ubuntu-font text-muted lh-lg mb-0">
+                            El <strong class="text-success">Sistema de Normas Propias de la Entidad BGA CONSULTA</strong> es una herramienta en línea implementada por la Secretaría Jurídica de la Alcaldía de Bucaramanga, en cumplimiento de la meta de producto establecida en el Plan de Desarrollo Bucaramanga Avanza Segura 2024-2027. Permite consultar, de manera pública, ágil y segura, documentos oficiales como conceptos jurídicos, actos administrativos (decretos, resoluciones) firmados por el Alcalde y circulares.
+                        </p>
+                    </div>
                 </div>
             </div>
-        @endif
-        
-</div>
-    {{-- FIN SECCIÓN PRINCIPAL --}}
+        </div>
 
-    {{-- FOOTER --}}
-<span id="final"></span>
-<footer class="bg-bucaramanga text-white ubuntu-font">
+        <!-- Modos de Uso -->
+        <div class="row mb-4 g-3">
+            <!-- Consulta Básica -->
+            <div class="col-12">
+                <div class="card h-100 border-0 shadow" style="border-radius: 25px;">
+                    <div class="card-body p-3 text-center">
+                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-bolt fa-lg"></i>
+                        </div>
+                        <h4 class="ubuntu-font fw-bold mb-3 text-success">Modo de Uso Simplificado</h4>
+                        <small class="text-muted ubuntu-font d-block mb-3">(Consulta Básica)</small>
+                        
+                        <div class="text-start">
+                            <div class="d-flex align-items-start mb-3">
+                                <span class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 30px; height: 30px; min-width: 30px; font-size: 0.8rem;">1</span>
+                                <div class="ubuntu-font">
+                                    <span>Accede al sistema:</span><br>
+                                    <strong class="text-break" style="word-break: break-word;">sistemadebusqueda.bucaramanga.gov.co</strong>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-start mb-3">
+                                <span class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 30px; height: 30px; min-width: 30px; font-size: 0.8rem;">2</span>
+                                <p class="ubuntu-font mb-0">Elige el módulo: Relatoría de Conceptos, Relatoría de Actos Administrativos o Circulares</p>
+                            </div>
+                            <div class="d-flex align-items-start mb-3">
+                                <span class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 30px; height: 30px; min-width: 30px; font-size: 0.8rem;">3</span>
+                                <p class="ubuntu-font mb-0">Escribe una palabra clave en el campo de búsqueda</p>
+                            </div>
+                            <div class="d-flex align-items-start">
+                                <span class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 30px; height: 30px; min-width: 30px; font-size: 0.8rem;">4</span>
+                                <p class="ubuntu-font mb-0">Haz clic en 'Buscar' para ver los resultados organizados y descargar documentos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filtros Avanzados -->
+            <div class="col-12">
+                <div class="card h-100 border-0 shadow" style="border-radius: 25px;">
+                    <div class="card-body p-3 text-center">
+                        <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-filter fa-lg"></i>
+                        </div>
+                        <h4 class="ubuntu-font fw-bold mb-3 text-success">Modo de Uso con Filtros Avanzados</h4>
+                        
+                        <div class="text-start">
+                            <p class="ubuntu-font text-muted mb-3">
+                                En cada módulo, al hacer clic en 'Filtros avanzados', podrás usar diferentes campos según el tipo de documento.
+                            </p>
+                            
+                            <!-- Filtros para Actos Administrativos -->
+                            <h6 class="ubuntu-font fw-semibold text-success mb-2">
+                                <i class="fas fa-gavel me-1"></i>Filtros para Actos Administrativos
+                            </h6>
+                            <div class="mb-3">
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Tipo de documento</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Tipo temático</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Tema específico</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Número del documento</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Año, mes</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Rango de fechas</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Fecha exacta</span>
+                            </div>
+                            
+                            <!-- Filtros para Conceptos -->
+                            <h6 class="ubuntu-font fw-semibold text-success mb-2">
+                                <i class="fas fa-book-open me-1"></i>Filtros para Conceptos Jurídicos
+                            </h6>
+                            <div>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Tipo de concepto</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Tema específico</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Año</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Rango de fechas</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Palabra clave</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejemplo Práctico -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="bg-success text-white p-3" style="border-radius: 25px;">
+                    <h4 class="ubuntu-font fw-bold mb-3">
+                        <i class="fas fa-lightbulb me-2"></i>Ejemplo Práctico
+                    </h4>
+                    <h5 class="ubuntu-font mb-3">Quiero encontrar decretos de 2025 relacionados con autonomía administrativa:</h5>
+                    <div class="ubuntu-font">
+                        <p class="mb-2"><strong>1.</strong> En la relatoría de Actos Administrativos, haz clic en 'Filtros avanzados'</p>
+                        <p class="mb-2"><strong>2.</strong> Selecciona: Decreto, Administrativo, Autonomía administrativa, Año: 2025</p>
+                        <p class="mb-3"><strong>3.</strong> Haz clic en 'Aplicar filtros'</p>
+                        <div class="alert alert-light text-dark rounded-3 mb-0">
+                            <strong>El sistema mostrará resultados con enlaces para ver o descargar los documentos.</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usuarios y Ventajas -->
+        <div class="row g-3">
+            <!-- Quién puede usarlo -->
+            <div class="col-12">
+                <div class="card h-100 border-0 shadow" style="border-radius: 25px;">
+                    <div class="card-body p-3 text-center">
+                        <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-users fa-lg"></i>
+                        </div>
+                        <h4 class="ubuntu-font fw-bold mb-3 text-success">¿Quién Puede Usarlo?</h4>
+                        <div class="text-start">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="ubuntu-font">Ciudadanos interesados en decisiones oficiales</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="ubuntu-font">Funcionarios y contratistas</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="ubuntu-font">Abogados y asesores jurídicos</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="ubuntu-font">Investigadores y estudiantes de derecho o gestión pública</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ventajas del Sistema -->
+            <div class="col-12">
+                <div class="card h-100 border-0 shadow" style="border-radius: 25px;">
+                    <div class="card-body p-3 text-center">
+                        <div class="bg-danger rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-star fa-lg"></i>
+                        </div>
+                        <h4 class="ubuntu-font fw-bold mb-3 text-success">Ventajas del Sistema</h4>
+                        <div class="text-start">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-unlock text-warning me-2"></i>
+                                    <span class="ubuntu-font">Acceso libre, gratuito y actualizado</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-rocket text-info me-2"></i>
+                                    <span class="ubuntu-font">Búsqueda rápida por palabras clave o filtros</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-shield-alt text-primary me-2"></i>
+                                    <span class="ubuntu-font">Transparencia y seguridad jurídica</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-eye text-success me-2"></i>
+                                    <span class="ubuntu-font">Apoya el control social y la gestión basada en normas</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- VERSIÓN ESCRITORIO - ANCHO NORMAL -->
+<div class="container d-none d-md-block my-5">
+    <div class="bg-light p-5" style="border-radius: 25px;">
+        
+        <!-- Título Principal -->
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-success mb-3 ubuntu-font">
+                ¿Qué es el Sistema de Búsqueda Jurídica de Bucaramanga?
+            </h2>
+            <p class="lead text-muted mx-auto ubuntu-font" style="max-width: 800px;">
+                Una herramienta moderna y eficiente para consultar documentos oficiales de manera pública, ágil y segura
+            </p>
+        </div>
+
+        <!-- Descripción Principal -->
+        <div class="row mb-5">
+            <div class="col-xl-8 col-lg-10 mx-auto">
+                <div class="card border-0 shadow-lg" style="border-radius: 25px;">
+                    <div class="card-body p-4 text-center">
+                        <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-search fa-lg"></i>
+                        </div>
+                        <p class="ubuntu-font text-muted lh-lg mb-0">
+                            El <strong class="text-success">Sistema de Normas Propias de la Entidad BGA CONSULTA</strong> es una herramienta en línea implementada por la Secretaría Jurídica de la Alcaldía de Bucaramanga, en cumplimiento de la meta de producto establecida en el Plan de Desarrollo Bucaramanga Avanza Segura 2024-2027. Permite consultar, de manera pública, ágil y segura, documentos oficiales como conceptos jurídicos, actos administrativos (decretos, resoluciones) firmados por el Alcalde y circulares.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modos de Uso -->
+        <div class="row mb-5 g-4">
+            <!-- Consulta Básica -->
+            <div class="col-lg-6">
+                <div class="card h-100 border-0 shadow" style="border-radius: 25px;">
+                    <div class="card-body p-4 text-center">
+                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-bolt fa-lg"></i>
+                        </div>
+                        <h4 class="ubuntu-font fw-bold mb-4 text-success">Modo de Uso Simplificado</h4>
+                        <small class="text-muted ubuntu-font d-block mb-3">(Consulta Básica)</small>
+                        
+                        <div class="text-start">
+                            <div class="d-flex align-items-start mb-3">
+                                <span class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 30px; height: 30px; min-width: 30px; font-size: 0.8rem;">1</span>
+                                <div class="ubuntu-font">
+                                    <span>Accede al sistema:</span><br>
+                                    <strong class="text-break" style="word-break: break-word;">sistemadebusqueda.bucaramanga.gov.co</strong>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-start mb-3">
+                                <span class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 30px; height: 30px; min-width: 30px; font-size: 0.8rem;">2</span>
+                                <p class="ubuntu-font mb-0">Elige el módulo: Relatoría de Conceptos, Relatoría de Actos Administrativos o Circulares</p>
+                            </div>
+                            <div class="d-flex align-items-start mb-3">
+                                <span class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 30px; height: 30px; min-width: 30px; font-size: 0.8rem;">3</span>
+                                <p class="ubuntu-font mb-0">Escribe una palabra clave en el campo de búsqueda</p>
+                            </div>
+                            <div class="d-flex align-items-start">
+                                <span class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 30px; height: 30px; min-width: 30px; font-size: 0.8rem;">4</span>
+                                <p class="ubuntu-font mb-0">Haz clic en 'Buscar' para ver los resultados organizados y descargar documentos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filtros Avanzados -->
+            <div class="col-lg-6">
+                <div class="card h-100 border-0 shadow" style="border-radius: 25px;">
+                    <div class="card-body p-4 text-center">
+                        <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-filter fa-lg"></i>
+                        </div>
+                        <h4 class="ubuntu-font fw-bold mb-4 text-success">Modo de Uso con Filtros Avanzados</h4>
+                        
+                        <div class="text-start">
+                            <p class="ubuntu-font text-muted mb-3">
+                                En cada módulo, al hacer clic en 'Filtros avanzados', podrás usar diferentes campos según el tipo de documento.
+                            </p>
+                            
+                            <!-- Filtros para Actos Administrativos -->
+                            <h6 class="ubuntu-font fw-semibold text-success mb-2">
+                                <i class="fas fa-gavel me-1"></i>Filtros para Actos Administrativos
+                            </h6>
+                            <div class="mb-3">
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Tipo de documento</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Tipo temático</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Tema específico</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Número del documento</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Año, mes</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Rango de fechas</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Fecha exacta</span>
+                            </div>
+                            
+                            <!-- Filtros para Conceptos -->
+                            <h6 class="ubuntu-font fw-semibold text-success mb-2">
+                                <i class="fas fa-book-open me-1"></i>Filtros para Conceptos Jurídicos
+                            </h6>
+                            <div>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Tipo de concepto</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Tema específico</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Año</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Rango de fechas</span>
+                                <span class="badge bg-light text-success border border-success me-1 mb-1" style="font-size: 0.7rem;">Palabra clave</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejemplo Práctico -->
+        <div class="row mb-5">
+            <div class="col-xl-10 mx-auto">
+                <div class="bg-success text-white p-5" style="border-radius: 25px;">
+                    <div class="row align-items-center">
+                        <div class="col-lg-9">
+                            <h4 class="ubuntu-font fw-bold mb-3">
+                                <i class="fas fa-lightbulb me-2"></i>Ejemplo Práctico
+                            </h4>
+                            <h5 class="ubuntu-font mb-3">Quiero encontrar decretos de 2025 relacionados con autonomía administrativa:</h5>
+                            <div class="ubuntu-font">
+                                <p class="mb-2"><strong>1.</strong> En la relatoría de Actos Administrativos, haz clic en 'Filtros avanzados'</p>
+                                <p class="mb-2"><strong>2.</strong> Selecciona: Decreto, Administrativo, Autonomía administrativa, Año: 2025</p>
+                                <p class="mb-3"><strong>3.</strong> Haz clic en 'Aplicar filtros'</p>
+                                <div class="alert alert-light text-dark rounded-3 mb-0">
+                                    <strong>El sistema mostrará resultados con enlaces para ver o descargar los documentos.</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 text-center d-none d-lg-block">
+                            <i class="fas fa-search-plus" style="font-size: 3rem; opacity: 0.3;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usuarios y Ventajas -->
+        <div class="row g-4">
+            <!-- Quién puede usarlo -->
+            <div class="col-lg-6">
+                <div class="card h-100 border-0 shadow" style="border-radius: 25px;">
+                    <div class="card-body p-4 text-center">
+                        <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-users fa-lg"></i>
+                        </div>
+                        <h4 class="ubuntu-font fw-bold mb-4 text-success">¿Quién Puede Usarlo?</h4>
+                        <div class="text-start">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="ubuntu-font">Ciudadanos interesados en decisiones oficiales</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="ubuntu-font">Funcionarios y contratistas</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="ubuntu-font">Abogados y asesores jurídicos</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="ubuntu-font">Investigadores y estudiantes de derecho o gestión pública</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ventajas del Sistema -->
+            <div class="col-lg-6">
+                <div class="card h-100 border-0 shadow" style="border-radius: 25px;">
+                    <div class="card-body p-4 text-center">
+                        <div class="bg-danger rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-star fa-lg"></i>
+                        </div>
+                        <h4 class="ubuntu-font fw-bold mb-4 text-success">Ventajas del Sistema</h4>
+                        <div class="text-start">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-unlock text-warning me-2"></i>
+                                    <span class="ubuntu-font">Acceso libre, gratuito y actualizado</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-rocket text-info me-2"></i>
+                                    <span class="ubuntu-font">Búsqueda rápida por palabras clave o filtros</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-shield-alt text-primary me-2"></i>
+                                    <span class="ubuntu-font">Transparencia y seguridad jurídica</span>
+                                </div>
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <i class="fas fa-eye text-success me-2"></i>
+                                    <span class="ubuntu-font">Apoya el control social y la gestión basada en normas</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    </div>
+
+    <footer class="bg-bucaramanga text-white ubuntu-font">
     <div class="container py-5">
         <div class="row g-4">
             
@@ -1090,6 +965,3 @@
         </div>
     </div>
 </footer>
-
-</body>
-</html>

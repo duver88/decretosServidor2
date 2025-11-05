@@ -102,57 +102,57 @@
         </div>
     </div>
 
-    <!-- CHIPS DE CATEGORÍAS -->
-<div class="mb-4">
-    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Filtrar por Año:</h3>
-    <div class="flex flex-wrap gap-2">
-        @if(isset($años) && $años->count() > 0)
-            @foreach($años as $año)
-                @php
-                    $countAño = $stats['por_año'][$año] ?? 0;
-                    $currentAño = request()->get('año');
-                @endphp
-                <form method="GET" action="{{ route('dashboard') }}" class="inline">
-                    @foreach(request()->except(['año', 'page']) as $key => $value)
-                        @if(is_array($value))
-                            @foreach($value as $v)
-                                <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
-                            @endforeach
-                        @else
-                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                        @endif
-                    @endforeach
-                    <input type="hidden" name="año" value="{{ $año }}">
-                    <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors
-                        {{ $currentAño == $año ? 'bg-[#43883d] text-white' : 'bg-gray-100 text-gray-700 hover:bg-[#43883d] hover:text-white' }}">
-                        {{ $año }} ({{ $countAño }})
-                    </button>
-                </form>
-            @endforeach
-            
-            {{-- Botón para limpiar filtro de año --}}
-            @if(request()->filled('año'))
-                <form method="GET" action="{{ route('dashboard') }}" class="inline">
-                    @foreach(request()->except(['año', 'page']) as $key => $value)
-                        @if(is_array($value))
-                            @foreach($value as $v)
-                                <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
-                            @endforeach
-                        @else
-                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                        @endif
-                    @endforeach
-                    <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors bg-gray-200 text-gray-600 hover:bg-gray-300">
-                        Todos los años
-                    </button>
-                </form>
+    <!-- CHIPS DE AÑOS -->
+    <div class="mb-4">
+        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Filtrar por Año:</h3>
+        <div class="flex flex-wrap gap-2">
+            @if(isset($años) && $años->count() > 0)
+                @foreach($años as $año)
+                    @php
+                        $countAño = $stats['por_año'][$año] ?? 0;
+                        $currentAño = request()->get('año');
+                    @endphp
+                    <form method="GET" action="{{ route('dashboard') }}" class="inline">
+                        @foreach(request()->except(['año', 'page']) as $key => $value)
+                            @if(is_array($value))
+                                @foreach($value as $v)
+                                    <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
+                                @endforeach
+                            @else
+                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                            @endif
+                        @endforeach
+                        <input type="hidden" name="año" value="{{ $año }}">
+                        <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors
+                            {{ $currentAño == $año ? 'bg-[#43883d] text-white' : 'bg-gray-100 text-gray-700 hover:bg-[#43883d] hover:text-white' }}">
+                            {{ $año }} ({{ $countAño }})
+                        </button>
+                    </form>
+                @endforeach
+                
+                {{-- Botón para limpiar filtro de año --}}
+                @if(request()->filled('año'))
+                    <form method="GET" action="{{ route('dashboard') }}" class="inline">
+                        @foreach(request()->except(['año', 'page']) as $key => $value)
+                            @if(is_array($value))
+                                @foreach($value as $v)
+                                    <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
+                                @endforeach
+                            @else
+                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                            @endif
+                        @endforeach
+                        <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors bg-gray-200 text-gray-600 hover:bg-gray-300">
+                            Todos los años
+                        </button>
+                    </form>
+                @endif
             @endif
-        @endif
+        </div>
     </div>
-</div>
 
-    <!-- BUSCADOR GENERAL -->
-    <form method="GET" action="{{ route('dashboard') }}">
+    <!-- FORMULARIO PRINCIPAL DE FILTROS -->
+    <form method="GET" action="{{ route('dashboard') }}" id="mainFilterForm">
         <!-- Preservar otros filtros cuando se usa búsqueda general -->
         @foreach(request()->except(['busqueda_general', 'page']) as $key => $value)
             @if(is_array($value))
@@ -164,6 +164,7 @@
             @endif
         @endforeach
         
+        <!-- BUSCADOR GENERAL -->
         <div class="flex gap-4 mb-4">
             <div class="flex-1">
                 <input type="search" name="busqueda_general" 
@@ -187,7 +188,6 @@
                     'fecha_desc' => 'Más recientes',
                     'fecha_asc' => 'Más antiguos',
                     'nombre_asc' => 'Nombre A-Z',
-                    
                 ] as $key => $label)
                     <label class="flex items-center cursor-pointer">
                         <input type="radio" name="orden" value="{{ $key }}" onchange="this.form.submit()" 
@@ -205,21 +205,21 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
                     </svg>
-                    Filtros avanzados
+                    <span id="toggleText">Mostrar filtros avanzados</span>
                 </button>
             </div>
         </div>
-
-       
-<!-- FILTROS AVANZADOS -->
 
         <!-- FILTROS AVANZADOS -->
         <div id="filtrosAvanzados" class="hidden border-t pt-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 
+                <!-- Tipo de Documento (Decreto/Resolución) -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Documento (Decreto/Resolución)</label>
-                    <select name="tipo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Tipo (Decreto/Resolución)
+                    </label>
+                    <select name="tipo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
                         <option value="">Todos los tipos</option>
                         @if(isset($tipos))
                             @foreach($tipos as $tipo)
@@ -231,10 +231,13 @@
                     </select>
                 </div>
 
+                <!-- Tipo de Documento (Categorías específicas) -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Documento</label>
-                    <select name="document_type_id" id="document_type_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]">
-                        <option value="">Seleccione un tipo</option>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Categoría del Documento
+                    </label>
+                    <select name="document_type_id" id="document_type_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+                        <option value="">Todas las categorías</option>
                         @if(isset($documentTypes))
                             @foreach($documentTypes as $documentType)
                                 <option value="{{ $documentType->id }}" {{ request('document_type_id') == $documentType->id ? 'selected' : '' }}>
@@ -245,33 +248,34 @@
                     </select>
                 </div>
 
+                <!-- Tema Específico -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tema Específico</label>
-                    <select name="document_theme_id" id="document_theme_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]" disabled>
-                        <option value="">Primero seleccione un tipo</option>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Tema Específico
+                    </label>
+                    <select name="document_theme_id" id="document_theme_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300" {{ !request('document_type_id') ? 'disabled' : '' }}>
+                        <option value="">{{ request('document_type_id') ? 'Todos los temas' : 'Primero seleccione una categoría' }}</option>
                     </select>
-                    <p class="text-xs text-gray-500 mt-1">Seleccione primero un tipo de documento</p>
+                    <p class="text-xs text-gray-500 mt-1">Seleccione primero una categoría de documento</p>
                 </div>
                 
-                {{-- <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre o Tipo</label>
-                    <input type="text" name="nombre" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]"
-                           placeholder="Buscar por nombre del documento" 
-                           value="{{ request('nombre') }}">
-                </div> --}}
-                
+                <!-- Número del Documento -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Número del Documento
+                    </label>
                     <input type="text" name="numero" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]"
-                           placeholder="Buscar por número del documento" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                           placeholder="Ej: 001, 002, etc." 
                            value="{{ request('numero') }}">
                 </div>
                 
+                <!-- Año -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Año</label>
-                    <select name="año" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Año Específico
+                    </label>
+                    <select name="año" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
                         <option value="">Todos los años</option>
                         @if(isset($años))
                             @foreach($años as $a)
@@ -281,9 +285,12 @@
                     </select>
                 </div>
                 
+                <!-- Mes -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mes</label>
-                    <select name="mes" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Mes Específico
+                    </label>
+                    <select name="mes" id="mesSelect" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
                         <option value="">Todos los meses</option>
                         @for($i = 1; $i <= 12; $i++)
                             <option value="{{ $i }}" {{ request('mes') == $i ? 'selected' : '' }}>
@@ -291,45 +298,70 @@
                             </option>
                         @endfor
                     </select>
+                    <p class="text-xs text-gray-500 mt-1">Recomendado seleccionar año primero</p>
                 </div>
                 
+                <!-- Fecha desde -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha desde</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Fecha desde
+                    </label>
                     <input type="date" name="fecha_desde" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
                            value="{{ request('fecha_desde') }}">
                 </div>
                 
+                <!-- Fecha hasta -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha hasta</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Fecha hasta
+                    </label>
                     <input type="date" name="fecha_hasta" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
                            value="{{ request('fecha_hasta') }}">
                 </div>
                 
+                <!-- Fecha exacta -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha exacta</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Fecha exacta
+                    </label>
                     <input type="date" name="fecha" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d]"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
                            value="{{ request('fecha') }}">
                 </div>
             </div>
             
-            <div class="flex justify-between mt-4">
-                <button type="button" onclick="window.location.href='{{ route('dashboard') }}'" 
-                        class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors">
-                    Limpiar filtros
-                </button>
+            <!-- Botones de acción para filtros avanzados -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+                <div class="flex flex-wrap gap-2">
+                    <button type="button" onclick="clearAllFilters()" 
+                            class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Limpiar todos los filtros
+                    </button>
+                    <button type="button" onclick="clearAdvancedFilters()" 
+                            class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Solo limpiar avanzados
+                    </button>
+                </div>
                 <button type="submit" 
                         class="px-6 py-2 bg-[#43883d] text-white rounded-md hover:bg-[#3F8827] transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
                     Aplicar filtros
                 </button>
             </div>
         </div>
-       
+    </form>
 
     <!-- Filtros aplicados -->
-<!-- Filtros aplicados -->
     @if (request()->hasAny(['busqueda_general', 'category_id', 'tipo', 'document_type_id', 'document_theme_id', 'nombre', 'numero', 'año', 'mes', 'fecha', 'fecha_desde', 'fecha_hasta', 'orden']))
         <div class="mt-4 pt-4 border-t">
             <h6 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Filtros aplicados:</h6>
@@ -358,7 +390,7 @@
                     @endphp
                     <a href="{{ route('dashboard', array_merge($baseParams, ['document_type_id' => null])) }}"
                        class="inline-flex items-center px-2 py-1 bg-[#4E7525] text-white text-xs rounded-full hover:bg-[#3E6015] transition-colors">
-                        Tipo Doc: {{ $selectedDocumentType ? Str::limit($selectedDocumentType->nombre, 20) : 'Desconocido' }} ×
+                        Categoría: {{ $selectedDocumentType ? Str::limit($selectedDocumentType->nombre, 20) : 'Desconocido' }} ×
                     </a>
                 @endif
 
@@ -369,13 +401,6 @@
                     <a href="{{ route('dashboard', array_merge($baseParams, ['document_theme_id' => null])) }}"
                        class="inline-flex items-center px-2 py-1 bg-[#7A7A52] text-white text-xs rounded-full hover:bg-[#6A6A42] transition-colors">
                         Tema: {{ $selectedDocumentTheme ? Str::limit($selectedDocumentTheme->nombre, 20) : 'Desconocido' }} ×
-                    </a>
-                @endif
-
-                @if(request()->filled('nombre'))
-                    <a href="{{ route('dashboard', array_merge($baseParams, ['nombre' => null])) }}"
-                       class="inline-flex items-center px-2 py-1 bg-[#8B8B52] text-white text-xs rounded-full hover:bg-[#7B7B42] transition-colors">
-                        Nombre: {{ Str::limit(request('nombre'), 20) }} ×
                     </a>
                 @endif
 
@@ -432,11 +457,6 @@
                             match(request('orden')) {
                                 'fecha_asc' => 'Más antiguos',
                                 'nombre_asc' => 'Nombre A-Z',
-                                'numero_asc' => 'Por número',
-                                'tipo_asc' => 'Por tipo',
-                                'categoria_asc' => 'Por categoría',
-                                'document_type_asc' => 'Por tipo doc',
-                                'document_theme_asc' => 'Por tema',
                                 default => request('orden')
                             }
                         }} ×
@@ -454,12 +474,10 @@
                 @endif
 
                 <!-- Botón para limpiar todos los filtros -->
-                @if(request()->hasAny(['busqueda_general', 'category_id', 'tipo', 'document_type_id', 'document_theme_id', 'nombre', 'numero', 'año', 'mes', 'fecha', 'fecha_desde', 'fecha_hasta', 'orden']))
-                    <a href="{{ route('dashboard') }}"
-                       class="inline-flex items-center px-3 py-1 bg-red-500 text-white text-xs rounded-full hover:bg-red-600 transition-colors font-semibold">
-                        🗑️ Limpiar todos ×
-                    </a>
-                @endif
+                <a href="{{ route('dashboard') }}"
+                   class="inline-flex items-center px-3 py-1 bg-red-500 text-white text-xs rounded-full hover:bg-red-600 transition-colors font-semibold">
+                    🗑️ Limpiar todos ×
+                </a>
             </div>
         </div>
     @endif
@@ -619,7 +637,6 @@
     @endforelse
 </div>
 
-<!-- Paginación mejorada -->
 <!-- Paginación mejorada responsiva -->
 @if($documents->hasPages())
     <div class="mt-8">
@@ -652,12 +669,15 @@
                             @endif
                         @endforeach
                         
-                        <select name="per_page" onchange="document.getElementById('perPageForm').submit()" 
+                        <select name="per_page" onchange="document.getElementById('perPageForm').submit()"
                                 class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-[#43883d] focus:border-[#43883d]">
                             <option value="9" {{ request('per_page', 9) == 9 ? 'selected' : '' }}>9</option>
                             <option value="18" {{ request('per_page', 9) == 18 ? 'selected' : '' }}>18</option>
                             <option value="27" {{ request('per_page', 9) == 27 ? 'selected' : '' }}>27</option>
                             <option value="36" {{ request('per_page', 9) == 36 ? 'selected' : '' }}>36</option>
+                            <option value="50" {{ request('per_page', 9) == 50 ? 'selected' : '' }}>50</option>
+                            <option value="100" {{ request('per_page', 9) == 100 ? 'selected' : '' }}>100</option>
+                            <option value="todos" {{ request('per_page') == 'todos' ? 'selected' : '' }}>Todos</option>
                         </select>
                     </form>
                     <span class="text-sm text-gray-700 dark:text-gray-300">por página</span>
@@ -689,10 +709,6 @@
                     @php
                         $start = max(1, $documents->currentPage() - 2);
                         $end = min($documents->lastPage(), $documents->currentPage() + 2);
-                        
-                        // En móvil, mostrar menos páginas
-                        $mobileStart = max(1, $documents->currentPage() - 1);
-                        $mobileEnd = min($documents->lastPage(), $documents->currentPage() + 1);
                     @endphp
 
                     {{-- Primera página (solo si no está en rango) --}}
@@ -790,67 +806,71 @@
 @endif
 
 <script>
+// Funciones para manejar los filtros avanzados
 function toggleAdvancedFilters() {
     const filters = document.getElementById('filtrosAvanzados');
-    filters.classList.toggle('hidden');
+    const toggleText = document.getElementById('toggleText');
+    
+    if (filters.classList.contains('hidden')) {
+        filters.classList.remove('hidden');
+        toggleText.textContent = 'Ocultar filtros avanzados';
+    } else {
+        filters.classList.add('hidden');
+        toggleText.textContent = 'Mostrar filtros avanzados';
+    }
+}
+
+// Función para limpiar todos los filtros
+function clearAllFilters() {
+    if (confirm('¿Está seguro de que desea limpiar todos los filtros?')) {
+        window.location.href = '{{ route("dashboard") }}';
+    }
+}
+
+// Función para limpiar solo filtros avanzados
+function clearAdvancedFilters() {
+    const form = document.getElementById('mainFilterForm');
+    
+    // Limpiar campos de filtros avanzados
+    const advancedFields = [
+        'document_type_id', 'document_theme_id', 'numero', 
+        'año', 'mes', 'fecha_desde', 'fecha_hasta', 'fecha'
+    ];
+    
+    advancedFields.forEach(fieldName => {
+        const field = form.querySelector(`[name="${fieldName}"]`);
+        if (field) {
+            if (field.type === 'select-one') {
+                field.selectedIndex = 0;
+            } else {
+                field.value = '';
+            }
+        }
+    });
+    
+    // Enviar formulario
+    form.submit();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Mejorar la experiencia con el filtro de mes
-    const añoSelect = document.querySelector('select[name="año"]');
-    const mesSelect = document.querySelector('select[name="mes"]');
-    
-    // Función para validar la selección de mes
-    function validarMes() {
-        if (mesSelect.value && !añoSelect.value) {
-            alert('Para filtrar por mes, primero debe seleccionar un año.');
-            mesSelect.value = '';
-        }
-    }
-    
-    // Agregar event listener al select de mes
-    if (mesSelect) {
-        mesSelect.addEventListener('change', validarMes);
-    }
-    
-    // Agregar indicador visual cuando se selecciona año
-    if (añoSelect) {
-        añoSelect.addEventListener('change', function() {
-            if (this.value) {
-                mesSelect.style.borderColor = '#43883d';
-                mesSelect.removeAttribute('disabled');
-            } else {
-                mesSelect.style.borderColor = '';
-                mesSelect.value = '';
-            }
-        });
-    }
-});
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
     const documentTypeSelect = document.getElementById('document_type_id');
     const documentThemeSelect = document.getElementById('document_theme_id');
-    const loadingText = 'Cargando temas...';
-    const emptyText = 'No hay temas disponibles';
-    const selectTypeText = 'Primero seleccione un tipo';
+    const añoSelect = document.querySelector('select[name="año"]');
+    const mesSelect = document.getElementById('mesSelect');
     
-    // Estado inicial
+    // Configuración inicial para temas basados en tipo de documento
     function resetThemeSelect() {
-        documentThemeSelect.innerHTML = `<option value="">${selectTypeText}</option>`;
+        documentThemeSelect.innerHTML = '<option value="">Primero seleccione una categoría</option>';
         documentThemeSelect.disabled = true;
         documentThemeSelect.classList.add('text-gray-400');
     }
     
-    // Función para cargar temas
+    // Función para cargar temas dinámicamente
     function loadThemes(typeId) {
-        // Mostrar estado de carga
-        documentThemeSelect.innerHTML = `<option value="">${loadingText}</option>`;
+        documentThemeSelect.innerHTML = '<option value="">Cargando temas...</option>';
         documentThemeSelect.disabled = true;
         documentThemeSelect.classList.add('text-gray-400');
         
-        // Hacer petición AJAX
         fetch(`/documents/themes/${typeId}`)
             .then(response => {
                 if (!response.ok) {
@@ -859,10 +879,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(themes => {
-                // Limpiar select
                 documentThemeSelect.innerHTML = '<option value="">Todos los temas</option>';
                 
-                // Agregar temas
                 if (themes && themes.length > 0) {
                     themes.forEach(theme => {
                         const option = document.createElement('option');
@@ -877,11 +895,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         documentThemeSelect.appendChild(option);
                     });
                     
-                    // Habilitar select
                     documentThemeSelect.disabled = false;
                     documentThemeSelect.classList.remove('text-gray-400');
                 } else {
-                    documentThemeSelect.innerHTML = `<option value="">${emptyText}</option>`;
+                    documentThemeSelect.innerHTML = '<option value="">No hay temas disponibles</option>';
                     documentThemeSelect.disabled = true;
                 }
             })
@@ -892,7 +909,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
     
-    // Event listener para cambio de tipo
+    // Event listener para cambio de tipo de documento
     if (documentTypeSelect) {
         documentTypeSelect.addEventListener('change', function() {
             const typeId = this.value;
@@ -904,37 +921,100 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Cargar temas si ya hay un tipo seleccionado (para mantener estado en recarga)
+        // Cargar temas si ya hay un tipo seleccionado
         if (documentTypeSelect.value) {
             loadThemes(documentTypeSelect.value);
         }
     }
     
-    // Mejorar experiencia visual con focus
-    if (documentTypeSelect) {
-        documentTypeSelect.addEventListener('focus', function() {
-            this.style.borderColor = '#43883d';
-            this.style.boxShadow = '0 0 0 0.2rem rgba(67, 136, 61, 0.25)';
+    // Validación y mejora para filtros de fecha
+    if (añoSelect && mesSelect) {
+        añoSelect.addEventListener('change', function() {
+            if (this.value) {
+                mesSelect.style.borderColor = '#43883d';
+                mesSelect.removeAttribute('disabled');
+            } else {
+                mesSelect.style.borderColor = '';
+                mesSelect.value = '';
+            }
         });
         
-        documentTypeSelect.addEventListener('blur', function() {
-            this.style.borderColor = '';
-            this.style.boxShadow = '';
+        mesSelect.addEventListener('change', function() {
+            if (this.value && !añoSelect.value) {
+                alert('Para filtrar por mes, primero debe seleccionar un año.');
+                this.value = '';
+            }
         });
     }
     
-    if (documentThemeSelect) {
-        documentThemeSelect.addEventListener('focus', function() {
+    // Mejorar experiencia visual con focus en todos los campos
+    const focusableFields = document.querySelectorAll('#filtrosAvanzados select, #filtrosAvanzados input');
+    focusableFields.forEach(field => {
+        field.addEventListener('focus', function() {
             if (!this.disabled) {
                 this.style.borderColor = '#43883d';
                 this.style.boxShadow = '0 0 0 0.2rem rgba(67, 136, 61, 0.25)';
             }
         });
         
-        documentThemeSelect.addEventListener('blur', function() {
+        field.addEventListener('blur', function() {
             this.style.borderColor = '';
             this.style.boxShadow = '';
         });
+    });
+    
+    // Validación de rangos de fecha
+    const fechaDesde = document.querySelector('input[name="fecha_desde"]');
+    const fechaHasta = document.querySelector('input[name="fecha_hasta"]');
+    const fechaExacta = document.querySelector('input[name="fecha"]');
+    
+    if (fechaDesde && fechaHasta) {
+        fechaDesde.addEventListener('change', function() {
+            if (fechaHasta.value && this.value > fechaHasta.value) {
+                alert('La fecha "desde" no puede ser posterior a la fecha "hasta".');
+                this.value = '';
+            }
+        });
+        
+        fechaHasta.addEventListener('change', function() {
+            if (fechaDesde.value && this.value < fechaDesde.value) {
+                alert('La fecha "hasta" no puede ser anterior a la fecha "desde".');
+                this.value = '';
+            }
+        });
+    }
+    
+    // Limpiar conflictos entre fecha exacta y rango
+    if (fechaExacta && fechaDesde && fechaHasta) {
+        fechaExacta.addEventListener('change', function() {
+            if (this.value) {
+                if (confirm('¿Desea limpiar el rango de fechas y usar solo la fecha exacta?')) {
+                    fechaDesde.value = '';
+                    fechaHasta.value = '';
+                }
+            }
+        });
+        
+        [fechaDesde, fechaHasta].forEach(field => {
+            field.addEventListener('change', function() {
+                if (this.value && fechaExacta.value) {
+                    if (confirm('¿Desea limpiar la fecha exacta y usar el rango de fechas?')) {
+                        fechaExacta.value = '';
+                    }
+                }
+            });
+        });
+    }
+    
+    // Auto-expandir filtros avanzados si hay filtros aplicados
+    const hasAdvancedFilters = {{ request()->hasAny(['document_type_id', 'document_theme_id', 'numero', 'año', 'mes', 'fecha', 'fecha_desde', 'fecha_hasta']) ? 'true' : 'false' }};
+    if (hasAdvancedFilters) {
+        const filters = document.getElementById('filtrosAvanzados');
+        const toggleText = document.getElementById('toggleText');
+        if (filters && toggleText) {
+            filters.classList.remove('hidden');
+            toggleText.textContent = 'Ocultar filtros avanzados';
+        }
     }
 });
 </script>

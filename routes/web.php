@@ -15,6 +15,21 @@ use App\Http\Controllers\UserCategoryPermissionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
+// Rutas para filtros AJAX de Documentos
+Route::get('/api/document-stats', [DocumentController::class, 'getStats'])
+->name('api.document-stats');
+
+Route::get('/documents/themes/{typeId}', [DocumentController::class, 'getThemesByType'])
+->name('documents.themes');
+
+Route::get('/themes/{typeId}', [ConceptController::class, 'getThemes'])->name('getThemes');
+
+
+Route::get('/concepts/themes/{typeId}', [ConceptController::class, 'getThemes'])->name('concepts.themes.public');
+
+// Ruta auxiliar para obtener temas...
+Route::get('/get-themes/{typeId}', [ConceptController::class, 'getThemes'])->name('direct.getThemes');
+
 // Ruta auxiliar para obtener temas (alternativa sin prefijo para depuración)
 Route::get('/get-themes/{typeId}', [ConceptController::class, 'getThemes'])->name('direct.getThemes');
 Route::get('/documents', [DocumentController::class, 'listPublic'])->name('documents.public');
@@ -26,9 +41,6 @@ Route::get('/api/concept-themes-by-type/{typeId}', [ConceptController::class, 'g
 Route::get('/api/concept-stats', [ConceptController::class, 'getAdvancedStats'])
     ->name('api.concept-stats');
 
-// Rutas para filtros AJAX de Documentos
-Route::get('/api/document-stats', [DocumentController::class, 'getStats'])
-    ->name('api.document-stats');
 
 // Rutas existentes mejoradas (mantener las que ya tienes y agregar estas)
 Route::prefix('conceptos')->group(function () {
@@ -72,16 +84,12 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::post('/dashboard/document-categories/themes', [DocumentThemeController::class, 'store'])->name('documents.storeTheme');  
     Route::delete('/dashboard/document-categories/types/{id}', [DocumentTypeController::class, 'destroy'])->name('documents.destroyType');  
     Route::delete('/dashboard/document-categories/themes/{id}', [DocumentThemeController::class, 'destroy'])->name('documents.destroyTheme');  
-
-    // Ruta AJAX para obtener temas  
     Route::get('/dashboard/document-themes/{typeId}', [DocumentController::class, 'getThemes'])->name('documents.getThemes');  
-    // Rutas para filtros AJAX de Documentos
-Route::get('/api/document-stats', [DocumentController::class, 'getStats'])
-    ->name('api.document-stats');
-
-    Route::get('/documents/themes/{typeId}', [DocumentController::class, 'getThemesByType'])
-    ->name('documents.themes');
+   
 });
+
+
+
 
 // Rutas de autenticación
 Route::middleware('auth')->group(function () {
@@ -134,7 +142,6 @@ Route::middleware(['auth'])->prefix('concepts')->name('concepts.')->group(functi
     
     
     // Rutas específicas que no deben ser confundidas con IDs (IMPORTANTE: estas rutas deben ir ANTES de las rutas con parámetros)
-    Route::get('/themes/{typeId}', [ConceptController::class, 'getThemes'])->name('getThemes');
     
     // Rutas para categorías y permisos (solo administradores)
     Route::middleware([IsAdmin::class])->group(function () {
@@ -157,3 +164,17 @@ Route::middleware(['auth'])->prefix('concepts')->name('concepts.')->group(functi
     Route::put('/{id}', [ConceptController::class, 'update'])->name('update');
     Route::delete('/{id}', [ConceptController::class, 'destroy'])->name('destroy');
 });
+
+Route::get('/conoce-sistema', function () {
+    return view('public.conoce_sistema');
+})->name('conoce.sistema');
+
+
+// Ruta para "Relatoría de Circulares" (estática)
+Route::get('/circulares', function () {
+    return view('public.circulares');
+})->name('circulares.index');
+
+// Ruta para obtener temas por tipo de documento (para usuarios)
+Route::get('/user/documents/themes/{typeId}', [DocumentController::class, 'getThemesByType'])
+    ->name('user.document.themes');

@@ -15,6 +15,8 @@ class IsAdmin
             return $next($request);
         }
 
+        
+
         // Si no es admin, redirige o lanza un error 403
         abort(403, 'Acceso denegado');
     }
