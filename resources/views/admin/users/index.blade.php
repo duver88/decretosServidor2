@@ -1,42 +1,46 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+@extends('layouts.app')
+
+@section('title', 'Gestión de Usuarios')
+
+@section('content')
+<div class="py-6">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">
                 Gestión de Usuarios
             </h2>
             <a href="{{ route('users.create') }}"
-               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center transition">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
                 Nuevo Usuario
             </a>
         </div>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Mensajes de éxito/error -->
-            @if(session('success'))
-                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                    <span class="block sm:inline">{{ session('success') }}</span>
-                </div>
-            @endif
+        <!-- Mensajes de éxito/error -->
+        @if(session('success'))
+            <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+        @endif
 
-            @if(session('error'))
-                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                    <span class="block sm:inline">{{ session('error') }}</span>
-                </div>
-            @endif
+        @if(session('error'))
+            <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('error') }}</span>
+            </div>
+        @endif
 
-            @if(session('info'))
-                <div class="mb-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
-                    <span class="block sm:inline">{{ session('info') }}</span>
-                </div>
-            @endif
+        @if(session('info'))
+            <div class="mb-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('info') }}</span>
+            </div>
+        @endif
 
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-700">
                             <tr>
@@ -129,15 +133,16 @@
                             @endforelse
                         </tbody>
                     </table>
-
-                    <!-- Paginación -->
-                    @if($users->hasPages())
-                        <div class="mt-4">
-                            {{ $users->links() }}
-                        </div>
-                    @endif
                 </div>
+
+                <!-- Paginación -->
+                @if($users->hasPages())
+                    <div class="mt-4">
+                        {{ $users->links() }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection
