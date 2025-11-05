@@ -148,6 +148,95 @@
                         @enderror
                     </div>
 
+                    <!-- Permisos de Categorías (Actos Administrativos) -->
+                    <div id="category-permissions-section" class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                            Permisos para Actos Administrativos (por Categoría)
+                        </label>
+                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 rounded-lg p-4 border-l-4 border-purple-500">
+                            <p class="text-xs text-gray-600 dark:text-gray-300 mb-4">
+                                Define qué acciones puede realizar el usuario en cada categoría de documentos
+                            </p>
+                            <div class="space-y-3">
+                                @forelse($categories as $category)
+                                    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+                                        <div class="font-medium text-gray-900 dark:text-gray-100 mb-3">
+                                            {{ $category->nombre }}
+                                        </div>
+                                        <div class="flex flex-wrap gap-4">
+                                            <label class="flex items-center cursor-pointer">
+                                                <input type="checkbox"
+                                                       name="category_permissions[{{ $category->id }}][can_create]"
+                                                       value="1"
+                                                       {{ old("category_permissions.{$category->id}.can_create") ? 'checked' : '' }}
+                                                       class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-500">
+                                                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Crear</span>
+                                            </label>
+                                            <label class="flex items-center cursor-pointer">
+                                                <input type="checkbox"
+                                                       name="category_permissions[{{ $category->id }}][can_edit]"
+                                                       value="1"
+                                                       {{ old("category_permissions.{$category->id}.can_edit") ? 'checked' : '' }}
+                                                       class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
+                                                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Editar</span>
+                                            </label>
+                                            <label class="flex items-center cursor-pointer">
+                                                <input type="checkbox"
+                                                       name="category_permissions[{{ $category->id }}][can_delete]"
+                                                       value="1"
+                                                       {{ old("category_permissions.{$category->id}.can_delete") ? 'checked' : '' }}
+                                                       class="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-2 focus:ring-red-500">
+                                                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Eliminar</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 italic">No hay categorías disponibles</p>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Permisos de Conceptos (Globales) -->
+                    <div id="concept-permissions-section" class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                            Permisos para Conceptos (Globales)
+                        </label>
+                        <div class="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 rounded-lg p-4 border-l-4 border-blue-500">
+                            <p class="text-xs text-gray-600 dark:text-gray-300 mb-4">
+                                Estos permisos se aplican a todos los tipos de conceptos
+                            </p>
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+                                <div class="flex flex-wrap gap-6">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox"
+                                               name="concept_permissions[create]"
+                                               value="1"
+                                               {{ old('concept_permissions.create') ? 'checked' : '' }}
+                                               class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-500">
+                                        <span class="ml-3 text-base font-medium text-gray-700 dark:text-gray-300">Crear Conceptos</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox"
+                                               name="concept_permissions[edit]"
+                                               value="1"
+                                               {{ old('concept_permissions.edit') ? 'checked' : '' }}
+                                               class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
+                                        <span class="ml-3 text-base font-medium text-gray-700 dark:text-gray-300">Editar Conceptos</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox"
+                                               name="concept_permissions[delete]"
+                                               value="1"
+                                               {{ old('concept_permissions.delete') ? 'checked' : '' }}
+                                               class="w-5 h-5 rounded border-gray-300 text-red-600 focus:ring-2 focus:ring-red-500">
+                                        <span class="ml-3 text-base font-medium text-gray-700 dark:text-gray-300">Eliminar Conceptos</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Botones -->
                     <div class="flex items-center justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
                         <a href="{{ route('users.index') }}"
@@ -169,11 +258,17 @@
     function toggleModules() {
         const isAdmin = document.getElementById('is_admin').checked;
         const modulesSection = document.getElementById('modules-section');
+        const categoryPermissionsSection = document.getElementById('category-permissions-section');
+        const conceptPermissionsSection = document.getElementById('concept-permissions-section');
 
         if (isAdmin) {
             modulesSection.style.display = 'none';
+            categoryPermissionsSection.style.display = 'none';
+            conceptPermissionsSection.style.display = 'none';
         } else {
             modulesSection.style.display = 'block';
+            categoryPermissionsSection.style.display = 'block';
+            conceptPermissionsSection.style.display = 'block';
         }
     }
 

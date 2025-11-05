@@ -161,14 +161,14 @@
               <span>Categorías</span>
             </a>
           </li>
-          <li>  
+          {{-- <li>  
             <a href="{{ route('permissions.index') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">  
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">  
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>  
               </svg>  
               <span>Asignar Categorías</span>  
             </a>  
-          </li>
+          </li> --}}
         </ul>
       </li>
       
@@ -202,14 +202,14 @@
               <span>Categorías Conceptos</span>
             </a>
           </li>
-          <li>  
+          {{-- <li>  
             <a href="{{ route('concepts.permissions') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">  
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">  
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>  
               </svg>  
               <span>Asignar Categorías Conceptos</span>  
             </a>  
-          </li>
+          </li> --}}
         </ul>
       </li>
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Module;
+use App\Models\Category;
+use App\Models\ConceptType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
@@ -25,7 +27,10 @@ class UserManagementController extends Controller
     public function create()
     {
         $modules = Module::active()->ordered()->get();
-        return view('admin.users.create', compact('modules'));
+        $categories = Category::all();
+        $conceptTypes = ConceptType::all();
+
+        return view('admin.users.create', compact('modules', 'categories', 'conceptTypes'));
     }
 
     /**
@@ -40,6 +45,11 @@ class UserManagementController extends Controller
             'is_admin' => ['boolean'],
             'modules' => ['array'],
             'modules.*' => ['exists:modules,id'],
+            'category_permissions' => ['array'],
+            'category_permissions.*.can_create' => ['boolean'],
+            'category_permissions.*.can_edit' => ['boolean'],
+            'category_permissions.*.can_delete' => ['boolean'],
+            'concept_permissions' => ['array'],
         ]);
 
         $user = User::create([
@@ -54,6 +64,38 @@ class UserManagementController extends Controller
             $user->modules()->sync($request->modules);
         }
 
+        // Asignar permisos de categorías
+        if (!$user->is_admin && $request->has('category_permissions')) {
+            foreach ($request->category_permissions as $categoryId => $permissions) {
+                if (isset($permissions['can_create']) || isset($permissions['can_edit']) || isset($permissions['can_delete'])) {
+                    $user->categoryPermissions()->create([
+                        'category_id' => $categoryId,
+                        'can_create' => isset($permissions['can_create']),
+                        'can_edit' => isset($permissions['can_edit']),
+                        'can_delete' => isset($permissions['can_delete']),
+                    ]);
+                }
+            }
+        }
+
+        // Asignar permisos de conceptos (globales)
+        if (!$user->is_admin && $request->has('concept_permissions')) {
+            $canCreate = isset($request->concept_permissions['create']);
+            $canEdit = isset($request->concept_permissions['edit']);
+            $canDelete = isset($request->concept_permissions['delete']);
+
+            if ($canCreate || $canEdit || $canDelete) {
+                $conceptTypes = ConceptType::all();
+                foreach ($conceptTypes as $type) {
+                    $user->conceptTypes()->attach($type->id, [
+                        'can_create' => $canCreate,
+                        'can_edit' => $canEdit,
+                        'can_delete' => $canDelete
+                    ]);
+                }
+            }
+        }
+
         return redirect()->route('users.index')
             ->with('success', 'Usuario creado exitosamente');
     }
@@ -66,7 +108,33 @@ class UserManagementController extends Controller
         $modules = Module::active()->ordered()->get();
         $userModules = $user->modules->pluck('id')->toArray();
 
-        return view('admin.users.edit', compact('user', 'modules', 'userModules'));
+        $categories = Category::all();
+        $conceptTypes = ConceptType::all();
+
+        // Obtener permisos actuales de categorías
+        $userCategoryPermissions = $user->categoryPermissions()
+            ->get()
+            ->keyBy('category_id')
+            ->toArray();
+
+        // Obtener permisos actuales de conceptos (globales)
+        $userConceptPermissions = [];
+        $allTypes = ConceptType::all();
+        if ($allTypes->count() > 0) {
+            $types = $user->conceptTypes;
+            if ($types->count() === $allTypes->count()) {
+                $firstType = $types->first();
+                if ($firstType) {
+                    $userConceptPermissions = [
+                        'can_create' => $firstType->pivot->can_create,
+                        'can_edit' => $firstType->pivot->can_edit,
+                        'can_delete' => $firstType->pivot->can_delete,
+                    ];
+                }
+            }
+        }
+
+        return view('admin.users.edit', compact('user', 'modules', 'userModules', 'categories', 'conceptTypes', 'userCategoryPermissions', 'userConceptPermissions'));
     }
 
     /**
@@ -81,6 +149,11 @@ class UserManagementController extends Controller
             'is_admin' => ['boolean'],
             'modules' => ['array'],
             'modules.*' => ['exists:modules,id'],
+            'category_permissions' => ['array'],
+            'category_permissions.*.can_create' => ['boolean'],
+            'category_permissions.*.can_edit' => ['boolean'],
+            'category_permissions.*.can_delete' => ['boolean'],
+            'concept_permissions' => ['array'],
         ]);
 
         $user->name = $request->name;
@@ -99,6 +172,50 @@ class UserManagementController extends Controller
         } elseif ($user->is_admin) {
             // Si es admin, remover todos los módulos asignados (no los necesita)
             $user->modules()->detach();
+        }
+
+        // Actualizar permisos de categorías
+        if (!$user->is_admin) {
+            // Eliminar permisos existentes
+            $user->categoryPermissions()->delete();
+
+            // Crear nuevos permisos
+            if ($request->has('category_permissions')) {
+                foreach ($request->category_permissions as $categoryId => $permissions) {
+                    if (isset($permissions['can_create']) || isset($permissions['can_edit']) || isset($permissions['can_delete'])) {
+                        $user->categoryPermissions()->create([
+                            'category_id' => $categoryId,
+                            'can_create' => isset($permissions['can_create']),
+                            'can_edit' => isset($permissions['can_edit']),
+                            'can_delete' => isset($permissions['can_delete']),
+                        ]);
+                    }
+                }
+            }
+
+            // Actualizar permisos de conceptos (globales)
+            $user->conceptTypes()->detach();
+
+            if ($request->has('concept_permissions')) {
+                $canCreate = isset($request->concept_permissions['create']);
+                $canEdit = isset($request->concept_permissions['edit']);
+                $canDelete = isset($request->concept_permissions['delete']);
+
+                if ($canCreate || $canEdit || $canDelete) {
+                    $conceptTypes = ConceptType::all();
+                    foreach ($conceptTypes as $type) {
+                        $user->conceptTypes()->attach($type->id, [
+                            'can_create' => $canCreate,
+                            'can_edit' => $canEdit,
+                            'can_delete' => $canDelete
+                        ]);
+                    }
+                }
+            }
+        } elseif ($user->is_admin) {
+            // Si es admin, remover todos los permisos (no los necesita)
+            $user->categoryPermissions()->delete();
+            $user->conceptTypes()->detach();
         }
 
         return redirect()->route('users.index')
