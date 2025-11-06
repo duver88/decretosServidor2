@@ -60,6 +60,8 @@
                     class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
                     placeholder="Ej: 2024"
                     required
+                    maxlength="4"
+                    oninput="if(this.value.length > 4) this.value = this.value.slice(0, 4);"
                     value="{{ old('nombre') }}">
                 @error('nombre')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
