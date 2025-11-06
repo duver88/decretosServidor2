@@ -99,26 +99,38 @@ class User extends Authenticatable
             return true;
         }
 
-        $allTypes = ConceptType::all();
-        if ($allTypes->count() === 0) {
-            return false;
-        }
+        // Usar caché para evitar queries repetidas
+        $cacheKey = "user_{$this->id}_global_concept_{$permission}";
 
-        $types = $this->conceptTypes;
-        if ($types->count() !== $allTypes->count()) {
-            return false;
-        }
+        return cache()->remember($cacheKey, 300, function () use ($permission) {
+            $allTypesCount = \DB::table('concept_types')->count();
 
-        // Verificar que todos los tipos tengan el mismo permiso
-        $permissionColumn = 'can_' . $permission;
-        $firstValue = $types->first()->pivot->{$permissionColumn};
+            if ($allTypesCount === 0) {
+                return false;
+            }
 
-        if (!$firstValue) {
-            return false;
-        }
+            // Cargar relación si no está cargada
+            if (!$this->relationLoaded('conceptTypes')) {
+                $this->load('conceptTypes');
+            }
 
-        return $types->every(function($type) use ($permissionColumn, $firstValue) {
-            return $type->pivot->{$permissionColumn} === $firstValue;
+            $types = $this->conceptTypes;
+
+            if ($types->count() !== $allTypesCount) {
+                return false;
+            }
+
+            // Verificar que todos los tipos tengan el mismo permiso
+            $permissionColumn = 'can_' . $permission;
+            $firstValue = $types->first()->pivot->{$permissionColumn};
+
+            if (!$firstValue) {
+                return false;
+            }
+
+            return $types->every(function($type) use ($permissionColumn, $firstValue) {
+                return $type->pivot->{$permissionColumn} === $firstValue;
+            });
         });
     }
 
@@ -150,14 +162,23 @@ class User extends Authenticatable
      */
     public function getAccessibleModules()
     {
-        if ($this->is_admin) {
-            return Module::active()->ordered()->get();
-        }
+        $cacheKey = "user_{$this->id}_accessible_modules";
 
-        return $this->modules()
-            ->where('is_active', true)
-            ->orderBy('order')
-            ->get();
+        return cache()->remember($cacheKey, 300, function () {
+            if ($this->is_admin) {
+                return Module::active()->ordered()->get();
+            }
+
+            // Cargar relación si no está cargada
+            if (!$this->relationLoaded('modules')) {
+                $this->load('modules');
+            }
+
+            return $this->modules()
+                ->where('is_active', true)
+                ->orderBy('order')
+                ->get();
+        });
     }
 
 

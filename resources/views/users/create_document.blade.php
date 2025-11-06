@@ -177,6 +177,103 @@
             @enderror
         </div>
 
+        <!-- Sección de campos opcionales de archivo -->
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+                <i class="fas fa-archive mr-2 text-[#43883d]"></i>
+                Información de Archivo (Opcional)
+            </h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                Estos campos son opcionales y se utilizan para documentos históricos.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Referencia y Ubicación -->
+                <div>
+                    <label for="referencia_ubicacion" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Referencia y Ubicación
+                    </label>
+                    <input type="text" name="referencia_ubicacion" id="referencia_ubicacion"
+                           class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                           value="{{ old('referencia_ubicacion') }}"
+                           placeholder="Ej: Archivo General, Estante 3, Caja 15">
+                    @error('referencia_ubicacion')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Soporte -->
+                <div>
+                    <label for="soporte" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Soporte
+                    </label>
+                    <input type="text" name="soporte" id="soporte"
+                           class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                           value="{{ old('soporte') }}"
+                           placeholder="Ej: Papel, Digital, Microfilm">
+                    @error('soporte')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Volumen -->
+                <div>
+                    <label for="volumen" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Volumen
+                    </label>
+                    <input type="text" name="volumen" id="volumen"
+                           class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                           value="{{ old('volumen') }}"
+                           placeholder="Ej: 15 folios, 3 carpetas">
+                    @error('volumen')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Nombre del Productor -->
+                <div>
+                    <label for="nombre_productor" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Nombre del Productor
+                    </label>
+                    <input type="text" name="nombre_productor" id="nombre_productor"
+                           class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                           value="{{ old('nombre_productor') }}"
+                           placeholder="Ej: Secretaría de Hacienda">
+                    @error('nombre_productor')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Información sobre Valoración -->
+                <div>
+                    <label for="informacion_valoracion" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Información sobre Valoración
+                    </label>
+                    <input type="text" name="informacion_valoracion" id="informacion_valoracion"
+                           class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                           value="{{ old('informacion_valoracion') }}"
+                           placeholder="Ej: Conservación permanente">
+                    @error('informacion_valoracion')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Lengua de los Documentos -->
+                <div>
+                    <label for="lengua_documentos" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Lengua de los Documentos
+                    </label>
+                    <input type="text" name="lengua_documentos" id="lengua_documentos"
+                           class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                           value="{{ old('lengua_documentos') }}"
+                           placeholder="Ej: Español">
+                    @error('lengua_documentos')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
         <!-- Botones de acción -->
         <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
             <a href="{{ route('user.dashboard') }}" class="px-4 py-2 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 rounded-md transition-colors font-ubuntu">

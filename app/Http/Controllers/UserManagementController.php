@@ -107,6 +107,9 @@ class UserManagementController extends Controller
             }
         }
 
+        // Limpiar caché del usuario
+        $this->clearUserCache($user->id);
+
         return redirect()->route('users.index')
             ->with('success', 'Usuario creado exitosamente');
     }
@@ -240,6 +243,9 @@ class UserManagementController extends Controller
             $user->conceptTypes()->detach();
         }
 
+        // Limpiar caché del usuario
+        $this->clearUserCache($user->id);
+
         return redirect()->route('users.index')
             ->with('success', 'Usuario actualizado exitosamente');
     }
@@ -326,5 +332,16 @@ class UserManagementController extends Controller
 
         return redirect()->route('my-account.edit')
             ->with('info', 'No se realizaron cambios');
+    }
+
+    /**
+     * Limpiar caché del usuario
+     */
+    private function clearUserCache($userId)
+    {
+        cache()->forget("user_{$userId}_accessible_modules");
+        cache()->forget("user_{$userId}_global_concept_create");
+        cache()->forget("user_{$userId}_global_concept_edit");
+        cache()->forget("user_{$userId}_global_concept_delete");
     }
 }

@@ -249,7 +249,7 @@
                     <span>Inicio</span>
                   </a>
                 </li>
-                @if(auth()->user()->categoryPermissions()->where('can_create', true)->exists())
+                @if($userHasCreatePermission ?? false)
                   <li>
                     <a href="{{ route('user.document.create') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -277,7 +277,7 @@
                     <span>Ver Conceptos</span>
                   </a>
                 </li>
-                @if(auth()->user()->conceptTypes()->wherePivot('can_create', true)->exists())
+                @if($userHasConceptCreatePermission ?? false)
                   <li>
                     <a href="{{ route('concepts.create') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
