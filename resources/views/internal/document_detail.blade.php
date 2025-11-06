@@ -1,593 +1,211 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ ucfirst($document->tipo) }} N° {{ $document->numero }} de {{ $document->nombre }} - Alcaldía de Bucaramanga</title>
+@extends('layouts.app')
 
-    <!-- Meta tags SEO -->
-    <meta name="description" content="{{ ucfirst($document->tipo) }} N° {{ $document->numero }} del año {{ $document->nombre }}, expedido el {{ \Carbon\Carbon::parse($document->fecha)->translatedFormat('d \d\e F \d\e\l Y') }}. {{ Str::limit($document->descripcion ?? 'Documento oficial de la Alcaldía de Bucaramanga', 150) }}">
-    <meta name="keywords" content="{{ strtolower($document->tipo) }}, {{ $document->numero }}, {{ $document->nombre }}, alcaldía bucaramanga, documentos oficiales, normativa bucaramanga, {{ $document->category->nombre ?? '' }}">
-    <meta name="author" content="Alcaldía de Bucaramanga">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{{ url()->current() }}">
+@section('title', ucfirst($document->tipo) . ' N° ' . $document->numero . ' de ' . $document->nombre)
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="{{ ucfirst($document->tipo) }} N° {{ $document->numero }} de {{ $document->nombre }}">
-    <meta property="og:description" content="{{ Str::limit($document->descripcion ?? 'Documento oficial de la Alcaldía de Bucaramanga', 150) }}">
-    <meta property="og:site_name" content="Alcaldía de Bucaramanga">
-    <meta property="og:locale" content="es_CO">
+@section('content')
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary">
-    <meta property="twitter:url" content="{{ url()->current() }}">
-    <meta property="twitter:title" content="{{ ucfirst($document->tipo) }} N° {{ $document->numero }} de {{ $document->nombre }}">
-    <meta property="twitter:description" content="{{ Str::limit($document->descripcion ?? 'Documento oficial de la Alcaldía de Bucaramanga', 150) }}">
-
-    <!-- Datos estructurados JSON-LD para Google -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "GovernmentService",
-      "name": "{{ ucfirst($document->tipo) }} N° {{ $document->numero }} de {{ $document->nombre }}",
-      "description": "{{ $document->descripcion ?? 'Documento oficial de la Alcaldía de Bucaramanga' }}",
-      "provider": {
-        "@type": "GovernmentOrganization",
-        "name": "Alcaldía de Bucaramanga",
-        "url": "https://www.bucaramanga.gov.co"
-      },
-      "serviceType": "{{ ucfirst($document->tipo) }}",
-      "areaServed": {
-        "@type": "City",
-        "name": "Bucaramanga",
-        "addressCountry": "CO"
-      },
-      "datePublished": "{{ $document->created_at->toIso8601String() }}",
-      "dateModified": "{{ $document->updated_at->toIso8601String() }}"
-    }
-    </script>
-     <link rel="stylesheet" href="{{ asset('css/cabecera.css') }}">   
-    <link rel="stylesheet" href="{{ asset('css/conceptsDetails.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&display=swap" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/accesbilidad.css') }}">
-    <script src="{{ asset('js/accesibilidad.js') }}"></script>
-        <style>
-                /* Solo las fuentes y colores básicos necesarios */
-        .ubuntu-font { font-family: 'Ubuntu', sans-serif !important; }
-        .oswald-font { font-family: 'Oswald', sans-serif !important; }
-        .bg-bucaramanga { background-color: #43883D !important; }
-        .text-bucaramanga { color: #43883D !important; }
-    </style>
-</head>
-<body>
-
-    <div class="accessibility-bar">
-    <div class="accessibility-container">
-        <!-- Botón toggle para móvil (oculto en escritorio) -->
-        <button id="accessibilityToggle" class="accessibility-toggle" title="Opciones de Accesibilidad">
-            <i class="fas fa-universal-access"></i>
-        </button>
-        
-        <!-- Panel de botones -->
-        <div id="accessibilityPanel" class="accessibility-panel">
-            <!-- Controles de Fuente -->
-            <button id="decreaseFont" 
-                    class="accessibility-btn font-btn-decrease" 
-                    data-tooltip="Disminuir texto" 
-                    title="Disminuir tamaño de texto">
-                <i class="fas fa-search-minus"></i>
-            </button>
-            
-            <button id="resetFont" 
-                    class="accessibility-btn font-btn-reset active" 
-                    data-tooltip="Tamaño normal" 
-                    title="Tamaño normal de texto">
-                <i class="fas fa-refresh"></i>
-            </button>
-            
-            <button id="increaseFont" 
-                    class="accessibility-btn font-btn-increase" 
-                    data-tooltip="Aumentar texto" 
-                    title="Aumentar tamaño de texto">
-                <i class="fas fa-search-plus"></i>
-            </button>
-            
-            <!-- Separador visual -->
-            <div class="accessibility-separator"></div>
-            
-            <!-- Controles de Contraste -->
-            <button id="normalContrast" 
-                    class="accessibility-btn contrast-btn-normal active" 
-                    data-tooltip="Contraste normal" 
-                    title="Contraste normal">
-                <i class="fas fa-eye"></i>
-            </button>
-            
-            <button id="highContrast" 
-                    class="accessibility-btn contrast-btn-high" 
-                    data-tooltip="Alto contraste" 
-                    title="Alto contraste">
-                <i class="fas fa-adjust"></i>
-            </button>
-            
-            <button id="darkMode" 
-                    class="accessibility-btn contrast-btn-dark" 
-                    data-tooltip="Modo oscuro" 
-                    title="Modo oscuro">
-                <i class="fas fa-moon"></i>
-            </button>
-            
-            <!-- Separador visual -->
-            <div class="accessibility-separator"></div>
-            
-            <!-- Centro de Relevo con ícono oficial -->
-            <a id="centroRelevo" 
-               href="https://centroderelevo.gov.co/" 
-               target="_blank" 
-               class="accessibility-btn centro-relevo-btn" 
-               data-tooltip="Centro de Relevo Colombia" 
-               title="Centro de Relevo Colombia">
-                <svg class="centro-relevo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Figura principal - persona -->
-                    <circle cx="16" cy="8" r="3" fill="currentColor"/>
-                    <path d="M16 12c-3 0-6 1.5-6 4v2h12v-2c0-2.5-3-4-6-4z" fill="currentColor"/>
-                    
-                    <!-- Manos en lenguaje de señas -->
-                    <g fill="currentColor">
-                        <!-- Mano izquierda -->
-                        <path d="M8 16c0-1 .5-2 1.5-2.5l1 .5c.5.3.5 1 0 1.3l-1 .5c-1 .5-1.5 1.5-1.5 2.5v2h2v-2z"/>
-                        
-                        <!-- Mano derecha -->
-                        <path d="M24 16c0-1-.5-2-1.5-2.5l-1 .5c-.5.3-.5 1 0 1.3l1 .5c1 .5 1.5 1.5 1.5 2.5v2h-2v-2z"/>
-                        
-                        <!-- Dedos en movimiento -->
-                        <circle cx="7" cy="14" r="1" fill="currentColor"/>
-                        <circle cx="6" cy="16" r="0.8" fill="currentColor"/>
-                        <circle cx="25" cy="14" r="1" fill="currentColor"/>
-                        <circle cx="26" cy="16" r="0.8" fill="currentColor"/>
-                    </g>
-                    
-                    <!-- Símbolo de comunicación -->
-                    <g stroke="currentColor" stroke-width="1.5" fill="none">
-                        <path d="M12 22c2-1 4-1 6 0"/>
-                        <path d="M10 24c4-2 8-2 12 0"/>
-                    </g>
-                    
-                    <!-- Indicador de accesibilidad -->
-                    <circle cx="26" cy="6" r="4" fill="currentColor" opacity="0.8"/>
-                    <path d="M24 6h4M26 4v4" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
-                </svg>
-            </a>
-            
-            <!-- Reset completo -->
-            <button id="resetAll" 
-                    class="accessibility-btn reset-btn" 
-                    data-tooltip="Restablecer todo" 
-                    title="Restablecer toda la configuración">
-                <i class="fas fa-undo-alt"></i>
-            </button>
-        </div>
-    </div>
-</div>
-
-
-        {{-- Header --}}
-    <nav class="navbar navbar-expand-lg barra-superior-govco" aria-label="Barra superior">
-            <a href="https://www.gov.co/" target="_blank" aria-label="Portal del Estado Colombiano - GOV.CO"></a>
-    </nav>
-    <header class="borderWg">      
-        <!-- Header principal con Bootstrap Navbar -->
-        <div class="container ">
-            <!-- Logo -->
-            
-            <div class="d-flex justify-content-center align-items-center">
-            <div class="logo-container">
-                <div class="logo-box">
-                <img
-                    src="https://www.bucaramanga.gov.co/wp-content/uploads/2025/05/Screenshot_7.png"
-                    alt="Escudo Bucaramanga"
-                    class="logo-img img-fluid"
-                />
-                </div>
-            </div>
-            </div>
-
-            
-            <!-- Menú Bootstrap -->
-            <nav class="navbar navbar-expand-lg">
-                <div class="container-fluid">
-                    <button class="navbar-toggler mx-auto border-0 bg-transparent p-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon">
-                            <span class="bar"></span>
-                            <span class="bar"></span>
-                            <span class="bar"></span>
-                        </span>
-                    </button>
-                    
-                    <div class="collapse navbar-collapse" id="navbarMenu">
-                        <ul class="navbar-nav mx-auto">
-                            <li class="nav-item">
-                                <a class="nav-link " href="https://www.bucaramanga.gov.co/">Inicio</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="https://www.bucaramanga.gov.co/tramites/">Paga tus impuestos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="https://www.bucaramanga.gov.co/noticias/">Noticias</a>
-                            </li>
-                            <li class="nav-item dropdown ">
-                                <a class="nav-link dropdown-toggle active " href="https://www.bucaramanga.gov.co/transparencia/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Transparencia y acceso<br>a la información pública
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/gobierno-ciudadanos/#entidad">Información de la entidad</a></li>
-                                    <li><a class="dropdown-item" href="https://outlook.office.com/owa/">Correo institucional</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#normativa">Normativa</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#contratacion">Contratación</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#planeacion">Planeación, presupuesto e informes</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/participa/">Participa</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#datos_abiertos">Datos abiertos</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#grupos_interes">Información específica para Grupos de Interés</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#reporte_info">Obligación de reporte de información específica por parte de la entidad</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/transparencia/#tributaria">Información tributaria en entidades territoriales locales</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Atención y servicios<br>a la ciudadanía
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/tramites/">Trámites</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/datos/">Centro de analítica de datos</a></li>
-                                    <li><a class="dropdown-item" href="https://canaldenuncia.bucaramanga.gov.co/">Canal de denuncia para presuntos actos de corrupción</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/inspecciones-de-policia/">Inspecciones de Policía</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/proteccion-animal/">Bienestar Animal</a></li>
-                                    <li><a class="dropdown-item" href="https://puntosdigitales.bucaramanga.gov.co/">Puntos Digitales</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/ninos/">Portal de Niños</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/inventario-de-sentencias-22/">Inventario de Sentencias</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/servicio-de-empleo/">Servicio de empleo</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/preguntas-frecuentes/">Preguntas frecuentes</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/canales-de-atencion/">Canales de atención</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/portal-de-peticiones/">Crea una PQRSD</a></li>
-                                    <li><a class="dropdown-item" href="https://www.bucaramanga.gov.co/juntas-administradoras-locales-2024-2027/">Juntas administradoras locales 2024-2027</a></li>
-                                </ul>
-                            </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="https://www.bucaramanga.gov.co/participa/">Participa</a>
-                                </li>
-                        </ul>
-                        
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
-    <br>
-    {{-- Fin Header --}}
-
-<div class="concept-container">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
     <!-- Botón de regreso -->
-    <a href="{{ auth()->user()->is_admin ? route('dashboard') : route('user.dashboard') }}" class="back-btn">
-        <i class="fas fa-arrow-left me-2"></i>
-        Volver al Dashboard
-    </a>
-
-    <!-- Header del documento -->
-    <div class="header-title">
-        <h1>{{ ucfirst($document->tipo) }} N° {{ $document->numero }} de {{ $document->nombre }}</h1>
+    <div class="mb-4">
+        <a href="{{ auth()->user()->is_admin ? route('dashboard') : route('user.dashboard') }}"
+           class="inline-flex items-center text-gray-600 hover:text-[#43883d] transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Volver al Dashboard
+        </a>
     </div>
 
-    <!-- Tarjeta de Estadísticas (solo vista interna) -->
-    <div class="info-card mb-4" style="background: linear-gradient(135deg, #43883d 0%, #2d6a2f 100%); border: none;">
-        <div class="info-card-header" style="background: rgba(255,255,255,0.1); color: white; border-bottom: 2px solid rgba(255,255,255,0.2);">
-            <i class="fas fa-chart-line me-2"></i>
+    <!-- Título del documento -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+        <h1 class="text-2xl font-ubuntu font-bold text-[#43883d] dark:text-[#93C01F] mb-2">
+            {{ ucfirst($document->tipo) }} N° {{ $document->numero }} de {{ $document->nombre }}
+        </h1>
+        <p class="text-gray-600 dark:text-gray-400">
+            Expedido el {{ \Carbon\Carbon::parse($document->fecha)->translatedFormat('d \d\e F \d\e\l Y') }}
+        </p>
+    </div>
+
+    <!-- Estadísticas del documento -->
+    <div class="bg-gradient-to-r from-[#43883d] to-[#2d6a2f] rounded-lg shadow-md p-6 mb-6 text-white">
+        <h2 class="text-lg font-semibold mb-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
             Estadísticas del Documento
-        </div>
-        <div class="info-card-body">
-            <div class="row text-center text-white">
-                <div class="col-md-4">
-                    <div class="p-3">
-                        <i class="fas fa-eye fa-2x mb-2" style="opacity: 0.9;"></i>
-                        <h3 class="mb-0" style="font-size: 2rem; font-weight: bold;">{{ number_format($document->views_count) }}</h3>
-                        <p class="mb-0" style="opacity: 0.9;">Visualizaciones Públicas</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="p-3 border-start border-end" style="border-color: rgba(255,255,255,0.2) !important;">
-                        <i class="fas fa-calendar-plus fa-2x mb-2" style="opacity: 0.9;"></i>
-                        <h5 class="mb-0" style="font-weight: bold;">{{ $document->created_at->format('d/m/Y') }}</h5>
-                        <p class="mb-0" style="opacity: 0.9;">Fecha de Creación</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="p-3">
-                        <i class="fas fa-clock fa-2x mb-2" style="opacity: 0.9;"></i>
-                        <h5 class="mb-0" style="font-weight: bold;">{{ $document->created_at->diffForHumans() }}</h5>
-                        <p class="mb-0" style="opacity: 0.9;">Antigüedad</p>
-                    </div>
-                </div>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="text-center">
+                <div class="text-3xl font-bold">{{ number_format($document->views_count) }}</div>
+                <div class="text-sm opacity-90">Visualizaciones Públicas</div>
+            </div>
+            <div class="text-center border-l border-r border-white border-opacity-20">
+                <div class="text-xl font-bold">{{ $document->created_at->format('d/m/Y') }}</div>
+                <div class="text-sm opacity-90">Fecha de Creación</div>
+            </div>
+            <div class="text-center">
+                <div class="text-xl font-bold">{{ $document->created_at->diffForHumans() }}</div>
+                <div class="text-sm opacity-90">Antigüedad</div>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <!-- Columna izquierda - Vista previa del documento (8 columnas) -->
-        <div class="col-lg-8 mb-4">
-            <div class="info-card">
-                <div class="info-card-header">
-                    <i class="fas fa-eye me-2"></i>
-                    Vista Previa del Documento
-                </div>
-                <div class="preview-container">
-                    @if(pathinfo($document->archivo, PATHINFO_EXTENSION) == 'pdf')
-                        <iframe src="{{ asset('storage/' . $document->archivo) }}" 
-                                class="preview-iframe">
-                        </iframe>
-                    @else
-                        <div class="no-preview">
-                            <div class="no-preview-icon">
-                                <i class="fas fa-file-download"></i>
-                            </div>
-                            <h5 style="color: #43883d; font-weight: 600;">Archivo no visualizable en línea</h5>
-                            <p class="mb-0">Solo los archivos PDF pueden visualizarse directamente. Descargue el archivo para abrirlo en su aplicación correspondiente.</p>
-                        </div>
-                    @endif
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Columna izquierda - Información del documento -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Información General -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#43883d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Información General
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Tipo:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ ucfirst($document->tipo) }}</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Número:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ $document->numero }}</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Año:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ $document->nombre }}</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Fecha de Expedición:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ \Carbon\Carbon::parse($document->fecha)->translatedFormat('d/m/Y') }}</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Tipo de Archivo:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ strtoupper(pathinfo($document->archivo, PATHINFO_EXTENSION)) }}</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Descripción del documento -->
+            <!-- Descripción -->
             @if($document->descripcion)
-            <div class="content-card">
-                <h5 class="text-success fw-bold mb-3">
-                    <i class="fas fa-align-left me-2"></i>
-                    Descripción del Documento
-                </h5>
-                <div class="content-text">
-                    {!! nl2br(e($document->descripcion)) !!}
-                </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#43883d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                    Descripción
+                </h3>
+                <p class="text-gray-700 dark:text-gray-300">{{ $document->descripcion }}</p>
             </div>
             @endif
 
-            <!-- Tarjeta de Acciones movida aquí -->
-            <div class="info-card">
-                <div class="info-card-header">
-                    <i class="fas fa-cog me-2"></i>
-                    Acciones Disponibles
+            <!-- Información de Archivo (si existe) -->
+            @if($document->referencia_ubicacion || $document->soporte || $document->volumen ||
+                $document->nombre_productor || $document->informacion_valoracion || $document->lengua_documentos)
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#43883d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+                    Información de Archivo
+                </h3>
+                <div class="space-y-3">
+                    @if($document->referencia_ubicacion)
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Referencia y Ubicación:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ $document->referencia_ubicacion }}</span>
+                    </div>
+                    @endif
+                    @if($document->soporte)
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Soporte:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ $document->soporte }}</span>
+                    </div>
+                    @endif
+                    @if($document->volumen)
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Volumen:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ $document->volumen }}</span>
+                    </div>
+                    @endif
+                    @if($document->nombre_productor)
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Nombre del Productor:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ $document->nombre_productor }}</span>
+                    </div>
+                    @endif
+                    @if($document->informacion_valoracion)
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Información sobre Valoración:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ $document->informacion_valoracion }}</span>
+                    </div>
+                    @endif
+                    @if($document->lengua_documentos)
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Lengua de los Documentos:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ $document->lengua_documentos }}</span>
+                    </div>
+                    @endif
                 </div>
-                <div class="info-card-body">
-                    <a href="{{ asset('storage/' . $document->archivo) }}" 
-                       target="_blank" 
-                       class="btn-action">
-                        <i class="fas fa-external-link-alt me-2"></i>
-                        Abrir en Nueva Pestaña
+            </div>
+            @endif
+        </div>
+
+        <!-- Columna derecha - Acciones y Fechas -->
+        <div class="space-y-6">
+            <!-- Acciones -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#43883d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                    Acciones
+                </h3>
+                <div class="space-y-3">
+                    <a href="{{ route('document.show', $document->id) }}"
+                       target="_blank"
+                       class="block w-full text-center px-4 py-3 bg-[#43883d] hover:bg-[#3F8827] text-white rounded-md transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        Ver Documento Público
                     </a>
-                    
-                    <a href="{{ asset('storage/' . $document->archivo) }}" 
-                       download 
-                       class="btn-outline-action">
-                        <i class="fas fa-download me-2"></i>
+                    <a href="{{ asset('storage/' . $document->archivo) }}"
+                       download
+                       class="block w-full text-center px-4 py-3 border-2 border-[#43883d] text-[#43883d] hover:bg-[#43883d] hover:text-white rounded-md transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
                         Descargar Archivo
                     </a>
                 </div>
             </div>
-        </div>
 
-        <!-- Columna derecha - Información en tarjetas (4 columnas) -->
-        <div class="col-lg-4">
-            <!-- Tarjeta de Información General -->
-            <div class="info-card">
-                <div class="info-card-header">
-                    <i class="fas fa-info-circle me-2"></i>
-                    Información General
-                </div>
-                <div class="info-card-body">
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-file-contract me-2"></i>
-                            Tipo de Documento
-                        </div>
-                        <div class="metadata-value">{{ ucfirst($document->tipo) }}</div>
+            <!-- Información Temporal -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#43883d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Fechas
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Creado:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ $document->created_at->translatedFormat('d/m/Y') }}</span>
                     </div>
-
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-hashtag me-2"></i>
-                            Número
-                        </div>
-                        <div class="metadata-value">{{ $document->numero }}</div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-600 dark:text-gray-400">Modificado:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ $document->updated_at->translatedFormat('d/m/Y') }}</span>
                     </div>
-
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-signature me-2"></i>
-                            Año 
-                        </div>
-                        <div class="metadata-value">{{ $document->nombre }}</div>
-                    </div>
-
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-calendar-alt me-2"></i>
-                            Fecha de Expedición
-                        </div>
-                        <div class="metadata-value">{{ \Carbon\Carbon::parse($document->fecha)->translatedFormat('d \d\e F \d\e\l Y') }}</div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Antigüedad:</span>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">{{ $document->created_at->diffForHumans() }}</span>
                     </div>
                 </div>
             </div>
-
-            <!-- Tarjeta de Clasificación -->
-            <div class="info-card">
-                <div class="info-card-header">
-                    <i class="fas fa-tags me-2"></i>
-                    Clasificación
-                </div>
-                <div class="info-card-body">
-                    {{-- <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-folder me-2"></i>
-                            Dependencia
-                        </div>
-                        <div class="metadata-value">{{ $document->category->nombre }}</div>
-                    </div> --}}
-
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-file-alt me-2"></i>
-                            Tipo de Archivo
-                        </div>
-                        <div class="metadata-value">{{ strtoupper(pathinfo($document->archivo, PATHINFO_EXTENSION)) }}</div>
-                    </div>
-
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-calendar-year me-2"></i>
-                            Año de Expedición
-                        </div>
-                        <div class="metadata-value">{{ \Carbon\Carbon::parse($document->fecha)->format('Y') }}</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tarjeta de Fechas -->
-            <div class="info-card">
-                <div class="info-card-header">
-                    <i class="fas fa-clock me-2"></i>
-                    Información Temporal
-                </div>
-                <div class="info-card-body">
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-plus-circle me-2"></i>
-                            Fecha de Creación
-                        </div>
-                        <div class="metadata-value">{{ $document->created_at->translatedFormat('d \d\e F \d\e\l Y') }}</div>
-                    </div>
-
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-edit me-2"></i>
-                            Última Modificación
-                        </div>
-                        <div class="metadata-value">{{ $document->updated_at->translatedFormat('d \d\e F \d\e\l Y') }}</div>
-                    </div>
-
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-eye me-2"></i>
-                            Tiempo Transcurrido
-                        </div>
-                        <div class="metadata-value">{{ $document->created_at->diffForHumans() }}</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tarjeta de Información de Archivo (Campos Opcionales) -->
-            @if($document->referencia_ubicacion || $document->soporte || $document->volumen ||
-                $document->nombre_productor || $document->informacion_valoracion || $document->lengua_documentos)
-            <div class="info-card">
-                <div class="info-card-header">
-                    <i class="fas fa-archive me-2"></i>
-                    Información de Archivo
-                </div>
-                <div class="info-card-body">
-                    @if($document->referencia_ubicacion)
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-map-marker-alt me-2"></i>
-                            Referencia y Ubicación
-                        </div>
-                        <div class="metadata-value">{{ $document->referencia_ubicacion }}</div>
-                    </div>
-                    @endif
-
-                    @if($document->soporte)
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-file-alt me-2"></i>
-                            Soporte
-                        </div>
-                        <div class="metadata-value">{{ $document->soporte }}</div>
-                    </div>
-                    @endif
-
-                    @if($document->volumen)
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-book me-2"></i>
-                            Volumen
-                        </div>
-                        <div class="metadata-value">{{ $document->volumen }}</div>
-                    </div>
-                    @endif
-
-                    @if($document->nombre_productor)
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-user-tie me-2"></i>
-                            Nombre del Productor
-                        </div>
-                        <div class="metadata-value">{{ $document->nombre_productor }}</div>
-                    </div>
-                    @endif
-
-                    @if($document->informacion_valoracion)
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-clipboard-check me-2"></i>
-                            Información sobre Valoración
-                        </div>
-                        <div class="metadata-value">{{ $document->informacion_valoracion }}</div>
-                    </div>
-                    @endif
-
-                    @if($document->lengua_documentos)
-                    <div class="metadata-item">
-                        <div class="metadata-label">
-                            <i class="fas fa-language me-2"></i>
-                            Lengua de los Documentos
-                        </div>
-                        <div class="metadata-value">{{ $document->lengua_documentos }}</div>
-                    </div>
-                    @endif
-                </div>
-            </div>
-            @endif
-
         </div>
     </div>
 </div>
 
-{{-- FOOTER --}}
-@include('partials.public-footer')
-
-<!-- CSS adicional para el badge de seguridad -->
-<style>
-.security-badge-large {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #43883d, #2d6a2f);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    box-shadow: 0 4px 12px rgba(67, 136, 61, 0.3);
-}
-
-.security-badge-large i {
-    color: white;
-    font-size: 1.5rem;
-}
-</style>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

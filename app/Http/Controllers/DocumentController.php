@@ -100,7 +100,7 @@ public function listPublic(Request $request)
     }
 
     if ($request->filled('nombre_productor')) {
-        $query->where('nombre_productor', 'LIKE', '%' . trim($request->nombre_productor) . '%');
+        $query->where('nombre_productor', $request->nombre_productor);
     }
 
     if ($request->filled('informacion_valoracion')) {
@@ -108,7 +108,7 @@ public function listPublic(Request $request)
     }
 
     if ($request->filled('lengua_documentos')) {
-        $query->where('lengua_documentos', 'LIKE', '%' . trim($request->lengua_documentos) . '%');
+        $query->where('lengua_documentos', $request->lengua_documentos);
     }
 
     // Búsqueda general (busca en nombre, número, descripción, tipo y campos opcionales de archivo)
@@ -732,6 +732,31 @@ public function userDashboard(Request $request)
 
     if ($request->filled('fecha_hasta')) {
         $query->whereDate('fecha', '<=', $request->fecha_hasta);
+    }
+
+    // Filtros de Información de Archivo
+    if ($request->filled('referencia_ubicacion')) {
+        $query->where('referencia_ubicacion', 'LIKE', '%' . $request->referencia_ubicacion . '%');
+    }
+
+    if ($request->filled('soporte')) {
+        $query->where('soporte', 'LIKE', '%' . $request->soporte . '%');
+    }
+
+    if ($request->filled('volumen')) {
+        $query->where('volumen', 'LIKE', '%' . $request->volumen . '%');
+    }
+
+    if ($request->filled('nombre_productor')) {
+        $query->where('nombre_productor', $request->nombre_productor);
+    }
+
+    if ($request->filled('informacion_valoracion')) {
+        $query->where('informacion_valoracion', 'LIKE', '%' . $request->informacion_valoracion . '%');
+    }
+
+    if ($request->filled('lengua_documentos')) {
+        $query->where('lengua_documentos', $request->lengua_documentos);
     }
 
     // Ordenamiento

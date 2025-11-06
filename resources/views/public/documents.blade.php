@@ -547,8 +547,10 @@
                         <label for="nombre_productor" class="form-label">
                             <i class="fas fa-user-tie me-1"></i> Nombre del Productor
                         </label>
-                        <input type="text" name="nombre_productor" id="nombre_productor" class="form-control"
-                               placeholder="Ej: DESPACHO ALCALDE (1000)" value="{{ request('nombre_productor') }}">
+                        <select name="nombre_productor" id="nombre_productor" class="form-control">
+                            <option value="">-- Selecciona --</option>
+                            <option value="DESPACHO ALCALDE (1000)" {{ request('nombre_productor') == 'DESPACHO ALCALDE (1000)' ? 'selected' : '' }}>DESPACHO ALCALDE (1000)</option>
+                        </select>
                     </div>
 
                     <div class="col-md-6">
@@ -563,8 +565,10 @@
                         <label for="lengua_documentos" class="form-label">
                             <i class="fas fa-language me-1"></i> Lengua de los Documentos
                         </label>
-                        <input type="text" name="lengua_documentos" id="lengua_documentos" class="form-control"
-                               placeholder="Ej: ESPAÑOL Código ISO 639-2 spa" value="{{ request('lengua_documentos') }}">
+                        <select name="lengua_documentos" id="lengua_documentos" class="form-control">
+                            <option value="">-- Selecciona --</option>
+                            <option value="ESPAÑOL ISO 639-2 SPA" {{ request('lengua_documentos') == 'ESPAÑOL ISO 639-2 SPA' ? 'selected' : '' }}>ESPAÑOL ISO 639-2 SPA</option>
+                        </select>
                     </div>
 
                     <div class="col-md-6 d-flex align-items-end">

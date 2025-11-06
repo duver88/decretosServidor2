@@ -286,12 +286,89 @@
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Fecha hasta
                     </label>
-                    <input type="date" name="fecha_hasta" 
+                    <input type="date" name="fecha_hasta"
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
                            value="{{ request('fecha_hasta') }}">
                 </div>
             </div>
-            
+
+            <!-- Campos Opcionales de Archivo -->
+            <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 flex items-center">
+                    <i class="fas fa-archive mr-2 text-[#43883d]"></i>
+                    Filtros de Información de Archivo (Opcionales)
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Referencia Ubicación -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Referencia de Ubicación
+                        </label>
+                        <input type="text" name="referencia_ubicacion"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                               placeholder="Ej: Archivo General, Estante 3..."
+                               value="{{ request('referencia_ubicacion') }}">
+                    </div>
+
+                    <!-- Soporte -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Soporte
+                        </label>
+                        <input type="text" name="soporte"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                               placeholder="Ej: Papel, Digital..."
+                               value="{{ request('soporte') }}">
+                    </div>
+
+                    <!-- Volumen -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Volumen
+                        </label>
+                        <input type="text" name="volumen"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                               placeholder="Ej: Vol. 1, Tomo 2..."
+                               value="{{ request('volumen') }}">
+                    </div>
+
+                    <!-- Nombre Productor -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Nombre del Productor
+                        </label>
+                        <select name="nombre_productor"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+                            <option value="">-- Selecciona --</option>
+                            <option value="DESPACHO ALCALDE (1000)" {{ request('nombre_productor') == 'DESPACHO ALCALDE (1000)' ? 'selected' : '' }}>DESPACHO ALCALDE (1000)</option>
+                        </select>
+                    </div>
+
+                    <!-- Información Valoración -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Información de Valoración
+                        </label>
+                        <input type="text" name="informacion_valoracion"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                               placeholder="Ej: Alta importancia..."
+                               value="{{ request('informacion_valoracion') }}">
+                    </div>
+
+                    <!-- Lengua Documentos -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Lengua de los Documentos
+                        </label>
+                        <select name="lengua_documentos"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+                            <option value="">-- Selecciona --</option>
+                            <option value="ESPAÑOL ISO 639-2 SPA" {{ request('lengua_documentos') == 'ESPAÑOL ISO 639-2 SPA' ? 'selected' : '' }}>ESPAÑOL ISO 639-2 SPA</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <!-- Botones de acción para filtros avanzados -->
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
                 <div class="flex flex-wrap gap-2">
@@ -497,7 +574,7 @@
                 
                 <!-- Acciones para el documento CON PERMISOS -->
                 <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <a href="{{ route('document.show', $document->id) }}" target="_blank" 
+                    <a href="{{ route('document.show.internal', $document->id) }}"
                         class="text-[#43883d] hover:text-[#3F8827] dark:text-[#93C01F] dark:hover:text-[#93C01F]/80 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
