@@ -44,7 +44,7 @@ Route::get('/api/concept-stats', [ConceptController::class, 'getAdvancedStats'])
     ->name('api.concept-stats');
 
 
-// Rutas existentes mejoradas (mantener las que ya tienes y agregar estas)
+// Rutas existentes mejoradas 
 Route::prefix('conceptos')->group(function () {
     Route::get('/', [ConceptController::class, 'listPublic'])->name('public.concepts');
     Route::get('/{id}', [ConceptController::class, 'showPublic'])->name('public.concepts.show');
@@ -188,7 +188,7 @@ Route::middleware(['auth', 'module.access:conceptos'])->prefix('concepts')->name
                ->name('getUserPermissions');
     });
     
-    // Rutas con parámetros (DEBEN IR AL FINAL)
+    // Rutas con parámetros 
     Route::get('/{id}', [ConceptController::class, 'show'])->name('show');
     Route::get('/{id}/edit', [ConceptController::class, 'edit'])->name('edit');
     Route::put('/{id}', [ConceptController::class, 'update'])->name('update');

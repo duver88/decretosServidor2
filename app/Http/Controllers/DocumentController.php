@@ -43,7 +43,7 @@ public function listPublic(Request $request)
         $query->where('category_id', $request->category_id);
     }
 
-    // 🔥 FILTROS PRINCIPALES QUE ESTABAN FALTANDO O MAL CONFIGURADOS:
+    //  FILTROS PRINCIPALES QUE ESTABAN FALTANDO O MAL CONFIGURADOS:
 
     // Filtro por DocumentType (CORREGIDO)
     if ($request->filled('document_type_id')) {
