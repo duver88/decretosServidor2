@@ -25,8 +25,15 @@ class Document extends Model
         'volumen',
         'nombre_productor',
         'informacion_valoracion',
-        'lengua_documentos'
+        'lengua_documentos',
+        'views_count'
     ];
+
+    // Incrementar contador de visitas
+    public function incrementViews()
+    {
+        $this->increment('views_count');
+    }
 
         public function documentType()  
     {  

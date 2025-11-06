@@ -628,12 +628,25 @@ public function edit($id)
     }  
 }
 
+// Vista pública del documento (incrementa visitas)
 public function show($id)
 {
     $document = Document::with(['category', 'documentType', 'documentTheme'])
                        ->findOrFail($id);
-    
+
+    // Incrementar contador de visitas
+    $document->incrementViews();
+
     return view('public.document_detail', compact('document'));
+}
+
+// Vista interna del documento para usuarios autenticados (con estadísticas)
+public function showInternal($id)
+{
+    $document = Document::with(['category', 'documentType', 'documentTheme'])
+                       ->findOrFail($id);
+
+    return view('internal.document_detail', compact('document'));
 }
 
     // Eliminar documento

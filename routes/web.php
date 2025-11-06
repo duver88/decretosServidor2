@@ -66,6 +66,11 @@ Route::get('/conceptos/{id}', [ConceptController::class, 'showPublic'])->name('c
 // Rutas para descarga/ver documento
 Route::get('/documento/{id}', [DocumentController::class, 'show'])->name('document.show');
 
+// Ruta interna para ver documento con estadísticas (solo usuarios autenticados)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/internal/documento/{id}', [DocumentController::class, 'showInternal'])->name('document.show.internal');
+});
+
 // Rutas para el admin, protegidas por middleware "auth" y "is_admin"
 Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::get('/dashboard', [DocumentController::class, 'index'])->name('dashboard');
