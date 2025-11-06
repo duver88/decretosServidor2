@@ -3,7 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentos | {{ ucfirst($document->tipo) }} N° {{ $document->numero }}</title>
+    <title>{{ ucfirst($document->tipo) }} N° {{ $document->numero }} de {{ $document->nombre }} - Alcaldía de Bucaramanga</title>
+
+    <!-- Meta tags SEO -->
+    <meta name="description" content="{{ ucfirst($document->tipo) }} N° {{ $document->numero }} del año {{ $document->nombre }}, expedido el {{ \Carbon\Carbon::parse($document->fecha)->translatedFormat('d \d\e F \d\e\l Y') }}. {{ Str::limit($document->descripcion ?? 'Documento oficial de la Alcaldía de Bucaramanga', 150) }}">
+    <meta name="keywords" content="{{ strtolower($document->tipo) }}, {{ $document->numero }}, {{ $document->nombre }}, alcaldía bucaramanga, documentos oficiales, normativa bucaramanga, {{ $document->category->nombre ?? '' }}">
+    <meta name="author" content="Alcaldía de Bucaramanga">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ ucfirst($document->tipo) }} N° {{ $document->numero }} de {{ $document->nombre }}">
+    <meta property="og:description" content="{{ Str::limit($document->descripcion ?? 'Documento oficial de la Alcaldía de Bucaramanga', 150) }}">
+    <meta property="og:site_name" content="Alcaldía de Bucaramanga">
+    <meta property="og:locale" content="es_CO">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ ucfirst($document->tipo) }} N° {{ $document->numero }} de {{ $document->nombre }}">
+    <meta property="twitter:description" content="{{ Str::limit($document->descripcion ?? 'Documento oficial de la Alcaldía de Bucaramanga', 150) }}">
+
+    <!-- Datos estructurados JSON-LD para Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "GovernmentService",
+      "name": "{{ ucfirst($document->tipo) }} N° {{ $document->numero }} de {{ $document->nombre }}",
+      "description": "{{ $document->descripcion ?? 'Documento oficial de la Alcaldía de Bucaramanga' }}",
+      "provider": {
+        "@type": "GovernmentOrganization",
+        "name": "Alcaldía de Bucaramanga",
+        "url": "https://www.bucaramanga.gov.co"
+      },
+      "serviceType": "{{ ucfirst($document->tipo) }}",
+      "areaServed": {
+        "@type": "City",
+        "name": "Bucaramanga",
+        "addressCountry": "CO"
+      },
+      "datePublished": "{{ $document->created_at->toIso8601String() }}",
+      "dateModified": "{{ $document->updated_at->toIso8601String() }}"
+    }
+    </script>
      <link rel="stylesheet" href="{{ asset('css/cabecera.css') }}">   
     <link rel="stylesheet" href="{{ asset('css/conceptsDetails.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
