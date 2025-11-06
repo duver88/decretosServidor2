@@ -15,9 +15,12 @@ class IsAdmin
             return $next($request);
         }
 
-        
+        // Si el usuario está autenticado pero no es admin, redirigir a bienvenida
+        if (Auth::check()) {
+            return redirect()->route('user.welcome')->with('error', 'No tienes permisos para acceder a esta área.');
+        }
 
-        // Si no es admin, redirige o lanza un error 403
-        abort(403, 'Acceso denegado');
+        // Si no está autenticado, redirigir al login
+        return redirect()->route('login')->with('error', 'Debes iniciar sesión primero.');
     }
 }
