@@ -8,7 +8,10 @@
       "Bash(cat:*)",
       "Bash(php test_permissions.php:*)",
       "Bash(storage/logs/laravel.log)",
-      "Bash(php test_circulares_access.php:*)"
+      "Bash(php test_circulares_access.php:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git restore:*)"
     ],
     "deny": [],
     "ask": []
