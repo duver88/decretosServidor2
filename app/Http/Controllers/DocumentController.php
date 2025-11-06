@@ -62,6 +62,18 @@ public function listPublic(Request $request)
 
     if ($request->filled('fecha_hasta')) {
         $query->whereDate('fecha', '<=', $request->fecha_hasta);
+
+        // Si es filtro de Documentos Históricos, solo mostrar los que tienen información de archivo
+        if ($request->fecha_hasta == '1949-12-31') {
+            $query->where(function($q) {
+                $q->whereNotNull('referencia_ubicacion')
+                  ->orWhereNotNull('soporte')
+                  ->orWhereNotNull('volumen')
+                  ->orWhereNotNull('nombre_productor')
+                  ->orWhereNotNull('informacion_valoracion')
+                  ->orWhereNotNull('lengua_documentos');
+            });
+        }
     }
 
     // Filtro por fecha exacta (mantener compatibilidad)
@@ -186,11 +198,12 @@ public function listPublic(Request $request)
                     ->values();
     
     // Obtener años únicos del nombre del documento
-    $años = Document::selectRaw('SUBSTRING(nombre, LOCATE("2", nombre), 4) as año')
+    // Usar el campo nombre directamente ya que contiene el año
+    $años = Document::select('nombre')
                    ->distinct()
-                   ->whereRaw('nombre REGEXP "[0-9]{4}"')
-                   ->orderBy('año', 'desc')
-                   ->pluck('año')
+                   ->whereRaw('nombre REGEXP "^[0-9]{4}$"')
+                   ->orderBy('nombre', 'desc')
+                   ->pluck('nombre')
                    ->filter()
                    ->unique()
                    ->values();
@@ -215,11 +228,11 @@ public function listPublic(Request $request)
                              ->pluck('count', 'tipo'),
         'por_categoria' => Category::withCount('documents')->get(),
         'por_document_type' => \App\Models\DocumentType::withCount('documents')->get(),
-        'por_año' => Document::selectRaw('SUBSTRING(nombre, LOCATE("2", nombre), 4) as año, COUNT(*) as count')
-                           ->whereRaw('nombre REGEXP "[0-9]{4}"')
-                           ->groupBy('año')
-                           ->orderBy('año', 'desc')
-                           ->pluck('count', 'año'),
+        'por_año' => Document::selectRaw('nombre, COUNT(*) as count')
+                           ->whereRaw('nombre REGEXP "^[0-9]{4}$"')
+                           ->groupBy('nombre')
+                           ->orderBy('nombre', 'desc')
+                           ->pluck('count', 'nombre'),
         'ultimos_30_dias' => Document::where('fecha', '>=', now()->subDays(30))->count(),
     ];
 
@@ -385,13 +398,14 @@ public function index(Request $request)
     // Datos adicionales para los filtros
     $categories = Category::orderBy('nombre')->get();
     $tipos = Document::distinct()->pluck('tipo')->filter()->sort()->values();
-    
+
     // Obtener años únicos del nombre del documento
-    $años = Document::selectRaw('SUBSTRING(nombre, LOCATE("2", nombre), 4) as año')
+    // Usar el campo nombre directamente ya que contiene el año
+    $años = Document::select('nombre')
                    ->distinct()
-                   ->whereRaw('nombre REGEXP "[0-9]{4}"')
-                   ->orderBy('año', 'desc')
-                   ->pluck('año')
+                   ->whereRaw('nombre REGEXP "^[0-9]{4}$"')
+                   ->orderBy('nombre', 'desc')
+                   ->pluck('nombre')
                    ->filter()
                    ->unique()
                    ->values();
@@ -403,11 +417,11 @@ public function index(Request $request)
                              ->groupBy('tipo')
                              ->pluck('count', 'tipo'),
         'por_categoria' => Category::withCount('documents')->get(),
-        'por_año' => Document::selectRaw('SUBSTRING(nombre, LOCATE("2", nombre), 4) as año, COUNT(*) as count')
-                           ->whereRaw('nombre REGEXP "[0-9]{4}"')
-                           ->groupBy('año')
-                           ->orderBy('año', 'desc')
-                           ->pluck('count', 'año'),
+        'por_año' => Document::selectRaw('nombre, COUNT(*) as count')
+                           ->whereRaw('nombre REGEXP "^[0-9]{4}$"')
+                           ->groupBy('nombre')
+                           ->orderBy('nombre', 'desc')
+                           ->pluck('count', 'nombre'),
         'ultimos_30_dias' => Document::where('fecha', '>=', now()->subDays(30))->count(),
     ];
 

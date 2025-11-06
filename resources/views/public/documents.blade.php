@@ -334,6 +334,23 @@
                 @endforeach
                 <button type="submit" class="chip {{ !$selectedTipo ? 'active' : '' }}">Todos los tipos</button>
             </form>
+
+            <!-- Botón especial para Documentos Históricos -->
+            <form method="GET" action="{{ route('home') }}" class="d-inline">
+                @foreach(request()->except(['historico', 'fecha_hasta', 'page']) as $key => $value)
+                    @if(is_array($value))
+                        @foreach($value as $v)
+                            <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
+                        @endforeach
+                    @else
+                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                    @endif
+                @endforeach
+                <input type="hidden" name="fecha_hasta" value="1949-12-31">
+                <button type="submit" class="chip {{ request('fecha_hasta') == '1949-12-31' ? 'active' : '' }}" style="background: linear-gradient(135deg, #8B4513 0%, #654321 100%); color: white; border: none;">
+                    <i class="fas fa-landmark me-1"></i> Documentos Históricos
+                </button>
+            </form>
         </div>
 
         <!-- CHIPS DE CATEGORÍAS -->
@@ -476,14 +493,22 @@
                     </div>
                     <div class="col-md-6">
                         <label for="año" class="form-label"><i class="fas fa-calendar me-1"></i> Año</label>
-                        <select class="form-select" name="año" id="año">
-                            <option value="">Todos los años</option>
+                        <input type="text"
+                               class="form-control"
+                               name="año"
+                               id="año"
+                               list="años-list"
+                               placeholder="Escriba o seleccione un año"
+                               value="{{ request('año') }}"
+                               pattern="[0-9]{4}"
+                               maxlength="4">
+                        <datalist id="años-list">
                             @if(isset($años))
                                 @foreach($años as $a)
-                                    <option value="{{ $a }}" @selected(request('año') == $a)>{{ $a }}</option>
+                                    <option value="{{ $a }}">
                                 @endforeach
                             @endif
-                        </select>
+                        </datalist>
                     </div>
                     <div class="col-md-6">
                         <label for="mes" class="form-label"><i class="fas fa-calendar-week me-1"></i> Mes</label>
@@ -720,8 +745,13 @@
             @if(request()->filled('fecha_hasta'))
                 <a href="{{ route('home', array_merge($baseParams, ['fecha_hasta' => null])) }}"
                    class="badge text-white"
-                   style="background-color: #878D47;">
-                    Hasta: {{ request('fecha_hasta') }} &times;
+                   style="background-color: {{ request('fecha_hasta') == '1949-12-31' ? '#8B4513' : '#878D47' }};">
+                    @if(request('fecha_hasta') == '1949-12-31')
+                        <i class="fas fa-landmark me-1"></i> Documentos Históricos (hasta 1949)
+                    @else
+                        Hasta: {{ request('fecha_hasta') }}
+                    @endif
+                    &times;
                 </a>
             @endif
 
