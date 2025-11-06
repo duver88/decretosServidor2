@@ -326,12 +326,87 @@
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Fecha exacta
                     </label>
-                    <input type="date" name="fecha" 
+                    <input type="date" name="fecha"
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
                            value="{{ request('fecha') }}">
                 </div>
             </div>
-            
+
+            <!-- Campos Opcionales de Archivo -->
+            <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 flex items-center">
+                    <i class="fas fa-archive mr-2 text-[#43883d]"></i>
+                    Filtros de Información de Archivo (Opcionales)
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Referencia Ubicación -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Referencia de Ubicación
+                        </label>
+                        <input type="text" name="referencia_ubicacion"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                               placeholder="Ej: Archivo General, Estante 3..."
+                               value="{{ request('referencia_ubicacion') }}">
+                    </div>
+
+                    <!-- Soporte -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Soporte
+                        </label>
+                        <input type="text" name="soporte"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                               placeholder="Ej: Papel, Digital..."
+                               value="{{ request('soporte') }}">
+                    </div>
+
+                    <!-- Volumen -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Volumen
+                        </label>
+                        <input type="text" name="volumen"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                               placeholder="Ej: Vol. 1, Tomo 2..."
+                               value="{{ request('volumen') }}">
+                    </div>
+
+                    <!-- Nombre Productor -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Nombre del Productor
+                        </label>
+                        <input type="text" name="nombre_productor"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                               placeholder="Ej: Secretaría..."
+                               value="{{ request('nombre_productor') }}">
+                    </div>
+
+                    <!-- Información Valoración -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Información de Valoración
+                        </label>
+                        <input type="text" name="informacion_valoracion"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                               placeholder="Ej: Alta importancia..."
+                               value="{{ request('informacion_valoracion') }}">
+                    </div>
+
+                    <!-- Lengua Documentos -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Lengua de los Documentos
+                        </label>
+                        <input type="text" name="lengua_documentos"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#43883d] focus:border-[#43883d] dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                               placeholder="Ej: Español, Inglés..."
+                               value="{{ request('lengua_documentos') }}">
+                    </div>
+                </div>
+            </div>
+
             <!-- Botones de acción para filtros avanzados -->
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
                 <div class="flex flex-wrap gap-2">
