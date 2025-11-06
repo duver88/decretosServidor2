@@ -3,7 +3,12 @@
     "allow": [
       "Bash(php artisan:*)",
       "Bash(git push:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(\"C:\\Users\\duver\\Desktop\\Proyecto\\decretos\\decretosServidor2\\resources\\views\\public\\circulares_clean.blade.php\")",
+      "Bash(cat:*)",
+      "Bash(php test_permissions.php:*)",
+      "Bash(storage/logs/laravel.log)",
+      "Bash(php test_circulares_access.php:*)"
     ],
     "deny": [],
     "ask": []

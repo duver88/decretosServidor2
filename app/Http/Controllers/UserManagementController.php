@@ -50,6 +50,7 @@ class UserManagementController extends Controller
             'category_permissions.*.can_edit' => ['boolean'],
             'category_permissions.*.can_delete' => ['boolean'],
             'concept_permissions' => ['array'],
+            'circular_permissions' => ['array'],
         ]);
 
         $user = User::create([
@@ -60,18 +61,46 @@ class UserManagementController extends Controller
         ]);
 
         // Asignar módulos con permisos si no es admin
-        if (!$user->is_admin && $request->has('modules')) {
+        if (!$user->is_admin) {
             $modulesData = [];
-            foreach ($request->modules as $moduleId => $modulePermissions) {
-                // Solo agregar si el módulo está habilitado
-                if (isset($modulePermissions['enabled']) && $modulePermissions['enabled']) {
-                    $modulesData[$moduleId] = [
-                        'can_create' => isset($modulePermissions['can_create']) ? 1 : 0,
-                        'can_edit' => isset($modulePermissions['can_edit']) ? 1 : 0,
-                        'can_delete' => isset($modulePermissions['can_delete']) ? 1 : 0,
-                    ];
+
+            // Procesar módulos normales
+            if ($request->has('modules')) {
+                foreach ($request->modules as $moduleId => $modulePermissions) {
+                    // Solo agregar si el módulo está habilitado
+                    if (isset($modulePermissions['enabled']) && $modulePermissions['enabled']) {
+                        $modulesData[$moduleId] = [
+                            'can_create' => isset($modulePermissions['can_create']) ? 1 : 0,
+                            'can_edit' => isset($modulePermissions['can_edit']) ? 1 : 0,
+                            'can_delete' => isset($modulePermissions['can_delete']) ? 1 : 0,
+                        ];
+                    }
                 }
             }
+
+            // Procesar permisos de circulares
+            $circularModule = Module::where('slug', 'circulares')->first();
+            if ($circularModule) {
+                // Verificar si el módulo de circulares está habilitado
+                $circularModuleEnabled = isset($request->modules[$circularModule->id]['enabled']) && $request->modules[$circularModule->id]['enabled'];
+
+                if ($circularModuleEnabled || $request->has('circular_permissions')) {
+                    $canCreate = isset($request->circular_permissions['create']);
+                    $canEdit = isset($request->circular_permissions['edit']);
+                    $canDelete = isset($request->circular_permissions['delete']);
+
+                    // Solo agregar si el módulo está habilitado O si hay permisos seleccionados
+                    if ($circularModuleEnabled || $canCreate || $canEdit || $canDelete) {
+                        $modulesData[$circularModule->id] = [
+                            'can_create' => $canCreate ? 1 : 0,
+                            'can_edit' => $canEdit ? 1 : 0,
+                            'can_delete' => $canDelete ? 1 : 0,
+                        ];
+                    }
+                }
+            }
+
+            // Sincronizar todos los módulos de una vez
             $user->modules()->sync($modulesData);
         }
 
@@ -148,7 +177,21 @@ class UserManagementController extends Controller
             }
         }
 
-        return view('admin.users.edit', compact('user', 'modules', 'userModules', 'categories', 'conceptTypes', 'userCategoryPermissions', 'userConceptPermissions'));
+        // Obtener permisos actuales de circulares (desde el módulo)
+        $userCircularPermissions = [];
+        $circularModule = Module::where('slug', 'circulares')->first();
+        if ($circularModule) {
+            $userModule = $user->modules()->where('module_id', $circularModule->id)->first();
+            if ($userModule) {
+                $userCircularPermissions = [
+                    'can_create' => $userModule->pivot->can_create,
+                    'can_edit' => $userModule->pivot->can_edit,
+                    'can_delete' => $userModule->pivot->can_delete,
+                ];
+            }
+        }
+
+        return view('admin.users.edit', compact('user', 'modules', 'userModules', 'categories', 'conceptTypes', 'userCategoryPermissions', 'userConceptPermissions', 'userCircularPermissions'));
     }
 
     /**
@@ -168,6 +211,7 @@ class UserManagementController extends Controller
             'category_permissions.*.can_edit' => ['boolean'],
             'category_permissions.*.can_delete' => ['boolean'],
             'concept_permissions' => ['array'],
+            'circular_permissions' => ['array'],
         ]);
 
         $user->name = $request->name;
@@ -181,26 +225,49 @@ class UserManagementController extends Controller
         $user->save();
 
         // Actualizar módulos con permisos si no es admin
-        if (!$user->is_admin && $request->has('modules')) {
+        if (!$user->is_admin) {
             $modulesData = [];
-            foreach ($request->modules as $moduleId => $modulePermissions) {
-                // Solo agregar si el módulo está habilitado
-                if (isset($modulePermissions['enabled']) && $modulePermissions['enabled']) {
-                    $modulesData[$moduleId] = [
-                        'can_create' => isset($modulePermissions['can_create']) ? 1 : 0,
-                        'can_edit' => isset($modulePermissions['can_edit']) ? 1 : 0,
-                        'can_delete' => isset($modulePermissions['can_delete']) ? 1 : 0,
-                    ];
+
+            // Procesar módulos normales
+            if ($request->has('modules')) {
+                foreach ($request->modules as $moduleId => $modulePermissions) {
+                    // Solo agregar si el módulo está habilitado
+                    if (isset($modulePermissions['enabled']) && $modulePermissions['enabled']) {
+                        $modulesData[$moduleId] = [
+                            'can_create' => isset($modulePermissions['can_create']) ? 1 : 0,
+                            'can_edit' => isset($modulePermissions['can_edit']) ? 1 : 0,
+                            'can_delete' => isset($modulePermissions['can_delete']) ? 1 : 0,
+                        ];
+                    }
                 }
             }
-            $user->modules()->sync($modulesData);
-        } elseif ($user->is_admin) {
-            // Si es admin, remover todos los módulos asignados (no los necesita)
-            $user->modules()->detach();
-        }
 
-        // Actualizar permisos de categorías
-        if (!$user->is_admin) {
+            // Procesar permisos de circulares
+            $circularModule = Module::where('slug', 'circulares')->first();
+            if ($circularModule) {
+                // Verificar si el módulo de circulares está habilitado
+                $circularModuleEnabled = isset($request->modules[$circularModule->id]['enabled']) && $request->modules[$circularModule->id]['enabled'];
+
+                if ($circularModuleEnabled || $request->has('circular_permissions')) {
+                    $canCreate = isset($request->circular_permissions['create']);
+                    $canEdit = isset($request->circular_permissions['edit']);
+                    $canDelete = isset($request->circular_permissions['delete']);
+
+                    // Solo agregar si el módulo está habilitado O si hay permisos seleccionados
+                    if ($circularModuleEnabled || $canCreate || $canEdit || $canDelete) {
+                        $modulesData[$circularModule->id] = [
+                            'can_create' => $canCreate ? 1 : 0,
+                            'can_edit' => $canEdit ? 1 : 0,
+                            'can_delete' => $canDelete ? 1 : 0,
+                        ];
+                    }
+                }
+            }
+
+            // Sincronizar todos los módulos de una vez
+            $user->modules()->sync($modulesData);
+
+            // Actualizar permisos de categorías
             // Eliminar permisos existentes
             $user->categoryPermissions()->delete();
 
@@ -238,7 +305,8 @@ class UserManagementController extends Controller
                 }
             }
         } elseif ($user->is_admin) {
-            // Si es admin, remover todos los permisos (no los necesita)
+            // Si es admin, remover todos los módulos y permisos
+            $user->modules()->detach();
             $user->categoryPermissions()->delete();
             $user->conceptTypes()->detach();
         }

@@ -16,15 +16,24 @@ class CheckModuleAccess
      */
     public function handle(Request $request, Closure $next, string $moduleSlug): Response
     {
+        \Log::info('=== CheckModuleAccess Middleware ===');
+        \Log::info('Module Slug: ' . $moduleSlug);
+        \Log::info('URL: ' . $request->url());
+
         // Si el usuario no está autenticado, redirigir al login
         if (!auth()->check()) {
+            \Log::warning('Usuario no autenticado - redirigiendo a login');
             return redirect()->route('login');
         }
 
         $user = auth()->user();
+        \Log::info('Usuario ID: ' . $user->id);
+        \Log::info('Usuario Email: ' . $user->email);
+        \Log::info('Es Admin: ' . ($user->is_admin ? 'true' : 'false'));
 
         // Los administradores siempre tienen acceso
         if ($user->is_admin) {
+            \Log::info('ES ADMIN - Middleware permite acceso');
             return $next($request);
         }
 
@@ -32,13 +41,20 @@ class CheckModuleAccess
         $cacheKey = "user_{$user->id}_module_access_{$moduleSlug}";
 
         $hasAccess = cache()->remember($cacheKey, 300, function () use ($user, $moduleSlug) {
-            return $user->hasModuleAccess($moduleSlug);
+            $result = $user->hasModuleAccess($moduleSlug);
+            \Log::info('hasModuleAccess result (from function): ' . ($result ? 'true' : 'false'));
+            return $result;
         });
 
+        \Log::info('hasModuleAccess (cached or fresh): ' . ($hasAccess ? 'true' : 'false'));
+
         if (!$hasAccess) {
-            abort(403, 'No tienes acceso a este módulo. Contacta al administrador para solicitar permisos.');
+            \Log::warning('ACCESO DENEGADO - redirigiendo a user.welcome');
+            // Redirigir a la página de bienvenida en lugar de mostrar error 403
+            return redirect()->route('user.welcome')->with('error', 'No tienes acceso al módulo solicitado. Usuario: ' . $user->email . ' - Módulo: ' . $moduleSlug);
         }
 
+        \Log::info('Middleware permite acceso - continuando');
         return $next($request);
     }
 }

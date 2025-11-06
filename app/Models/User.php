@@ -138,6 +138,7 @@ class User extends Authenticatable
     public function modules()
     {
         return $this->belongsToMany(Module::class, 'user_module_access')
+            ->withPivot('can_create', 'can_edit', 'can_delete')
             ->withTimestamps();
     }
 

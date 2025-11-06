@@ -176,6 +176,31 @@
         </ul>
       </li>
       
+      <!-- Sección: Relatoría Circulares -->
+      <li class="mt-4">
+        <div class="px-4 py-2 text-sm font-medium text-[#43883d] dark:text-[#93C01F] uppercase tracking-wider">
+          Relatoría Circulares
+        </div>
+        <ul class="pl-2">
+          <li>
+            <a href="{{ route('circulares.admin.index') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              <span>Gestionar Circulares</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ route('circulares.admin.create') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+              <span>Crear Circular</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
       <!-- Sección: Relatoría conceptos -->
       <li class="mt-4">
         <div class="px-4 py-2 text-sm font-medium text-[#43883d] dark:text-[#93C01F] uppercase tracking-wider">
@@ -291,6 +316,32 @@
                     </a>
                   </li>
                 @endif
+              </ul>
+            </li>
+
+          @elseif($module->slug === 'circulares')
+            <!-- Módulo: Relatoría de Circulares -->
+            <li class="mt-4">
+              <div class="px-4 py-2 text-sm font-medium text-[#43883d] dark:text-[#93C01F] uppercase tracking-wider">
+                {{ $module->name }}
+              </div>
+              <ul class="pl-2">
+                <li>
+                  <a href="{{ route('user.circulares.index') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <span>Ver Circulares</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="{{ route('user.circulares.create') }}" class="flex items-center px-4 py-3 hover:bg-[#EAECB1] dark:hover:bg-[#285F19] transition-colors rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-[#43883d] dark:text-[#93C01F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    <span>Crear Circular</span>
+                  </a>
+                </li>
               </ul>
             </li>
           @endif

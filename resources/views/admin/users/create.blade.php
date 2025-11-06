@@ -227,6 +227,46 @@
                                                 </div>
                                             </div>
 
+                                        @elseif($module->slug === 'circulares')
+                                            {{-- Permisos Globales para Circulares --}}
+                                            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-3">
+                                                Permisos Globales para Circulares:
+                                            </label>
+                                            <div class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
+                                                <div class="flex flex-wrap gap-4">
+                                                    <label class="flex items-center cursor-pointer">
+                                                        <input type="checkbox"
+                                                               name="circular_permissions[create]"
+                                                               value="1"
+                                                               {{ old('circular_permissions.create') ? 'checked' : '' }}
+                                                               class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-500">
+                                                        <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                                                            <i class="fas fa-plus-circle text-green-600"></i> Crear Circulares
+                                                        </span>
+                                                    </label>
+                                                    <label class="flex items-center cursor-pointer">
+                                                        <input type="checkbox"
+                                                               name="circular_permissions[edit]"
+                                                               value="1"
+                                                               {{ old('circular_permissions.edit') ? 'checked' : '' }}
+                                                               class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
+                                                        <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                                                            <i class="fas fa-edit text-blue-600"></i> Editar Circulares
+                                                        </span>
+                                                    </label>
+                                                    <label class="flex items-center cursor-pointer">
+                                                        <input type="checkbox"
+                                                               name="circular_permissions[delete]"
+                                                               value="1"
+                                                               {{ old('circular_permissions.delete') ? 'checked' : '' }}
+                                                               class="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-2 focus:ring-red-500">
+                                                        <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                                                            <i class="fas fa-trash-alt text-red-600"></i> Eliminar Circulares
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
                                         @else
                                             {{-- Permisos genéricos para otros módulos --}}
                                             <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">

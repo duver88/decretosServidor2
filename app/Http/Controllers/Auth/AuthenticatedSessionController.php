@@ -31,10 +31,32 @@ class AuthenticatedSessionController extends Controller
         // Limpiar la URL "intended" para evitar redirecciones incorrectas
         $request->session()->forget('url.intended');
 
-        if ($request->user()->is_admin) {
+        $user = $request->user();
+
+        if ($user->is_admin) {
             return redirect()->route('dashboard');
         } else {
-            return redirect()->route('user.dashboard');
+            // Verificar si el usuario tiene al menos un módulo asignado
+            $userModules = $user->getAccessibleModules();
+
+            if ($userModules->isEmpty()) {
+                // Si no tiene módulos, redirigir a la página de bienvenida
+                return redirect()->route('user.welcome');
+            }
+
+            // Redirigir al primer módulo disponible
+            $firstModule = $userModules->first();
+
+            if ($firstModule->slug === 'actos-administrativos') {
+                return redirect()->route('user.dashboard');
+            } elseif ($firstModule->slug === 'conceptos') {
+                return redirect()->route('concepts.index');
+            } elseif ($firstModule->slug === 'circulares') {
+                return redirect()->route('circulares.admin.index');
+            }
+
+            // Si no coincide con ninguno conocido, ir a bienvenida
+            return redirect()->route('user.welcome');
         }
     }
 

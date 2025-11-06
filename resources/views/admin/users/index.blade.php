@@ -664,11 +664,23 @@
                     @if(!$user->is_admin)
                         <div class="permissions-list">
                             @php
-                                $totalPermissions = $user->categoryPermissions->count() + $user->conceptTypes->count();
+                                // Contar permisos de módulos con al menos un permiso activo
+                                $modulePermissionsCount = $user->modules->filter(function($module) {
+                                    return $module->pivot->can_create || $module->pivot->can_edit || $module->pivot->can_delete;
+                                })->count();
+
+                                $totalPermissions = $user->categoryPermissions->count() + $user->conceptTypes->count() + $modulePermissionsCount;
                             @endphp
                             @if($totalPermissions > 0)
-                                <div><i class="fas fa-folder"></i>{{ $user->categoryPermissions->count() }} categorías</div>
-                                <div><i class="fas fa-file-alt"></i>{{ $user->conceptTypes->count() }} tipos</div>
+                                @if($user->categoryPermissions->count() > 0)
+                                    <div><i class="fas fa-folder"></i>{{ $user->categoryPermissions->count() }} categorías</div>
+                                @endif
+                                @if($user->conceptTypes->count() > 0)
+                                    <div><i class="fas fa-file-alt"></i>{{ $user->conceptTypes->count() }} tipos</div>
+                                @endif
+                                @if($modulePermissionsCount > 0)
+                                    <div><i class="fas fa-key"></i>{{ $modulePermissionsCount }} módulos</div>
+                                @endif
                             @else
                                 <small>Sin permisos</small>
                             @endif

@@ -14,6 +14,7 @@ use App\Http\Controllers\ConceptPermissionController;
 use App\Http\Controllers\UserCategoryPermissionController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CircularController;
 
 
 // Rutas para filtros AJAX de Documentos
@@ -79,14 +80,21 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::post('/dashboard/categorias', [CategoryController::class, 'store'])->name('category.store');
     Route::delete('/dashboard/categorias/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
 
-    // Nuevas rutas para tipos y temas de documentos  
-    Route::get('/dashboard/document-categories', [DocumentTypeController::class, 'index'])->name('documents.categories');  
-    Route::post('/dashboard/document-categories/types', [DocumentTypeController::class, 'store'])->name('documents.storeType');  
-    Route::post('/dashboard/document-categories/themes', [DocumentThemeController::class, 'store'])->name('documents.storeTheme');  
-    Route::delete('/dashboard/document-categories/types/{id}', [DocumentTypeController::class, 'destroy'])->name('documents.destroyType');  
-    Route::delete('/dashboard/document-categories/themes/{id}', [DocumentThemeController::class, 'destroy'])->name('documents.destroyTheme');  
-    Route::get('/dashboard/document-themes/{typeId}', [DocumentController::class, 'getThemes'])->name('documents.getThemes');  
-   
+    // Nuevas rutas para tipos y temas de documentos
+    Route::get('/dashboard/document-categories', [DocumentTypeController::class, 'index'])->name('documents.categories');
+    Route::post('/dashboard/document-categories/types', [DocumentTypeController::class, 'store'])->name('documents.storeType');
+    Route::post('/dashboard/document-categories/themes', [DocumentThemeController::class, 'store'])->name('documents.storeTheme');
+    Route::delete('/dashboard/document-categories/types/{id}', [DocumentTypeController::class, 'destroy'])->name('documents.destroyType');
+    Route::delete('/dashboard/document-categories/themes/{id}', [DocumentThemeController::class, 'destroy'])->name('documents.destroyTheme');
+    Route::get('/dashboard/document-themes/{typeId}', [DocumentController::class, 'getThemes'])->name('documents.getThemes');
+
+    // Rutas para gestión de circulares (admin) - Los admins no necesitan middleware adicional
+    Route::get('/dashboard/circulares', [CircularController::class, 'index'])->name('circulares.admin.index');
+    Route::get('/dashboard/circulares/crear', [CircularController::class, 'create'])->name('circulares.admin.create');
+    Route::post('/dashboard/circulares', [CircularController::class, 'store'])->name('circulares.admin.store');
+    Route::get('/dashboard/circulares/{id}/editar', [CircularController::class, 'edit'])->name('circulares.admin.edit');
+    Route::put('/dashboard/circulares/{id}', [CircularController::class, 'update'])->name('circulares.admin.update');
+    Route::delete('/dashboard/circulares/{id}', [CircularController::class, 'destroy'])->name('circulares.admin.destroy');
 });
 
 
@@ -101,6 +109,11 @@ Route::middleware('auth')->group(function () {
     // Ruta para "Mi Cuenta"
     Route::get('/mi-cuenta', [UserManagementController::class, 'myAccount'])->name('my-account.edit');
     Route::put('/mi-cuenta', [UserManagementController::class, 'updateMyAccount'])->name('my-account.update');
+
+    // Ruta de bienvenida para usuarios sin módulos
+    Route::get('/bienvenido', function () {
+        return view('users.welcome');
+    })->name('user.welcome');
 });
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
@@ -187,10 +200,19 @@ Route::get('/conoce-sistema', function () {
 })->name('conoce.sistema');
 
 
-// Ruta para "Relatoría de Circulares" (estática)
-Route::get('/circulares', function () {
-    return view('public.circulares');
-})->name('circulares.index');
+// Rutas públicas para circulares
+Route::get('/circulares', [CircularController::class, 'listPublic'])->name('circulares.index');
+Route::get('/circulares/{id}', [CircularController::class, 'showPublic'])->name('circulares.show');
+
+// Rutas para usuarios normales con acceso al módulo de circulares
+Route::middleware(['auth', 'module.access:circulares'])->prefix('users/circulares')->name('user.circulares.')->group(function () {
+    Route::get('/', [CircularController::class, 'index'])->name('index');
+    Route::get('/crear', [CircularController::class, 'create'])->name('create');
+    Route::post('/', [CircularController::class, 'store'])->name('store');
+    Route::get('/{id}/editar', [CircularController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [CircularController::class, 'update'])->name('update');
+    Route::delete('/{id}', [CircularController::class, 'destroy'])->name('destroy');
+});
 
 // Ruta para obtener temas por tipo de documento (para usuarios)
 Route::get('/user/documents/themes/{typeId}', [DocumentController::class, 'getThemesByType'])
