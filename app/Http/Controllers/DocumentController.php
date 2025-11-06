@@ -457,7 +457,7 @@ public function store(Request $request)
         'numero' => 'required|string|max:50',
         'tipo' => 'required|string',
         'descripcion' => 'nullable|string',
-        'fecha' => 'required|date|date_format:Y-m-d|after:1990-01-01|before:2050-12-31', // ✅ VALIDACIÓN MÁS ESTRICTA
+        'fecha' => 'required|date|date_format:Y-m-d|after:1919-12-31|before:2050-12-31', // Validación para fechas desde 1920
         'category_id' => 'required|exists:categories,id',
         'document_type_id' => 'required|exists:document_types,id',
         'document_theme_id' => 'required|exists:document_themes,id',

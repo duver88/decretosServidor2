@@ -56,12 +56,11 @@
                 <!-- Año -->
                 <div>
                     <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Año</label>
-                    <select name="nombre" id="nombre" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu" required>
-                        <option value="">Selecciona el año</option>
-                        @foreach(range(2022, 2027) as $year)
-                            <option value="{{ $year }}" {{ old('nombre', $document->nombre) == (string)$year ? 'selected' : '' }}>{{ $year }}</option>
-                        @endforeach
-                    </select>
+                    <input type="number" name="nombre" id="nombre" min="1920" max="2050" step="1"
+                        class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
+                        placeholder="Ej: 2024"
+                        required
+                        value="{{ old('nombre', $document->nombre) }}">
                     @error('nombre')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -118,7 +117,7 @@
                 <!-- Fecha Del Documento -->
                 <div>
                     <label for="fecha" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha Del Documento</label>
-                    <input type="date" name="fecha" id="fecha" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu" required value="{{ old('fecha', $document->fecha) }}">
+                    <input type="date" name="fecha" id="fecha" min="1920-01-01" max="2050-12-31" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu" required value="{{ old('fecha', $document->fecha) }}">
                     @error('fecha')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -248,10 +247,11 @@
                         <label for="nombre_productor" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Nombre del Productor
                         </label>
-                        <input type="text" name="nombre_productor" id="nombre_productor"
-                               class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
-                               value="{{ old('nombre_productor', $document->nombre_productor) }}"
-                               placeholder="Ej: Secretaría de Hacienda">
+                        <select name="nombre_productor" id="nombre_productor"
+                            class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu">
+                            <option value="">-- Selecciona --</option>
+                            <option value="DESPACHO ALCALDE (1000)" {{ old('nombre_productor', $document->nombre_productor) == 'DESPACHO ALCALDE (1000)' ? 'selected' : '' }}>DESPACHO ALCALDE (1000)</option>
+                        </select>
                         @error('nombre_productor')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -276,10 +276,11 @@
                         <label for="lengua_documentos" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Lengua de los Documentos
                         </label>
-                        <input type="text" name="lengua_documentos" id="lengua_documentos"
-                               class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu"
-                               value="{{ old('lengua_documentos', $document->lengua_documentos) }}"
-                               placeholder="Ej: Español">
+                        <select name="lengua_documentos" id="lengua_documentos"
+                            class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-[#43883d] focus:border-[#43883d] font-ubuntu">
+                            <option value="">-- Selecciona --</option>
+                            <option value="ESPAÑOL ISO 639-2 SPA" {{ old('lengua_documentos', $document->lengua_documentos) == 'ESPAÑOL ISO 639-2 SPA' ? 'selected' : '' }}>ESPAÑOL ISO 639-2 SPA</option>
+                        </select>
                         @error('lengua_documentos')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
