@@ -339,9 +339,19 @@ class UserManagementController extends Controller
      */
     private function clearUserCache($userId)
     {
+        // Limpiar cache de módulos
         cache()->forget("user_{$userId}_accessible_modules");
+
+        // Limpiar cache de conceptos
         cache()->forget("user_{$userId}_global_concept_create");
         cache()->forget("user_{$userId}_global_concept_edit");
         cache()->forget("user_{$userId}_global_concept_delete");
+
+        // Limpiar cache de acceso a módulos individuales
+        // Obtener todos los slugs de módulos y limpiar su cache
+        $modules = \App\Models\Module::pluck('slug');
+        foreach ($modules as $slug) {
+            cache()->forget("user_{$userId}_module_access_{$slug}");
+        }
     }
 }

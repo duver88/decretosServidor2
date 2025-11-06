@@ -28,8 +28,14 @@ class CheckModuleAccess
             return $next($request);
         }
 
-        // Verificar si el usuario tiene acceso al módulo
-        if (!$user->hasModuleAccess($moduleSlug)) {
+        // Cachear la verificación de acceso al módulo por 5 minutos
+        $cacheKey = "user_{$user->id}_module_access_{$moduleSlug}";
+
+        $hasAccess = cache()->remember($cacheKey, 300, function () use ($user, $moduleSlug) {
+            return $user->hasModuleAccess($moduleSlug);
+        });
+
+        if (!$hasAccess) {
             abort(403, 'No tienes acceso a este módulo. Contacta al administrador para solicitar permisos.');
         }
 

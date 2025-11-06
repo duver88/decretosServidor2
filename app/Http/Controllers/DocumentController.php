@@ -246,7 +246,7 @@ public function getThemesByType($typeId)
     // Dashboard - listado de documentos para admin
 public function index(Request $request)
 {
-    $query = Document::with('category');
+    $query = Document::with(['category', 'documentType', 'documentTheme']);
 
     /* --- FILTROS (mismos que listPublic()) --- */
         if ($request->filled('document_type_id')) {

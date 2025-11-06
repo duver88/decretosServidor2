@@ -1091,4 +1091,4 @@
     </div>
 
     {{-- FOOTER --}}
-    @include('partials.public-footer')
+    @include('partials.public-footer') 
