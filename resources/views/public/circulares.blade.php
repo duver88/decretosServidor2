@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatoria De Circulares</title>
-     <link rel="stylesheet" href="{{ asset('css/cabecera.css') }}">   
+     <link rel="stylesheet" href="{{ asset('css/cabecera.css') }}">
     <link rel="stylesheet" href="{{ asset('css/conceptsDetails.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/document.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -362,15 +363,7 @@
                     </div>
                 </div>
 
-                <div class="d-grid gap-2">
-                    @if($circular->archivo)
-                    <a href="{{ asset('storage/' . $circular->archivo) }}"
-                    target="_blank"
-                    class="btn {{ $buttonClass }} fw-bold py-2 rounded-2"
-                    onclick="event.stopPropagation();">
-                        {!! $icon !!} <span class="ms-2">{{ $buttonText }}</span>
-                    </a>
-                    @endif
+                <div class="d-grid">
                     <a href="{{ route('circulares.show', $circular->id) }}"
                     class="btn text-white fw-bold py-2 rounded-2"
                     style="background-color: #2d6a2f; transition: background-color 0.3s ease;"
@@ -393,10 +386,14 @@
     @endforelse
 </div>
 
+<!-- SECCIÓN DE PAGINACIÓN MEJORADA -->
 @if($circulares->hasPages())
-<div class="mt-4">
-    {{ $circulares->links() }}
-</div>
+    <div class="pagination-container mt-4">
+        <!-- Enlaces de paginación -->
+        <div class="d-flex justify-content-center">
+            {{ $circulares->appends(request()->query())->links('pagination::bootstrap-4') }}
+        </div>
+    </div>
 @endif
 
 
