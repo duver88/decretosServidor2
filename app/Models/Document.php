@@ -29,10 +29,13 @@ class Document extends Model
         'views_count'
     ];
 
-    // Incrementar contador de visitas
+    // Incrementar contador de visitas sin actualizar updated_at
     public function incrementViews()
     {
+        // Usar incremento directo en la base de datos sin actualizar timestamps
+        $this->timestamps = false;
         $this->increment('views_count');
+        $this->timestamps = true;
     }
 
         public function documentType()  
