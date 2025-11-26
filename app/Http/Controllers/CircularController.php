@@ -16,7 +16,7 @@ class CircularController extends Controller
     {
         $circulares = Circular::orderBy('fecha', 'desc')
             ->orderBy('created_at', 'desc')
-            ->paginate(20);
+            ->paginate(12); // 3 columnas × 4 filas = 12 por página
 
         return view('admin.circulares.index', compact('circulares'));
     }
