@@ -7,7 +7,7 @@ use App\Models\Document;
 use Illuminate\Support\Facades\DB;
 
 class ResetDocumentTimestamps extends Command
-{
+{ 
     /**
      * The name and signature of the console command.
      *
