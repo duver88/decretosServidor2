@@ -600,10 +600,10 @@
                                 <i class="fas fa-calendar me-2 text-primary"></i>
                                 {{ \Carbon\Carbon::parse($concept->fecha)->format('d \d\e F \d\e\l Y') }}
                             </span>
-                            <span class="d-flex align-items-center">
+                            {{-- <span class="d-flex align-items-center">
                                 <i class="fas fa-clock me-2 text-secondary"></i>
                                 {{ $concept->created_at->diffForHumans() }}
-                            </span>
+                            </span> --}}
                         </div>
 
                         <!-- Botón Ver idéntico a la imagen -->

@@ -424,7 +424,7 @@
             </div>
 
             <!-- Tarjeta de Fechas -->
-            <div class="info-card">
+            {{-- <div class="info-card">
                 <div class="info-card-header">
                     <i class="fas fa-clock me-2"></i>
                     Información Temporal
@@ -454,7 +454,7 @@
                         <div class="metadata-value">{{ $document->created_at->diffForHumans() }}</div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Tarjeta de Información de Archivo (Campos Opcionales) -->
             @if($document->referencia_ubicacion || $document->soporte || $document->volumen ||

@@ -383,7 +383,7 @@
                 </div>
             </div>
 
-            <!-- Tarjeta de Fechas -->
+            {{-- <!-- Tarjeta de Fechas -->
             <div class="info-card">
                 <div class="info-card-header">
                     <i class="fas fa-clock me-2"></i>
@@ -406,7 +406,7 @@
                         <div class="metadata-value">{{ $concept->updated_at->translatedFormat('d \d\e F \d\e\l Y') }}</div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

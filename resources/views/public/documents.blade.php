@@ -926,10 +926,10 @@
                                 <i class="fas fa-calendar" style="color: #2D6A2F;"></i>
                                 <span>{{ \Carbon\Carbon::parse($document->fecha)->format('d \d\e F \d\e\l Y') }}</span>
                             </div>
-                            <div class="d-flex align-items-center gap-1">
+                            {{-- <div class="d-flex align-items-center gap-1">
                                 <i class="fas fa-clock" style="color: #2D6A2F;"></i>
                                 <span>{{ $document->created_at->diffForHumans() }}</span>
-                            </div>
+                            </div> --}}
                         </div>
 
                         <!-- Botón Ver / Descargar -->
